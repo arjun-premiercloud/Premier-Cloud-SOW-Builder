@@ -150,10 +150,16 @@ The complete and live project plan, including all tasks, effort estimates, and t
 
 # **{{ sections.timeline.n }}. {{ sections.timeline.title }}**
 
+{% if term.duration_weeks %}
 {{ table(['**Duration**', (term.duration_weeks | string) ~ ' weeks'], [
   ['**Estimated Start Date**', term.effective_date],
   ['**Estimated End Date**', term.end_date],
 ]) }}
+{% else %}
+{{ table(['**Estimated Start Date**', term.effective_date], [
+  ['**Estimated End Date**', term.end_date],
+]) }}
+{% endif %}
 
 # **{{ sections.investment.n }}. {{ sections.investment.title }}**
 
@@ -167,6 +173,10 @@ The complete and live project plan, including all tasks, effort estimates, and t
 {{ clauses.compensation.fixed_fee_note }}
 {% else %}
 {{ clauses.compensation.fixed_fee_note_no_funding }}
+{% endif %}
+{% if pricing.payment_terms %}
+
+{{ pricing.payment_terms }}
 {% endif %}
 {% if pricing.clawback %}
 

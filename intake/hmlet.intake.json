@@ -9,16 +9,23 @@
     "prepared_by": "Premier Cloud Inc."
   },
   "customer": {
-    "legal_name": "Hmlet",
+    "legal_name": "Hmlet Central Pte Ltd",
     "short_name": "Hmlet",
     "industry": "Co-living and flexible accommodation",
     "profile": "Hmlet operates the destination Google Workspace environment (hmlet.com) and is the contracting party for this migration. Habyt operates the source environment (habyt.com); the two organisations are separating into independent entities, and this engagement transfers an agreed subset of historical Habyt data into the pre-existing Hmlet accounts. Hmlet's technical and IT operations are managed by ZenAdmin, who act as Hmlet's technical point of contact for this engagement. Scope, commercials and timeline run directly between Premier Cloud and Hmlet.",
     "contact": {
-      "name": "Ashok Kumar Sarma R",
-      "title": "ZenAdmin - IT Operations, Hmlet",
-      "email": "ashokkumarsarma.r@zenadmin.ai"
+      "name": "Yoan Kamalski",
+      "title": "Hmlet Director",
+      "email": "yoan.kamalski@hmlet.com"
     },
     "stakeholders": [
+      {
+        "role": "Commercial Contact / Signatory",
+        "name": "Yoan Kamalski",
+        "title": "Hmlet Director",
+        "email": "yoan.kamalski@hmlet.com",
+        "description": "Contracting signatory for Hmlet Central Pte Ltd; commercial point of contact. Accounts payable via accounts@zenadmin.ai"
+      },
       {
         "role": "Technical Lead",
         "name": "Ashok Kumar Sarma R",
@@ -37,7 +44,13 @@
         "name": "Edoardo Archetti",
         "description": "Habyt-side point of contact; approves migration scope and source-environment access. Not a party to this SOW"
       }
-    ]
+    ],
+    "address": "269 South Bridge Road, Singapore, 058818, Singapore",
+    "signatory": {
+      "name": "Yoan Kamalski",
+      "title": "Hmlet Director",
+      "email": "yoan.kamalski@hmlet.com"
+    }
   },
   "partner": {
     "team": [
@@ -69,11 +82,16 @@
     ]
   },
   "agreement": {
-    "msa_style": "public_link"
+    "msa_style": "public_link",
+    "msa_url": "https://premiercloud.com/master-services-agreement.pdf",
+    "execution_date": "the date of last signature"
   },
-  "term": {},
+  "term": {
+    "effective_date": "August 7, 2026",
+    "end_date": "a date to be confirmed on completion of the environment scan"
+  },
   "background": {
-    "objective": "Hmlet is engaging Premier Cloud Inc., a Google Cloud Premier Partner, to migrate an agreed subset of historical Google Workspace data from the Habyt source environment (habyt.com) into Hmlet's existing destination environment (hmlet.com).\n\nThis is a Google-to-Google migration of historical data only. Both environments remain independent: no DNS, MX or Autodiscover records are changed, the source domain is not added as an alias or secondary domain under the destination, and destination accounts are already provisioned and in active use. Premier Cloud will transfer mail, Drive, calendar and contacts data for the in-scope accounts, together with the in-scope shared drives, and Habyt will delete the migrated source accounts following the final delta pass.\n\nThis SOW covers Phase 1 only. Phase 2 - restoration of archived user data currently held in Spin AI - is a separate engagement and is not scoped, priced or scheduled here.",
+    "objective": "Hmlet is engaging Premier Cloud Inc., a Google Cloud Premier Partner, to migrate an agreed subset of historical Google Workspace data from the Habyt source environment (habyt.com) into Hmlet's existing destination environment (hmlet.com).\n\nThis is a Google-to-Google migration of historical data only. Both environments remain independent: no DNS, MX or Autodiscover records are changed, the source domain is not added as an alias or secondary domain under the destination, and destination accounts are already provisioned and in active use. Premier Cloud will transfer mail, Drive, calendar and contacts data for the in-scope accounts, together with the in-scope shared drives, and Habyt will delete the migrated source accounts following the final delta pass.\n\nThis SOW documents the delivery scope for Phase 1 of 2 as contracted in the executed Order Form for Hmlet Central Pte Ltd dated 5 August 2026, covering 108 users and approximately 2.15 TB of data. This SOW covers Phase 1 only. Phase 2 - restoration of archived user data currently held in Spin AI - is a separate engagement and is not scoped, priced or scheduled here.",
     "key_focus_areas": [
       {
         "label": "Historical Data Migration",
@@ -98,22 +116,22 @@
     "source_platform": "Google Workspace (habyt.com)",
     "destination_platform": "Google Workspace (hmlet.com)",
     "tool": "CloudM Migrate",
-    "user_count": 221,
+    "user_count": 108,
     "volumes": [
       {
-        "label": "Total in-scope data",
-        "size": "approximately 2.2 TB",
-        "notes": "Active user data across the agreed mapping; distinct from the ~10 TB total in the source environment, which includes accounts not in scope"
-      },
-      {
-        "label": "User drives",
-        "size": "223 drives",
-        "notes": ""
+        "label": "User data",
+        "size": "approximately 1.07 TB",
+        "notes": "108 in-scope users per the executed Order Form"
       },
       {
         "label": "Shared drives",
-        "size": "1.079 TB across 29 drives",
+        "size": "approximately 1.08 TB",
         "notes": "Largest: All Properties (447.5 GB), Visual Content - APAC (423 GB), Marketing APAC (292 GB), DAS - Projects and Work (188 GB)"
+      },
+      {
+        "label": "Total initial scope",
+        "size": "approximately 2.15 TB",
+        "notes": "Distinct from the ~10 TB total in the source environment, which includes accounts not in scope"
       }
     ],
     "tracks": [
@@ -174,7 +192,7 @@
       }
     ],
     "decisions_pending": [
-      "Hmlet to confirm the final in-scope user list. The source environment holds 331 active accounts; the agreed mapping covers 221, of which 163 consolidate into a single destination account. Required before the environment scan is signed off",
+      "Hmlet to confirm the final in-scope user list. The executed Order Form contracts 108 users; the mapping spreadsheet lists 221 rows, of which 163 consolidate into a single destination account. Confirm which figure governs delivery before the environment scan is signed off",
       "Hmlet to confirm whether Google Groups are in scope. The migration intake sheet records Groups as out of scope; the July 15 discovery call recorded an intent to migrate all groups with their memberships. Required before Phase 1 completes",
       "Hmlet to confirm the final shared drive list. Three drives in the current mapping could not be located as shared drives in the source environment and may be subfolders of All Properties",
       "Hmlet and Habyt to identify any third-party applications authenticating against Habyt accounts (for example Salesforce, Jira or Zendesk), so that dependencies are resolved before the source accounts are deleted",
@@ -244,32 +262,34 @@
     }
   ],
   "pricing": {
-    "currency": "USD"
+    "currency": "USD",
+    "total_fixed_price": 30000,
+    "payment_terms": "Invoiced as a one-time fee on Net 30 terms, payable by wire transfer, in accordance with the executed Order Form for Hmlet Central Pte Ltd dated 5 August 2026."
   },
   "provenance": {
     "sources": [
       "Hmlet & Habyt x Premier Cloud - GWS migration, discovery call, 2026-07-15 (doc 1RbGzocsq3WriQ_VB-OmgdMGknA5wnD10KMQjv36xm2o)",
       "Habyt / Hmlet Sync, Sarah Giles and Arjun Bellur, 2026-08-06 (doc 17NbOf_LRwS4Ux09zfiM8U0GdsCTlLLOxMqsaB3S6bps)",
       "Ian / Arjun: Hamlet/Habyt Sync, 2026-08-06 (doc 1AJzT6eNzFOgS1Zds_nCjIKnCtQV0od91igfGPjzvDeA)",
-      "[INT] Mapping Spreadsheet - Hmlet x Habyt (sheet 1w9mqbdPjSZXCDkwgpXGLf5_TDJ0egVh4htVmbTS_8pM)"
+      "[INT] Mapping Spreadsheet - Hmlet x Habyt (sheet 1w9mqbdPjSZXCDkwgpXGLf5_TDJ0egVh4htVmbTS_8pM)",
+      "Order Form: Hmlet Central Pte Ltd, executed 5 August 2026 (file 1WJrF0C7sQcUPfEJW5D_F-iYo9b376EV-)"
     ],
     "assumed": [
       "Five-phase track structure derived from the migration intake sheet, with the Phase 4 tasks 'domain transfer', 'rename users' and 'update DKIM records' REMOVED - they contradict the approach agreed on the 2026-07-15 call, where both domains remain independent and no DNS changes are made. The intake sheet appears to be an untailored generic template. Confirm with Ian Basham.",
       "A pilot phase is included. Sarah Giles noted a ~5-user pilot is standard on previous migrations and Arjun Bellur assumed one would run, but Ian Basham stated on 2026-08-06 that a pilot had not been discussed. Confirm before issuing.",
       "Hypercare and a post-migration support window appear in the intake sheet (14 days) but were not discussed in any call and are excluded from this draft, consistent with prior Premier Cloud SOWs. Confirm whether Hmlet expects post-cutover support.",
-      "Customer legal entity recorded as 'Hmlet' - the registered legal name was not stated in any source.",
-      "Shared drive count of 29 taken from the mapping sheet header; the drive tab lists 28 rows of which 4 are marked FALSE, implying 24 in scope. Reconcile before issuing."
+      "Shared drive count of 29 taken from the mapping sheet header; the drive tab lists 28 rows of which 4 are marked FALSE, implying 24 in scope. Reconcile before issuing.",
+      "SOW execution date set to 'the date of last signature', matching the house pattern used on the Afni SOW. The Order Form was executed 5 August 2026; the SOW execution date was not stated separately.",
+      "Term end date mirrors the Order Form's 'TBD upon completion of environment scan'. This leaves the Term open-ended, which is weaker in a SOW than in an Order Form - consider an estimated outside date once the scan lands."
     ],
     "unanswered": [
-      "PRICE. Sarah Giles priced Phase 1 from initial estimates of user data, shared drive volume and engineering hours, and Hmlet signed off - but the figure does not appear in any meeting note. Required before this SOW can be issued.",
-      "START AND END DATES. No firm dates have been given to the client. Hmlet has a hard internal deadline and wants to start ASAP. Effort estimates per task are still outstanding from Ian Basham and Ahmed Ketari.",
-      "EFFORT ESTIMATES per task, needed for the activity schedule and resource allocation tables. Outstanding from Ian and Ahmed via the intake sheet.",
-      "Hmlet signatory name and title.",
-      "Hmlet registered legal entity name and billing address.",
-      "User count reconciliation: 331 active in source, 221 in the agreed mapping, ~116 described as 'active Google Workspace users' by Sarah Giles, and 163 consolidating into oldemails@hmlet.com. These four figures need to resolve into one in-scope number.",
+      "EFFORT ESTIMATES per task, needed for the activity schedule and resource allocation tables. Outstanding from Ian Basham and Ahmed Ketari.",
+      "Term end date - deliberately open pending the environment scan, per the Order Form.",
+      "User count: Order Form contracts 108; mapping sheet lists 221 rows including 163 consolidating into oldemails@hmlet.com. Which governs delivery?",
       "Whether Google Groups are in scope (mapping sheet says No, discovery call said yes).",
-      "Whether the environment scan started 2026-08-06 has completed, and what it changed about complexity.",
-      "Whether a pilot cohort is being run, and its size."
+      "Final shared drive list - three drives could not be located as shared drives in the source.",
+      "Whether Hmlet expects post-cutover support (Ian's intake sheet has a 14-day hypercare line; not discussed on any call and not priced in the Order Form).",
+      "Third-party applications authenticating against Habyt accounts, to be resolved before source account deletion."
     ]
   },
   "assumptions_suppress": [
