@@ -1,0 +1,6 @@
+{{ table(['**Partner**', '**Customer**'], [
+  ['**Name:** ' ~ (partner.contact.name or ''), '**Name:** ' ~ (customer.contact.name or '')],
+  ['**Phone:** ' ~ (partner.contact.phone or partner.phone or ''), '**Phone:** ' ~ (customer.contact.phone or 'To be confirmed')],
+  ['**Address:** ' ~ (partner.contact.address or partner.address or ''), '**Address:** ' ~ (customer.contact.address or customer.address or '')],
+  ['**E-Mail:** ' ~ (partner.contact.email or ''), '**E-Mail:** ' ~ (customer.contact.email or '')],
+]) }}

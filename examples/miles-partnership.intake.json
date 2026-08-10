@@ -1,0 +1,257 @@
+{
+  "_comment": "Reconstruction of the Miles Partnership migration SOW. Reference example for sow_type=workspace_migration. Note the clawback flag: the customer pays a net $68,000, so the Google Funding reversal paragraph is mandatory.",
+
+  "sow_type": "workspace_migration",
+
+  "document": {
+    "title": "Office 365 → Google Workspace Migration & Active Directory Unjoining",
+    "date": "2026-05-20",
+    "version": "1.0",
+    "prepared_by": "Premier Cloud Inc."
+  },
+
+  "customer": {
+    "legal_name": "Miles Partnership",
+    "short_name": "Miles Partnership",
+    "website": "milespartnership.com",
+    "industry": "Creative marketing agency",
+    "employee_count": 444,
+    "profile": "Miles Partnership is a creative marketing agency operating primarily on Google Workspace, with Microsoft 365 retained for mail and calendar. The majority of file content is already on Google Drive; mailboxes, OneDrive, SharePoint, and approximately 225 domain-joined endpoints remain on Microsoft infrastructure.",
+    "contact": { "name": "Gray Lawry", "title": "Chief Technology Officer", "email": "gray.lawry@milespartnership.com" },
+    "signatory": { "name": "", "title": "" },
+    "stakeholders": [
+      { "role": "Chief Technology Officer", "name": "Gray Lawry", "title": "Chief Technology Officer", "email": "gray.lawry@milespartnership.com", "description": "Executive sponsor" },
+      { "role": "IT Lead", "name": "David Laffitte", "title": "IT Lead", "email": "david.laffitte@milespartnership.com", "description": "Day-to-day technical lead, user mapping and decision owner" }
+    ]
+  },
+
+  "partner": { "signatory": { "name": "Lee Henwood", "title": "" } },
+
+  "agreement": { "msa_style": "public_link", "execution_date": "2026-05-20" },
+
+  "term": { "effective_date": "2026-07-06", "end_date": "2026-09-13", "duration_weeks": 10 },
+
+  "background": {
+    "objective": "Miles Partnership, a creative marketing agency with approximately 444 active users, is partnering with Premier Cloud Inc., a Google Cloud Premier Partner, to migrate from Microsoft 365 to Google Workspace and decommission its on-premises Active Directory (AD) infrastructure.\n\nThe objective of this engagement is to execute an end-to-end migration of mail (approximately 8.1 TB across 768 mailboxes), files (14.7 TB OneDrive and 2.0 TB SharePoint), and endpoint identity (approximately 225 domain-joined Windows devices managed via Splashtop, transitioning from Pulseway) to Google Workspace within a 10-week window. Active Directory will be decommissioned, the ~10 SSO-integrated applications will be redirected to Google as the Identity Provider, and Microsoft Outlook mail and calendar will be migrated to Gmail and Google Calendar.",
+    "key_focus_areas": [
+      { "label": "Mail & File Migration", "text": "CloudM Migrate-driven migration of mailboxes, OneDrive, and SharePoint using a dual-track wave approach with delta sync at cutover" },
+      { "label": "Endpoint Identity Migration", "text": "Active Directory decommission via Google Credential Provider for Windows (GCPW) for Windows endpoints, with user data preserved on-device" },
+      { "label": "SSO Re-pointing", "text": "Re-configuration of identified SSO-integrated applications to use Google as the Identity Provider, with per-application validation" },
+      { "label": "Cutover & Decommission", "text": "MX, Autodiscover, SPF, DKIM DNS changes; Gmail and Calendar activation; Active Directory decommission and operational handover" }
+    ],
+    "engagement_type": "This is an execution engagement. Premier Cloud will perform the migration end-to-end, including discovery, configuration, pilot, wave bulk migration, delta migration, cutover, and post-migration validation. Deliverables include a migrated Google Workspace tenant, CloudM reconciliation and validation reports, an AD decommission checklist, and final sign-off."
+  },
+
+  "migration": {
+    "source_platform": "Microsoft 365 (Exchange Online, OneDrive, SharePoint Online)",
+    "destination_platform": "Google Workspace (Gmail, Drive, Shared Drives, Calendar)",
+    "tool": "CloudM Migrate",
+    "domain_count": 6,
+    "user_count": 444,
+    "mailbox_count": 768,
+    "worker_nodes": "12 worker nodes (5 mail + 7 file)",
+    "pilot_user_count": 25,
+    "volumes": [
+      { "label": "Mail", "size": "approximately 8.1 TB", "notes": "768 mailboxes" },
+      { "label": "OneDrive", "size": "14.7 TB", "notes": "" },
+      { "label": "SharePoint", "size": "2.0 TB", "notes": "includes OldEmployeeFiles (1.18 TB) and BrandUSAProduction (901 GB)" },
+      { "label": "PST files", "size": "144 GB", "notes": "Customer decision required" }
+    ],
+    "endpoints": {
+      "windows_count": 225,
+      "mac_count": 275,
+      "mdm": "Splashtop, transitioning from Pulseway",
+      "directory": "on-premises Active Directory",
+      "in_scope": ["approximately 225 Windows devices"]
+    },
+    "sso_apps": ["ADP", "Zoom", "LastPass", "and approximately seven similar applications"],
+    "plan_link": "https://docs.google.com/spreadsheets/d/1fmL25khqA0hkI7EEh3-Xbzlv8RVGOmuKz8VEMdtU8_U/edit",
+    "plan_note": "The Gantt chart provides a comprehensive 10-week roadmap for the Office 365 to Google Workspace migration, outlining key workstreams for data migration and endpoint identity configuration. It ensures all stakeholders have visibility into specific milestones, such as 'Pilot acceptance' and 'Cutover complete', and references the essential resources and infrastructure required for a successful transition.",
+    "decisions_pending": [
+      "Miles Partnership IT completes the user mapping spreadsheet (source O365 user → target Google Workspace user) for all in-scope users and SharePoint sites by end of Week 1",
+      "Customer decisions on PST files (144 GB), OldEmployeeFiles SharePoint (1.18 TB), BrandUSAProduction SharePoint (901 GB), external sharing strategy (179K externally-shared items), and service-account handling are finalized before the Week 2 pilot"
+    ],
+    "tracks": [
+      {
+        "name": "Track A — Data Migration (CloudM Migrate)",
+        "phases": [
+          {
+            "name": "Phase 1: Preparation & Discovery (Week 1)",
+            "activities": [
+              "Pre-migration scan of the Microsoft 365 source tenant covering mailbox count and size distribution, OneDrive volume and file-type breakdown, SharePoint site inventory, externally-shared content, service/shared accounts, and PST/VMDK files",
+              "User mapping spreadsheet completed by Miles Partnership IT: source O365 user → target Google Workspace user for all in-scope accounts and SharePoint sites",
+              "Customer decisions documented for PST files, SharePoint retention, external sharing strategy (approximately 179,000 externally-shared items), and service-account handling"
+            ]
+          },
+          {
+            "name": "Phase 2: Configuration & Readiness Scan (Week 1)",
+            "activities": [
+              "CloudM Migrate instance provisioned in Google Cloud with 12 worker nodes (5 mail + 7 file)",
+              "Domain mappings configured per migration project; per-entity migration batches (mail, OneDrive, SharePoint, contacts, calendar) configured separately",
+              "CloudM readiness scan executed against the configured project to validate source/destination connectivity and surface configuration issues prior to pilot",
+              "Service-account and admin credentials provisioned in both tenants per CloudM prerequisites"
+            ]
+          },
+          {
+            "name": "Phase 3: Pilot Migration (Week 2)",
+            "activities": [
+              "Pilot group of 25 users selected across departments and mailbox-size profiles",
+              "Pilot covers mail and OneDrive migration with full data fidelity validation",
+              "Pilot acceptance criteria reviewed with Miles Partnership before proceeding to bulk waves"
+            ]
+          },
+          {
+            "name": "Phase 4: Bulk Historical Migration in Waves (Weeks 3–9)",
+            "intro": "Migration is sequenced by mailbox size, smallest first, to maximize early CloudM worker utilization and contain risk:",
+            "activities": [
+              "Wave 1 (Weeks 3–4): 316 mailboxes under 1 GB",
+              "Wave 2 (Weeks 5–6): 210 mailboxes 1–20 GB plus smaller SharePoint sites",
+              "Wave 3 (Weeks 7–8): 160 mailboxes 20–50 GB plus larger SharePoint sites",
+              "Wave 4 (Week 9): 20 mailboxes over 50 GB — delta pass only; pre-staging of bulk historical data for these mailboxes runs in the background from Week 3 onward"
+            ]
+          },
+          {
+            "name": "Phase 5: Delta Migration & Cutover (Week 10)",
+            "activities": [
+              "Final delta pass to capture new and changed mail and files since the last bulk pass",
+              "DNS cutover: MX, Autodiscover, SPF, DKIM, and any CNAMEs required for Google Workspace mail flow",
+              "Gmail and Google Calendar activated for all in-scope users",
+              "Microsoft 365 access frozen for in-scope users at the cutover boundary"
+            ]
+          },
+          {
+            "name": "Phase 6: Post-Migration Validation (Week 10)",
+            "activities": [
+              "CloudM reconciliation report reviewed for each migration batch",
+              "Spot-check audit of mailboxes and Drive folders against source counts",
+              "Known non-migrating items documented for user self-service: personal signatures, canned responses, and inbox filters/rules",
+              "Outstanding remediation items tracked to closure"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Track B — Endpoint Identity Migration (AD → Google Login)",
+        "description": "Track B runs in parallel with Track A. Endpoints are migrated in waves aligned to the data-migration waves.",
+        "phases": [
+          {
+            "name": "Phase 1: Endpoint Inventory & SSO Audit (Week 1)",
+            "activities": [
+              "Inventory of all approximately 225 domain-joined Windows endpoints managed via Splashtop",
+              "Audit of the approximately 10 SSO-integrated applications currently authenticating via AD/Microsoft (ADP, Zoom, LastPass, and similar)",
+              "SSO re-pointing plan with per-application validation criteria"
+            ]
+          },
+          {
+            "name": "Phase 2: Endpoint Pilot (Week 2)",
+            "activities": [
+              "10-device pilot covering Windows only",
+              "Windows flow validated: Splashtop-pushed scripts create local accounts (Local Admin and Local User), ForensIT Profwiz migrates the AD profile to the local user profile, domain unjoin is executed, and Google Credential Provider for Windows (GCPW) is installed",
+              "Active Directory kept live in parallel for two weeks post-pilot to enable rollback if needed"
+            ]
+          },
+          {
+            "name": "Phase 3: Endpoint Migration Waves (Weeks 3–8)",
+            "activities": [
+              "Wave A (Weeks 3–4): 45 Windows endpoints",
+              "Wave B (Weeks 5–6): 70 Windows endpoints",
+              "Wave C (Weeks 7–8): 65 Windows endpoints",
+              "VIP and executive endpoints are intentionally scheduled in the final wave"
+            ]
+          },
+          {
+            "name": "Phase 4: Final Endpoint Wave & AD Decommission (Weeks 9–10)",
+            "activities": [
+              "Final approximately 100 endpoints, including VIP machines",
+              "SSO applications re-pointed to Google as Identity Provider; each application validated against the test plan defined in Phase 1",
+              "Active Directory infrastructure decommissioned",
+              "Operational handover and decommission sign-off"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "scope": {
+    "statement": "This engagement is delivered in two parallel tracks executed over 10 weeks: Track A — Data Migration (mail, OneDrive, SharePoint), and Track B — Endpoint Identity Migration (Active Directory decommission, GCPW, Google SSO). Track A follows CloudM Migrate's documented methodology, applied in waves keyed to mailbox size distribution.",
+    "out_of_scope_extra": [
+      "Migration of Microsoft Teams content — Slack is Miles Partnership's instant-messaging platform; a small Teams subset is retained out of scope",
+      "Video files are migrated by default. Users who wish to exclude video files must indicate this via the pre-migration opt-out tracking sheet. Opt-out users will be placed in a dedicated migration batch with video MIME types excluded at the batch level. Files exceeding 5 GB cannot be migrated, regardless of opt-out preference"
+    ]
+  },
+
+  "assumptions": [
+    "Splashtop MDM platform is operational throughout the migration window for pushing endpoint scripts and configuration profiles to Windows devices",
+    "Active Directory remains operational in parallel for the two weeks following the endpoint pilot to enable rollback",
+    "Network bandwidth from Microsoft 365 to the CloudM Migrate worker pool in Google Cloud is sufficient for the 24.8 TB total data volume; CloudM worker count and concurrency may be tuned during pilot"
+  ],
+
+  "success_criteria": [
+    "100% of in-scope mailboxes migrated to Google Workspace with delta sync validated against the CloudM reconciliation report",
+    "100% of in-scope OneDrive and SharePoint content migrated to Google Drive and Shared Drives",
+    "100% of in-scope Windows endpoints (approximately 225 devices) transitioned to Google login via GCPW with user data preserved",
+    "Active Directory decommissioned and all SSO-integrated applications re-pointed to Google as Identity Provider, each application validated",
+    "Mail flow cutover (MX, SPF, DKIM, Autodiscover) completed with no inbound mail loss",
+    "Final cutover and decommission completed within the 10-week window",
+    "Final reports reviewed and validated by Miles Partnership stakeholders"
+  ],
+
+  "timeline": {
+    "weeks": 10,
+    "schedule": [
+      { "track": "Track A: Data Migration (CloudM)", "activity": "Preparation & Discovery", "effort_hours": 44, "deliverable": "Kickoff deck; CloudM Discovery Report; Decision register", "start_date": "2026-07-06", "end_date": "2026-07-10" },
+      { "track": "Track A: Data Migration (CloudM)", "activity": "CloudM Setup & Configuration", "effort_hours": 22, "deliverable": "Configured CloudM project; Readiness scan report", "start_date": "2026-07-09", "end_date": "2026-07-12" },
+      { "track": "Track A: Data Migration (CloudM)", "activity": "Pilot Migration & Acceptance", "effort_hours": 44, "deliverable": "Pilot mail/OneDrive reports; Signed pilot acceptance", "start_date": "2026-07-13", "end_date": "2026-07-19" },
+      { "track": "Track A: Data Migration (CloudM)", "activity": "Bulk Migration Waves (including Pre-stage)", "effort_hours": 244, "deliverable": "Wave 1-4 CloudM reports; Pre-stage status report", "start_date": "2026-07-20", "end_date": "2026-09-06" },
+      { "track": "Track A: Data Migration (CloudM)", "activity": "Delta Migration & Cutover", "effort_hours": 22, "deliverable": "Final delta reconciliation; Cutover runbook; Activation confirmation", "start_date": "2026-09-07", "end_date": "2026-09-10" },
+      { "track": "Track A: Data Migration (CloudM)", "activity": "Post-Migration Validation & Sign-off", "effort_hours": 20, "deliverable": "Final reconciliation report; Signed Track A acceptance", "start_date": "2026-09-11", "end_date": "2026-09-13" },
+      { "track": "Track B: Endpoint Identity Migration (AD → Google Login)", "activity": "Endpoint Inventory & Planning", "effort_hours": 40, "deliverable": "Endpoint inventory; SSO app audit; SSO re-pointing plan", "start_date": "2026-07-07", "end_date": "2026-07-12" },
+      { "track": "Track B: Endpoint Identity Migration (AD → Google Login)", "activity": "Endpoint Pilot & Sign-off", "effort_hours": 38, "deliverable": "Windows pilot reports; Signed endpoint pilot acceptance", "start_date": "2026-07-13", "end_date": "2026-07-19" },
+      { "track": "Track B: Endpoint Identity Migration (AD → Google Login)", "activity": "Endpoint Bulk Waves", "effort_hours": 184, "deliverable": "Wave A, B, C migration reports", "start_date": "2026-07-20", "end_date": "2026-08-30" },
+      { "track": "Track B: Endpoint Identity Migration (AD → Google Login)", "activity": "Final Endpoints + VIPs", "effort_hours": 40, "deliverable": "Final endpoint wave report", "start_date": "2026-08-31", "end_date": "2026-09-06" },
+      { "track": "Track B: Endpoint Identity Migration (AD → Google Login)", "activity": "Cutover: SSO Repointing & AD Decommission", "effort_hours": 22, "deliverable": "SSO re-pointing log; AD decommission checklist", "start_date": "2026-09-07", "end_date": "2026-09-12" },
+      { "track": "Track B: Endpoint Identity Migration (AD → Google Login)", "activity": "SSO Validation & Operational Handover", "effort_hours": 16, "deliverable": "SSO validation matrix; Signed handover & Track B acceptance", "start_date": "2026-09-10", "end_date": "2026-09-13" }
+    ]
+  },
+
+  "resources": [
+    { "role": "Project Manager", "hours": 112, "responsibilities": "Project planning, weekly status, stakeholder coordination, sign-off" },
+    { "role": "Migration Engineers (×2)", "hours": 540, "responsibilities": "CloudM project configuration, batch execution, wave management, and troubleshooting" },
+    { "role": "CloudM Workers (×12: 5 mail + 7 file)", "hours": "n/a (compute)", "responsibilities": "Parallel CloudM Migrate worker nodes providing migration throughput" },
+    { "role": "Endpoint Engineer", "hours": 84, "responsibilities": "Splashtop scripting, GCPW deployment, unjoining computers from AD, and providing an SSO migration checklist (customer to execute SSO migration)" }
+  ],
+
+  "deliverables": [
+    { "detail": "CloudM Pre-Migration Discovery Report: source-tenant scan results, user mapping baseline, decision register" },
+    { "detail": "Pilot Validation Report: data fidelity, endpoint login, sign-off criteria" },
+    { "detail": "Weekly Migration Status Reports: wave progress, throughput, blocking issues" },
+    { "detail": "Cutover Runbook: DNS sequence, freeze windows, rollback plan" },
+    { "detail": "AD Unjoining Checklist: per-application SSO validation, decommission sign-off" },
+    { "detail": "Post-Migration Validation Report: CloudM reconciliation summary, audit results, outstanding remediation items" }
+  ],
+
+  "pricing": {
+    "currency": "USD",
+    "total_fixed_price": 105000,
+    "google_funding": 37000,
+    "funding_program": "PSF",
+    "funding_clawback": true,
+    "line_items": [
+      { "label": "Office 365 → Google Workspace Migration, AD Decommission, SSO Re-pointing", "amount": 105000 }
+    ]
+  },
+
+  "appendices": [
+    {
+      "title": "CloudM M365 to Google Workspace Watchpoints",
+      "body": "To ensure project success, it is imperative to review the exhaustive migration watchpoints within the CloudM documentation: [Microsoft 365 to Google Workspace Migration Watchpoints](https://support.cloudm.io/hc/en-us/articles/16345799645852-Microsoft-365-to-Google-Workspace-Migration-Watchpoints)"
+    }
+  ],
+
+  "provenance": {
+    "sources": ["Google Doc 10JyXwiRUXw7eP2_iRvpqBUvF-LOmkwa0HI--r1CnTbA"],
+    "assumed": [],
+    "unanswered": ["Customer signatory name and title were blank in the issued document."]
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "_comment": "Reconstruction of the issued CoachHub SOW as an intake file. Used as the round-trip fixture: rendering this should reproduce the real document's structure and language. Treat it as the reference example for sow_type=gemini_enterprise_implementation.",
+
+  "sow_type": "gemini_enterprise_implementation",
+
+  "document": {
+    "title": "Gemini Enterprise Implementation SOW",
+    "date": "Jul 2, 2026",
+    "version": "1.0",
+    "prepared_by": "Premier Cloud Team"
+  },
+
+  "customer": {
+    "legal_name": "CoachHub",
+    "short_name": "CoachHub",
+    "address": "Alexandrerstraße 36, Berlin, Germany 10179",
+    "contact": {
+      "name": "Ruben Berghmans",
+      "email": "ruben.berghmans@coachhub.com",
+      "address": "Alexandrerstraße 36, Berlin, Germany 10179"
+    },
+    "signatory": {
+      "name": "Ruben Berghmans",
+      "email": "ruben.berghmans@coachhub.com"
+    }
+  },
+
+  "partner": {
+    "contact": {
+      "name": "Jason Murray-Rosel",
+      "email": "Jason@premiercloud.com",
+      "address": "504-1803 Douglas Street, Victoria BC",
+      "phone": "+1 888-866-2230"
+    },
+    "signatory": {
+      "name": "Jason Murray-Rosel",
+      "title": "Head of Client Success",
+      "email": "Jason@premiercloud.com",
+      "phone": "+1 888-866-2230"
+    }
+  },
+
+  "agreement": {
+    "msa_style": "public_link",
+    "execution_date": "July 27, 2026"
+  },
+
+  "term": {
+    "effective_date": "July 27, 2026",
+    "end_date": "August 28, 2026",
+    "duration_weeks": 5
+  },
+
+  "background": {
+    "business_challenges": [
+      {
+        "label": "Information Overload & Retrieval",
+        "summary": "Reducing the time employees spend searching for, synthesizing, and summarizing information spread across support tickets, CRM records, and team conversations."
+      },
+      {
+        "label": "Workflow Inefficiencies",
+        "summary": "Accelerating routine tasks such as drafting communications, creating customer-facing documentation, and generating reports."
+      },
+      {
+        "label": "Meeting & Task Management",
+        "summary": "Improving productivity by streamlining scheduling, summarizing discussions, and seamlessly tracking action items."
+      }
+    ]
+  },
+
+  "platform": {
+    "seats": 279,
+    "identity_provider": "Google Identity",
+    "workforce_identity_federation": "not_required",
+    "environment": "non-production",
+    "user_community": [
+      "Human Resources",
+      "Sales Team",
+      "Additional users will be selected from the CoachHub side to validate the various functionalities of Gemini Enterprise across different departments and roles as part of the production implementation."
+    ],
+    "data_sources": [
+      { "name": "Google Drive" },
+      { "name": "Google Calendar" },
+      { "name": "Gmail" },
+      { "name": "People Search" },
+      { "name": "Salesforce", "federated": true },
+      { "name": "GitHub", "federated": true },
+      { "name": "Jira Cloud", "federated": true },
+      { "name": "Confluence Cloud", "federated": true }
+    ],
+    "cloud_foundations": false,
+    "agentic_workflows": [
+      {
+        "name": "Chief of Staff",
+        "description": "integrates with Gmail and Google Calendar to provide users with a daily morning summary of their emails, calendar events, and key team communications.",
+        "integrations": ["Gmail", "Google Calendar"]
+      }
+    ]
+  },
+
+  "scope": {
+    "out_of_scope_extra": [
+      "Development of new or custom connectors, agents, and actions beyond what is described in this SOW."
+    ],
+    "out_of_scope_suppress": [
+      "Development of new or custom connectors and actions beyond what is described in this SOW."
+    ]
+  },
+
+  "success_criteria": [
+    "Complete end-to-end set up and system integration on Customer's Google Cloud environment with functional connectors.",
+    "Users can effectively search and retrieve information across integrated systems.",
+    "Timely onboarding of users using a scalable framework with minimal technical issues with adoption across the organization.",
+    "Positive customer feedback and successful handover, ensuring readiness for future scalability and collaboration."
+  ],
+
+  "pricing": {
+    "currency": "USD",
+    "total_fixed_price": 45000,
+    "google_funding": 45000,
+    "funding_program": "Commit PSF",
+    "funding_stage": "Stage 4",
+    "funding_clawback": false
+  },
+
+  "provenance": {
+    "sources": ["Google Doc 1-uqAXU7Zo6I7Ku5RioP2yDORAPfuXqkYCZP2DWNHmTY"],
+    "assumed": [],
+    "unanswered": ["Customer signatory title and phone number were left TBD in the issued document."]
+  }
+}

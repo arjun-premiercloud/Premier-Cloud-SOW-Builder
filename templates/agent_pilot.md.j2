@@ -1,0 +1,184 @@
+{% include "partials/cover.md.j2" %}
+{% include "partials/preamble.md.j2" %}
+
+The Parties hereby agree as follows:
+
+## **{{ sections.contacts.n }}. {{ sections.contacts.title }}**
+
+The point of contacts for this SOW shall be:
+
+{% include "partials/contacts.md.j2" %}
+
+## **{{ sections.term.n }}. {{ sections.term.title }}**
+
+{% include "partials/term.md.j2" %}
+
+## **{{ sections.background.n }}. {{ sections.background.title }}**
+
+{% if background.objective %}
+{{ background.objective }}
+{% endif %}
+
+### **Customer Profile**
+
+{{ customer.profile }}
+
+### **Partner Profile**
+
+{{ partner.profile }}
+{% if challenges %}
+
+{{ doc.product_short or 'The solution' }} is intended to address the following business challenge(s) for Customer:
+
+{{ bullets(challenges) }}
+{% endif %}
+{% if background.baseline_metrics %}
+
+The following baseline measurements are recorded at the start of the engagement and form the reference point for the success criteria in section {{ sections.success.n }}:
+
+{{ table(['**Metric**', '**Baseline**', '**Source**'],
+         rows(background.baseline_metrics, ['metric', 'value', 'source'])) }}
+{% endif %}
+{% if sections.usecases %}
+
+## **{{ sections.usecases.n }}. {{ sections.usecases.title }}**
+
+{% if intake.scope and intake.scope.statement %}
+{{ intake.scope.statement }}
+
+{% endif %}
+This pilot delivers {{ spell(use_cases | length) }} independent agent{{ '' if use_cases | length == 1 else 's' }} against a defined set of representative Customer scenarios:
+
+{{ bullets(use_cases | map(attribute='_listline') | list) }}
+{% for uc in use_cases %}
+
+### **Use case {{ loop.index }}: {{ uc.name }}**
+
+#### **Current Solution**
+{% if uc.current_solution %}
+
+{{ uc.current_solution }}
+{% endif %}
+{% if uc.current_solution_steps %}
+
+{% for step in uc.current_solution_steps %}
+{{ loop.index }}. {{ step }}
+{% endfor %}
+{% endif %}
+
+#### **Proposed Solution**
+
+{{ uc.proposed_solution }}
+{% if uc.trigger %}
+
+**Trigger:** {{ uc.trigger }}
+{% endif %}
+{% if uc.systems %}
+
+**Systems of record:** {{ uc.systems | join(', ') }}
+{% endif %}
+{% if uc.success_metrics %}
+
+**Measured on:**
+
+{{ bullets(uc.success_metrics) }}
+{% endif %}
+{% if uc.figures %}
+
+The proposed solution is illustrated in the following figures:
+
+{% for f in uc.figures %}
+**Figure {{ loop.index }} — {{ f }}**
+
+> [INSERT DIAGRAM: {{ f }}]
+
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+## **{{ sections.services.n }}. {{ sections.services.title }}**
+
+Partner will perform the following Services as per the Scope defined above in Customer's {{ platform.environment or 'non-production' }} environment:
+
+**In Scope Services:**
+
+{% for s in service_sections %}
+
+**{{ sections.services.n }}.{{ loop.index }} {{ s.heading }}**
+{% if s.intro %}
+
+{{ s.intro }}
+{% endif %}
+{% if s.bullets %}
+
+{{ bullets(s.bullets) }}
+{% endif %}
+{% for g in s.groups or [] %}
+
+**{{ g.title }}**
+
+{{ bullets(g.bullets) }}
+{% endfor %}
+{% endfor %}
+
+**Out of Scope:**
+
+{{ bullets(out_of_scope) }}
+
+## **{{ sections.timeline.n }}. {{ sections.timeline.title }}**
+
+{% include "partials/timeline.md.j2" %}
+
+## **{{ sections.governance.n }}. {{ sections.governance.title }}**
+
+{% include "partials/governance.md.j2" %}
+
+### **{{ sections.governance.n }}.1 RACI Matrix During Delivery**
+
+{{ table(['**Deliverable**', '**Partner**', '**Customer**'],
+         rows(governance.raci, ['deliverable', 'partner', 'customer'])) }}
+
+## **{{ sections.deliverables.n }}. {{ sections.deliverables.title }}**
+
+The Deliverables to be provided by Partner to Customer are as follows:
+
+{% include "partials/deliverables.md.j2" %}
+
+## **{{ sections.roles.n }}. {{ sections.roles.title }}**
+
+### **{{ sections.roles.n }}.1 Roles**
+
+{% include "partials/roles.md.j2" %}
+
+### **{{ sections.roles.n }}.2 Escalation Matrix**
+
+{% include "partials/escalation.md.j2" %}
+
+## **{{ sections.raid.n }}. {{ sections.raid.title }}**
+
+### **{{ sections.raid.n }}.1 Risks**
+
+{% include "partials/risks.md.j2" %}
+
+### **{{ sections.raid.n }}.2 Assumptions**
+
+{{ bullets(assumptions) }}
+
+### **{{ sections.raid.n }}.3 Customer Dependencies and Prerequisites**
+
+{% include "partials/prerequisites.md.j2" %}
+
+## **{{ sections.success.n }}. {{ sections.success.title }}**
+
+{{ bullets(success_criteria) }}
+
+## **{{ sections.closure.n }}. {{ sections.closure.title }}**
+
+{{ clauses.closure }}
+
+## **{{ sections.compensation.n }}. {{ sections.compensation.title }}**
+
+{% include "partials/compensation.md.j2" %}
+
+{% include "partials/signature.md.j2" %}

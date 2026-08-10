@@ -1,0 +1,20 @@
+{{ timeline_note }}
+
+{{ table(gantt.headers, gantt.rows) }}
+
+{% for m in milestones %}
+
+**Milestone {{ loop.index }}: {{ m.name }}** – {{ m.description }}
+{% endfor %}
+{% if schedule %}
+
+{{ intake.timeline.schedule_note or 'Indicative task schedule; exact dates and cadence are confirmed at kickoff:' }}
+
+{% if schedule[0].effort_hours is defined and schedule[0].effort_hours %}
+{{ table(['**Activity**', '**Estimated Effort (hrs)**', '**Deliverable**', '**Estimated Start Date**', '**Estimated End Date**'],
+         rows(schedule, ['activity', 'effort_hours', 'deliverable', 'start_date', 'end_date'])) }}
+{% else %}
+{{ table(['**Phase**', '**Task Description**', '**Start Date**', '**End Date**'],
+         rows(schedule, ['phase', 'activity', 'start_date', 'end_date'])) }}
+{% endif %}
+{% endif %}

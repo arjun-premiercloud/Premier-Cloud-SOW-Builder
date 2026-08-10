@@ -1,0 +1,184 @@
+{% include "partials/cover.md.j2" %}
+{% include "partials/preamble.md.j2" %}
+
+# **{{ sections.summary.n }}. {{ sections.summary.title }}**
+
+{{ background.objective }}
+{% if background.key_focus_areas is defined and background.key_focus_areas %}
+
+## **Key Focus Areas**
+
+{{ bullets(background.key_focus_areas) }}
+{% endif %}
+{% if intake.background and intake.background.engagement_type %}
+
+## **Engagement Type**
+
+{{ intake.background.engagement_type }}
+{% endif %}
+
+# **{{ sections.profiles.n }}. {{ sections.profiles.title }}**
+
+## **{{ sections.profiles.n }}.1 Customer Profile**
+
+{{ customer.profile }}
+
+**Platform Details:**
+
+- Source: {{ migration.source_platform }}{% if migration.domain_count %} across {{ migration.domain_count }} domains{% endif %}
+
+- Destination: {{ migration.destination_platform or 'Google Workspace (Gmail, Drive, Shared Drives, Calendar)' }}
+{% if migration.endpoints %}
+- Endpoints: {{ migration.endpoints.in_scope | join('; ') if migration.endpoints.in_scope else '' }}{% if migration.endpoints.mdm %} (managed via {{ migration.endpoints.mdm }}){% endif %}; all currently joined to {{ migration.endpoints.directory or 'on-premises Active Directory' }}
+{% endif %}
+{% if migration.sso_apps %}
+- Identity: {{ migration.endpoints.directory or 'Active Directory' }} is used for endpoint authentication and the following SSO-integrated applications: {{ migration.sso_apps | join(', ') }}
+{% endif %}
+{% if migration.volumes %}
+
+**Data Volumes:**
+
+{{ table(['**System**', '**Volume**', '**Notes**'], rows(migration.volumes, ['label', 'size', 'notes'])) }}
+{% endif %}
+{% if customer.stakeholders %}
+
+**Key Customer Stakeholders:**
+
+{% for s in customer.stakeholders %}
+- {{ s.name }} — {{ s.title or s.role }}{% if s.email %} ({{ s.email }}){% endif %}
+
+{% endfor %}
+{% endif %}
+
+## **{{ sections.profiles.n }}.2 Premier Cloud Profile**
+
+{{ partner.profile }}
+
+**Core Specializations**
+
+We specialize in three core pillars:
+
+{{ bullets(partner.specializations) }}
+
+**Target Market**
+
+{{ partner.target_market }}
+
+# **{{ sections.scope.n }}. {{ sections.scope.title }}**
+
+## **{{ sections.scope.n }}.1 Project Scope**
+
+{{ scope_statement }}
+{% for track in migration.tracks %}
+
+### **{{ track.name }}**
+{% if track.description %}
+
+{{ track.description }}
+{% endif %}
+{% for phase in track.phases %}
+
+#### {{ phase.name }}
+{% if phase.intro %}
+
+{{ phase.intro }}
+{% endif %}
+
+{{ bullets(phase.activities) }}
+{% endfor %}
+{% endfor %}
+
+## **{{ sections.scope.n }}.2 Out of Scope**
+
+{{ bullets(out_of_scope) }}
+
+## **{{ sections.scope.n }}.3 Assumptions and Dependencies**
+
+{{ bullets(assumptions) }}
+{% if migration.decisions_pending %}
+
+The following Customer decisions are required on the schedule noted; each is a dependency for the phase that follows it:
+
+{{ bullets(migration.decisions_pending) }}
+{% endif %}
+
+# **{{ sections.success.n }}. {{ sections.success.title }}**
+
+{{ bullets(success_criteria) }}
+
+# **{{ sections.activities.n }}. {{ sections.activities.title }}**
+{% if intake.migration.plan_link is defined and intake.migration.plan_link %}
+
+## **{{ sections.activities.n }}.1 Migration Plan**
+
+{{ intake.migration.plan_note or '' }}
+
+The complete and live project plan, including all tasks, effort estimates, and the visual Gantt chart, is maintained here: {{ intake.migration.plan_link }}
+{% endif %}
+
+## **{{ sections.activities.n }}.2 Activity Schedule**
+{% if track_schedules %}
+{% for track_name, items in track_schedules %}
+
+### **{{ track_name }}**
+
+{{ table(['**Activity**', '**Estimated Effort (hrs)**', '**Deliverable**', '**Estimated Start Date**', '**Estimated End Date**'],
+         rows(items, ['activity', 'effort_hours', 'deliverable', 'start_date', 'end_date'])
+         + [['**TOTAL**', '**' ~ (items | sum(attribute='effort_hours')) ~ '**', '', '', '']]) }}
+{% endfor %}
+{% else %}
+
+{{ table(['**Activity**', '**Estimated Effort (hrs)**', '**Deliverable**', '**Estimated Start Date**', '**Estimated End Date**'],
+         rows(schedule, ['activity', 'effort_hours', 'deliverable', 'start_date', 'end_date'])) }}
+{% endif %}
+{% if resources %}
+
+## **{{ sections.activities.n }}.3 Resource Allocation**
+
+{{ table(['**Resources**', '**Total Hours**', '**Responsibilities**'],
+         rows(resources, ['role', 'hours', 'responsibilities'])) }}
+{% endif %}
+
+# **{{ sections.deliverables.n }}. {{ sections.deliverables.title }}**
+
+{% for d in deliverables %}
+**{{ d.detail.split(':')[0] }}**{% if ':' in d.detail %}: {{ d.detail.split(':', 1)[1].strip() }}{% endif %}
+
+
+{% endfor %}
+
+# **{{ sections.timeline.n }}. {{ sections.timeline.title }}**
+
+{{ table(['**Duration**', (term.duration_weeks | string) ~ ' weeks'], [
+  ['**Estimated Start Date**', term.effective_date],
+  ['**Estimated End Date**', term.end_date],
+]) }}
+
+# **{{ sections.investment.n }}. {{ sections.investment.title }}**
+
+{{ table(['Category', 'Cost (' ~ pricing.currency ~ ')'], pricing.rows) }}
+
+{{ clauses.compensation.fixed_fee_note }}
+{% if pricing.clawback %}
+
+{{ clauses.compensation.clawback }}
+{% endif %}
+
+# **{{ sections.signatures.n }}. {{ sections.signatures.title }}**
+
+{{ clauses.signature.intro_migration }}
+
+{{ table([partner.legal_name, customer.legal_name], [
+  ['**Name:** ' ~ (partner.signatory.name or ''), '**Name:** ' ~ (customer.signatory.name or '')],
+  ['**Title:** ' ~ (partner.signatory.title or ''), '**Title:** ' ~ (customer.signatory.title or '')],
+  ['**Date:**', '**Date:**'],
+  ['**Signature:**', '**Signature:**'],
+]) }}
+{% for a in appendices %}
+
+---
+
+# **APPENDIX {{ alpha(loop.index0) }}: {{ a.title }}**
+
+{{ a.body }}
+{% endfor %}

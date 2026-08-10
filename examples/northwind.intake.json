@@ -1,0 +1,113 @@
+{
+  "_comment": "Worked example: this intake was extracted from examples/meeting-notes/northwind-discovery-notes.md and nothing else. Note what is deliberately absent — signatory details, funding stage, customer address — because the notes did not contain them. Those show up in the gap report as questions rather than being invented.",
+
+  "sow_type": "gemini_enterprise_implementation",
+
+  "document": {
+    "title": "Gemini Enterprise Implementation SOW",
+    "date": "2026-08-10",
+    "version": "1.0",
+    "prepared_by": "Premier Cloud Team"
+  },
+
+  "customer": {
+    "legal_name": "Northwind Logistics",
+    "short_name": "Northwind",
+    "industry": "Logistics",
+    "contact": {
+      "name": "Priya Raman",
+      "title": "VP IT",
+      "email": "priya.raman@northwindlogistics.example"
+    },
+    "signatory": { "name": "Marcus Bell", "title": "Chief Financial Officer" },
+    "stakeholders": [
+      { "role": "VP IT", "name": "Priya Raman", "description": "Project sponsor; scope and phasing decisions" },
+      { "role": "IT Operations Manager", "name": "Tom Deakin", "description": "Technical contact for connector configuration and source-system access" }
+    ]
+  },
+
+  "agreement": { "msa_style": "public_link", "execution_date": "2026-09-01" },
+
+  "term": { "effective_date": "2026-09-07", "end_date": "2026-10-09", "duration_weeks": 5 },
+
+  "background": {
+    "business_challenges": [
+      {
+        "label": "Information Retrieval Across Systems",
+        "summary": "Reducing the time dispatch and operations staff spend locating shipment context spread across the transport management system, team conversations, and email."
+      },
+      {
+        "label": "Repetitive Drafting",
+        "summary": "Accelerating routine customer-service communications, where a small number of email types are drafted repeatedly."
+      }
+    ],
+    "objective": "Deploy Gemini Enterprise across Northwind's dispatch operations and customer service teams so that staff can retrieve shipment and customer context across connected systems without manual searching, and draft routine communications faster."
+  },
+
+  "platform": {
+    "seats": 180,
+    "identity_provider": "Google Identity",
+    "workforce_identity_federation": "not_required",
+    "environment": "production",
+    "cloud_foundations": false,
+    "user_community": ["Dispatch Operations", "Customer Service"],
+    "data_sources": [
+      { "name": "Google Drive" },
+      { "name": "Gmail" },
+      { "name": "Google Calendar" },
+      { "name": "Confluence Cloud", "federated": true }
+    ],
+    "activation_plan": {
+      "purchased_licenses": 180,
+      "active_at_start": 0,
+      "active_at_end": 50,
+      "active_at_end_plus_4w": 110,
+      "target_activation_percent": 50
+    }
+  },
+
+  "scope": {
+    "out_of_scope_extra": [
+      "Integration with Northwind's transport management system (TMS). No Gemini Enterprise connector exists for the platform and a custom connector is not included in this phase.",
+      "Integration with Slack. Raised during discovery and deferred to a future phase.",
+      "Extension of the deployment to the Finance team. The in-scope user community for this engagement is Dispatch Operations and Customer Service only.",
+      "Development of a shipment-history summarisation agent. Dependent on TMS integration and therefore out of scope for this phase."
+    ]
+  },
+
+  "risks": [
+    {
+      "risk": "Confluence tier is unconfirmed (Cloud vs Server)",
+      "mitigation": "Confirm the Confluence deployment tier before kickoff; the Gemini Enterprise connector supports Confluence Cloud, and a Server deployment would require a scope and schedule review."
+    },
+    {
+      "risk": "Google funding approval is not yet confirmed",
+      "mitigation": "Premier Cloud will confirm the funding stage with the Google account team prior to countersignature; the compensation section will be updated to reflect the approved funding position before the SOW is issued."
+    }
+  ],
+
+  "pricing": {
+    "currency": "USD",
+    "total_fixed_price": 38000,
+    "google_funding": 38000,
+    "funding_program": "PSF",
+    "funding_clawback": false
+  },
+
+  "provenance": {
+    "sources": ["examples/meeting-notes/northwind-discovery-notes.md (discovery call, 2026-08-04)"],
+    "assumed": [
+      "SOW execution date of 2026-09-01 inferred from the agreed 7 September start; not stated in the call.",
+      "End date of 2026-10-09 derived from 'end of the first week of October' plus the stated five-week duration.",
+      "Priya Raman's email address is a placeholder — it was not given in the call.",
+      "Environment set to production; the call implied a live rollout but did not state it."
+    ],
+    "unanswered": [
+      "PSF funding stage — Jason to confirm with the Google account team. Determines whether the Funding Disclosure paragraph is used.",
+      "Marcus Bell's email address (title confirmed as CFO).",
+      "Northwind's registered/billing address for the point-of-contact table.",
+      "Whether Confluence is on the Cloud tier — Tom to confirm. Affects connector feasibility.",
+      "Tom's estimate of one hour per person per day for information retrieval was explicitly a gut number, not measured. Not recorded as a baseline metric."
+    ]
+  }
+}

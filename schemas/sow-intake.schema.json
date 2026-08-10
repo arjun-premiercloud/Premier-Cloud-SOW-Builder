@@ -1,0 +1,573 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://premiercloud.com/schemas/sow-intake.schema.json",
+  "title": "Premier Cloud SOW Intake",
+  "description": "Structured inputs required to generate a Premier Cloud Statement of Work. Every field carries an `x-question` (what to ask in the meeting) and an `x-source` (where the answer normally comes from). The validator uses `x-question` to build the gap report.",
+  "type": "object",
+  "required": ["sow_type", "document", "customer", "partner", "agreement", "term", "pricing"],
+  "properties": {
+
+    "sow_type": {
+      "type": "string",
+      "enum": ["gemini_enterprise_implementation", "agent_pilot", "workspace_migration"],
+      "description": "Selects the template. gemini_enterprise_implementation = seat-based GE rollout with connectors (CoachHub, City Winery). agent_pilot = fixed-term pilot proving one or more agents against named use cases (Afni GECX). workspace_migration = M365/other -> Google Workspace data + identity migration (Miles Partnership).",
+      "x-question": "Is this a Gemini Enterprise rollout, an agent/CX pilot, or a Workspace migration?",
+      "x-source": "Opportunity type in CRM; obvious from the meeting."
+    },
+
+    "document": {
+      "type": "object",
+      "required": ["title", "date", "version"],
+      "properties": {
+        "title":       { "type": "string",  "x-question": "What is the SOW titled?", "x-source": "Deal name. e.g. 'Gemini Enterprise Implementation SOW'." },
+        "subtitle":    { "type": "string",  "x-question": "Is there a scope subtitle?", "x-source": "e.g. 'Gemini Enterprise for CX Voice Agent Pilots - IT Service Desk, Progressive CCC & FNOL'." },
+        "date":        { "type": "string",  "format": "date", "x-question": "What date goes on the cover?", "x-source": "Date the SOW is issued." },
+        "version":     { "type": "string",  "default": "1.0", "x-question": "Version number?", "x-source": "1.0 unless revising." },
+        "prepared_by": { "type": "string",  "default": "Premier Cloud Team" },
+        "include_toc": { "type": "boolean", "default": true }
+      }
+    },
+
+    "customer": {
+      "type": "object",
+      "required": ["legal_name", "short_name", "contact"],
+      "properties": {
+        "legal_name":     { "type": "string", "x-question": "What is the customer's exact legal entity name?", "x-source": "MSA / order form. NOT the brand name - 'Afni, Inc.' not 'Afni'." },
+        "short_name":     { "type": "string", "x-question": "What short name should the body text use?", "x-source": "e.g. 'CoachHub', 'Miles Partnership'." },
+        "address":        { "type": "string", "x-question": "Customer's billing/registered address?", "x-source": "Order form or the POC's signature block." },
+        "website":        { "type": "string" },
+        "industry":       { "type": "string", "x-question": "What industry are they in?", "x-source": "Used in the Customer Profile paragraph." },
+        "employee_count": { "type": ["integer", "string"], "x-question": "Roughly how many employees?", "x-source": "Used in profile narrative for pilot and migration SOWs." },
+        "profile":        { "type": "string", "x-question": "One paragraph: who is this customer and what do they do?", "x-source": "Required for agent_pilot and workspace_migration; omitted in the GE implementation template." },
+        "contact": {
+          "type": "object",
+          "required": ["name", "email"],
+          "description": "The named SOW point of contact in section 1.",
+          "properties": {
+            "name":    { "type": "string", "x-question": "Who is the customer's SOW point of contact?" },
+            "title":   { "type": "string" },
+            "email":   { "type": "string", "x-question": "Point of contact's email?" },
+            "phone":   { "type": "string", "default": "To be confirmed" },
+            "address": { "type": "string" }
+          }
+        },
+        "signatory": {
+          "type": "object",
+          "description": "Who actually signs. Defaults to `customer.contact` when absent.",
+          "properties": {
+            "name":  { "type": "string", "x-question": "Who signs on the customer side?", "x-source": "Often the CIO/CTO, not the day-to-day contact." },
+            "title": { "type": "string", "default": "TBD" },
+            "email": { "type": "string" },
+            "phone": { "type": "string", "default": "TBD" }
+          }
+        },
+        "stakeholders": {
+          "type": "array",
+          "description": "Named people with a role in delivery. Feeds section 9/10 Customer Team Roles.",
+          "items": {
+            "type": "object",
+            "required": ["role", "description"],
+            "properties": {
+              "role":        { "type": "string" },
+              "name":        { "type": "string" },
+              "title":       { "type": "string" },
+              "email":       { "type": "string" },
+              "description": { "type": "string" }
+            }
+          },
+          "x-question": "Who on the customer side owns which part of delivery?",
+          "x-source": "Attendee list + who spoke to what in the meeting."
+        }
+      }
+    },
+
+    "partner": {
+      "type": "object",
+      "description": "Premier Cloud side. Almost always inherited from library/defaults.json - only override when the deal team differs.",
+      "properties": {
+        "legal_name": { "type": "string", "default": "Premier Cloud Inc." },
+        "address":    { "type": "string", "default": "504-1803 Douglas Street, Victoria BC" },
+        "phone":      { "type": "string", "default": "+1 888-866-2230" },
+        "profile":    { "type": "string", "x-source": "library/defaults.json holds the standard boilerplate; override only to re-angle it for the vertical." },
+        "contact":    { "$ref": "#/$defs/person", "x-question": "Which Premier Cloud person is the SOW point of contact?" },
+        "signatory":  { "$ref": "#/$defs/person", "x-question": "Who signs for Premier Cloud?", "x-source": "Historically Lee Henwood or Jason Murray-Rosel." },
+        "team": {
+          "type": "array",
+          "description": "Partner Team Roles table.",
+          "items": {
+            "type": "object",
+            "required": ["role", "description"],
+            "properties": {
+              "role":        { "type": "string" },
+              "name":        { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "agreement": {
+      "type": "object",
+      "required": ["execution_date"],
+      "properties": {
+        "msa_style": {
+          "type": "string",
+          "enum": ["public_link", "dated_mpsa"],
+          "default": "public_link",
+          "description": "public_link = the standard 'available at premiercloud.com/...' preamble. dated_mpsa = 'pursuant to the Master Professional Services Agreement dated <date>' (used when a negotiated MSA exists).",
+          "x-question": "Is there a signed MSA with this customer, or do we point at the public one?"
+        },
+        "msa_url":  { "type": "string", "default": "https://premiercloud.com/wp-content/uploads/2024/06/MASTER-SERVICES-AGREEMENT-PREMIER-CLOUD-INC.pdf" },
+        "msa_date": { "type": "string", "format": "date", "description": "Required when msa_style = dated_mpsa.", "x-question": "What is the date of the executed MSA?" },
+        "execution_date": {
+          "type": "string",
+          "description": "Date string or the literal 'date of last signature'.",
+          "x-question": "What is the SOW execution date?",
+          "x-source": "Target signature date agreed in the meeting."
+        }
+      }
+    },
+
+    "term": {
+      "type": "object",
+      "required": ["effective_date", "end_date"],
+      "properties": {
+        "effective_date":  { "type": "string", "x-question": "When does the engagement start?", "x-source": "Explicit in the meeting, or execution date + N business days." },
+        "end_date":        { "type": "string", "x-question": "What is the estimated end date?", "x-source": "Start + duration_weeks if not stated." },
+        "duration_weeks":  { "type": "integer", "x-question": "How many weeks is the engagement?", "x-source": "5 weeks for a standard GE implementation, 8 for a pilot, 10 for a migration." },
+        "extendable_note": { "type": "boolean", "default": false, "description": "Adds the 'may be extended upon mutual written agreement' sentence." }
+      }
+    },
+
+    "background": {
+      "type": "object",
+      "description": "Section 3. The narrative heart of the SOW and the part most directly mined from meeting notes.",
+      "properties": {
+        "product_intro":      { "type": "string", "x-source": "library/defaults.json ships the standard Gemini Enterprise paragraph." },
+        "business_challenges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["summary"],
+            "properties": {
+              "label":   { "type": "string", "description": "Bolded lead-in, e.g. 'Information Overload & Retrieval'." },
+              "summary": { "type": "string" }
+            }
+          },
+          "x-question": "What business problems is the customer trying to solve? Any numbers behind them?",
+          "x-source": "The pain the customer described in discovery. Quantify wherever they gave you a number - ticket volumes, handle time, hours lost."
+        },
+        "objective":     { "type": "string", "x-question": "In one paragraph, what is this engagement meant to prove or deliver?" },
+        "key_focus_areas": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/bullet" },
+          "description": "Executive-summary bullets (workspace_migration).",
+          "x-question": "What are the three or four headline workstreams?"
+        },
+        "engagement_type": {
+          "type": "string",
+          "description": "Execution vs advisory framing paragraph (workspace_migration).",
+          "x-question": "Is this an execution engagement or an advisory one, and what does that mean for who does the work?"
+        },
+        "baseline_metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["metric", "value"],
+            "properties": {
+              "metric": { "type": "string" },
+              "value":  { "type": "string" },
+              "source": { "type": "string", "description": "e.g. 'ServiceNow, March-May 2026'." }
+            }
+          },
+          "x-question": "What is today's baseline we will measure against?",
+          "x-source": "Numbers the customer quoted. Always record where the number came from."
+        }
+      }
+    },
+
+    "platform": {
+      "type": "object",
+      "description": "Gemini Enterprise specifics. Required for sow_type = gemini_enterprise_implementation.",
+      "properties": {
+        "seats":            { "type": "integer", "x-question": "How many Gemini Enterprise seats are being provisioned?", "x-source": "Order form. Drives the user-community cap and the success criteria." },
+        "identity_provider": { "type": "string", "default": "Google Identity", "x-question": "Which IdP?", "x-source": "Google Identity, Entra ID, Okta. Anything other than Google Identity changes the assumptions and adds an Identity Architect." },
+        "workforce_identity_federation": {
+          "type": "string",
+          "enum": ["not_required", "customer_preexisting", "customer_to_configure"],
+          "default": "not_required",
+          "x-question": "Is Workforce Identity Federation in play, and who sets it up?",
+          "x-source": "Determines which assumption paragraph is used and whether WIF lands in Out of Scope."
+        },
+        "environment": { "type": "string", "enum": ["production", "non-production"], "default": "non-production", "x-question": "Are we deploying into a production or non-production project?" },
+        "user_community": {
+          "type": "array",
+          "items": { "type": "string" },
+          "x-question": "Which teams or departments are the in-scope users?",
+          "x-source": "e.g. Finance, HR, IT."
+        },
+        "data_sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name":      { "type": "string" },
+              "federated": { "type": "boolean", "default": false, "description": "Appends '(Federated)' to the name." },
+              "notes":     { "type": "string" }
+            }
+          },
+          "x-question": "Exactly which data sources get connected?",
+          "x-source": "Name every one. Connector count drives price, timeline and the success criteria line."
+        },
+        "cloud_foundations": {
+          "type": "boolean",
+          "default": false,
+          "x-question": "Does the customer already have a Google Cloud org, or do we stand up foundations?",
+          "x-source": "If they have no GCP org, set true - this injects the Identity & Access Configuration and Resource Implementation scope blocks."
+        },
+        "agentic_workflows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "description"],
+            "properties": {
+              "name":         { "type": "string", "description": "e.g. 'Chief of Staff'." },
+              "description":  { "type": "string" },
+              "integrations": { "type": "array", "items": { "type": "string" } },
+              "revision_cycles": { "type": "integer", "default": 1 }
+            }
+          },
+          "x-question": "Are we building any no-code agents, and what does each do?",
+          "x-source": "If empty, 'Developing agentic workflows' is added to Out of Scope automatically."
+        },
+        "activation_plan": {
+          "type": "object",
+          "description": "Google increasingly requires this. Include whenever the deal is PSF-funded against a licence commitment.",
+          "properties": {
+            "purchased_licenses":       { "type": "integer" },
+            "active_at_start":          { "type": "integer", "default": 0 },
+            "active_at_end":            { "type": "integer" },
+            "active_at_end_plus_4w":    { "type": "integer" },
+            "target_activation_percent": { "type": "integer", "default": 50 }
+          },
+          "x-question": "What activation numbers are we committing to at project end and end + 4 weeks?"
+        },
+        "golden_dataset": { "type": "boolean", "default": true, "description": "Whether the customer provides sample Q&A pairs for evaluation." }
+      }
+    },
+
+    "use_cases": {
+      "type": "array",
+      "description": "Required for sow_type = agent_pilot. Each renders a full subsection with Current Solution / Proposed Solution.",
+      "items": {
+        "type": "object",
+        "required": ["name", "proposed_solution"],
+        "properties": {
+          "name":             { "type": "string", "x-question": "What is each use case called?" },
+          "summary":          { "type": "string", "description": "One-line entry in the use-case list at the top of the section." },
+          "current_solution": { "type": "string", "x-question": "How does this workflow run today, step by step?", "x-source": "Walk the customer through it in discovery and number the steps. This is the single most meeting-dependent field in the document." },
+          "current_solution_steps": { "type": "array", "items": { "type": "string" } },
+          "proposed_solution":{ "type": "string", "x-question": "What will we build, and how does it change that flow?" },
+          "systems":          { "type": "array", "items": { "type": "string" }, "x-question": "Which systems of record does it read from and write back to?" },
+          "trigger":          { "type": "string", "x-question": "What triggers it - inbound call, API, work basket?" },
+          "success_metrics":  { "type": "array", "items": { "type": "string" }, "x-question": "How will we know this use case worked?" },
+          "figures":          { "type": "array", "items": { "type": "string" }, "description": "Figure captions; diagrams are pasted in manually after generation." },
+          "price":            { "type": "number", "description": "Per-use-case line item in the compensation table." }
+        }
+      }
+    },
+
+    "migration": {
+      "type": "object",
+      "description": "Required for sow_type = workspace_migration.",
+      "properties": {
+        "source_platform":      { "type": "string", "x-question": "Migrating from what?", "x-source": "e.g. 'Microsoft 365 (Exchange Online, OneDrive, SharePoint Online)'." },
+        "destination_platform": { "type": "string", "default": "Google Workspace (Gmail, Drive, Shared Drives, Calendar)" },
+        "tool":                 { "type": "string", "default": "CloudM Migrate", "x-question": "Which migration tool?" },
+        "domain_count":         { "type": "integer", "x-question": "How many domains?" },
+        "user_count":           { "type": "integer", "x-question": "How many active users?" },
+        "mailbox_count":        { "type": "integer", "x-question": "How many mailboxes, and what is the size distribution?", "x-source": "The size distribution drives the wave plan - ask for a breakdown, not just a total." },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "size"],
+            "properties": { "label": { "type": "string" }, "size": { "type": "string" }, "notes": { "type": "string" } }
+          },
+          "x-question": "How much data per system - mail, OneDrive, SharePoint, PSTs?",
+          "x-source": "Total TB drives worker-pool sizing and the timeline."
+        },
+        "endpoints": {
+          "type": "object",
+          "properties": {
+            "windows_count": { "type": "integer" },
+            "mac_count":     { "type": "integer" },
+            "mdm":           { "type": "string", "x-question": "What MDM manages the endpoints?" },
+            "directory":     { "type": "string", "default": "on-premises Active Directory" },
+            "in_scope":      { "type": "array", "items": { "type": "string" }, "x-question": "Which endpoint platforms are actually in scope?" }
+          },
+          "x-question": "How many domain-joined devices, on what platforms, managed by what?"
+        },
+        "sso_apps": {
+          "type": "array",
+          "items": { "type": "string" },
+          "x-question": "Which applications authenticate through AD today and need re-pointing to Google?",
+          "x-source": "Get the actual list, not a count - each one needs a validation line."
+        },
+        "worker_nodes":     { "type": "string", "x-question": "How many CloudM workers, split how?", "x-source": "e.g. '12 worker nodes (5 mail + 7 file)'." },
+        "pilot_user_count": { "type": "integer", "default": 25 },
+        "tracks": {
+          "type": "array",
+          "description": "Parallel workstreams. Each track has ordered phases; each phase has bullets.",
+          "items": {
+            "type": "object",
+            "required": ["name", "phases"],
+            "properties": {
+              "name":        { "type": "string" },
+              "description": { "type": "string" },
+              "phases": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "activities"],
+                  "properties": {
+                    "name":       { "type": "string", "description": "e.g. 'Phase 3: Pilot Migration (Week 2)'." },
+                    "intro":      { "type": "string" },
+                    "activities": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          },
+          "x-question": "What are the parallel tracks and their phase-by-phase plan?"
+        },
+        "plan_link": { "type": "string", "x-question": "Is there a live project plan / Gantt sheet to link?" },
+        "plan_note": { "type": "string", "description": "Paragraph introducing the linked plan." },
+        "decisions_pending": {
+          "type": "array",
+          "items": { "type": "string" },
+          "x-question": "What customer decisions are still open, and by when are they needed?",
+          "x-source": "These become dated dependencies. Every open decision in the notes belongs here."
+        }
+      }
+    },
+
+    "scope": {
+      "type": "object",
+      "properties": {
+        "statement":     { "type": "string", "description": "Opening paragraph of section 4." },
+        "summary_blocks": {
+          "type": "array",
+          "description": "Summary of Scope subsections. Defaults per sow_type from library/defaults.json.",
+          "items": {
+            "type": "object",
+            "required": ["heading"],
+            "properties": {
+              "heading": { "type": "string" },
+              "body":    { "type": "string" },
+              "bullets": { "type": "array", "items": { "$ref": "#/$defs/bullet" } }
+            }
+          }
+        },
+        "service_sections": {
+          "type": "array",
+          "description": "Section 5 'Description of Services'. Defaults per sow_type, then customised.",
+          "items": {
+            "type": "object",
+            "required": ["heading"],
+            "properties": {
+              "heading": { "type": "string" },
+              "intro":   { "type": "string" },
+              "bullets": { "type": "array", "items": { "$ref": "#/$defs/bullet" } }
+            }
+          }
+        },
+        "out_of_scope_extra": {
+          "type": "array",
+          "items": { "type": "string" },
+          "x-question": "What did the customer ask about that we are explicitly NOT doing?",
+          "x-source": "Everything raised in the meeting and parked. The standard exclusion list is applied automatically - this adds the deal-specific ones, which are the ones that prevent scope disputes."
+        },
+        "out_of_scope_suppress": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Substrings of standard exclusions to drop, for when the deal actually includes them."
+        }
+      }
+    },
+
+    "timeline": {
+      "type": "object",
+      "properties": {
+        "note":  { "type": "string" },
+        "weeks": { "type": "integer", "x-question": "How many weeks does the Gantt cover?" },
+        "milestones": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "name"],
+            "properties": {
+              "id":          { "type": "string", "description": "M1, M2, ..." },
+              "name":        { "type": "string" },
+              "description": { "type": "string" },
+              "task":        { "type": "string", "description": "Gantt row label." },
+              "week":        { "type": "integer", "description": "Week the milestone lands in." }
+            }
+          },
+          "x-question": "What are the milestones and which week does each land in?"
+        },
+        "schedule": {
+          "type": "array",
+          "description": "Optional dated task schedule (agent_pilot) or effort schedule (workspace_migration).",
+          "items": {
+            "type": "object",
+            "properties": {
+              "phase":       { "type": "string" },
+              "activity":    { "type": "string" },
+              "effort_hours": { "type": "number" },
+              "deliverable": { "type": "string" },
+              "start_date":  { "type": "string" },
+              "end_date":    { "type": "string" },
+              "track":       { "type": "string" }
+            }
+          },
+          "x-question": "What is the dated task-by-task schedule, with effort where we quote hours?"
+        }
+      }
+    },
+
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["detail"],
+        "properties": {
+          "name":     { "type": "string" },
+          "detail":   { "type": "string" },
+          "timeline": { "type": "string", "description": "e.g. 'End of Milestone 1' or 'M1'." }
+        }
+      },
+      "x-question": "What artefacts does the customer physically receive, and when?",
+      "x-source": "Must reconcile 1:1 with the milestones. Defaults exist per sow_type."
+    },
+
+    "resources": {
+      "type": "array",
+      "description": "Resource Allocation table (workspace_migration). Include only when quoting hours.",
+      "items": {
+        "type": "object",
+        "required": ["role"],
+        "properties": {
+          "role":             { "type": "string" },
+          "hours":            { "type": ["number", "string"] },
+          "responsibilities": { "type": "string" }
+        }
+      },
+      "x-question": "Who is staffed, for how many hours, doing what?"
+    },
+
+    "governance": {
+      "type": "object",
+      "properties": {
+        "meetings":  { "type": "array", "items": { "type": "object" }, "description": "Defaults from library/defaults.json." },
+        "raci":      { "type": "array", "items": { "type": "object" } },
+        "escalation": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["risk", "mitigation"],
+        "properties": { "risk": { "type": "string" }, "mitigation": { "type": "string" } }
+      },
+      "x-question": "What could derail this, specific to this customer?",
+      "x-source": "Five standard risks are applied automatically. Add the deal-specific ones you heard - unconfirmed API access, stakeholder turnover, resource constraints."
+    },
+
+    "assumptions":            { "type": "array", "items": { "type": "string" }, "x-question": "What are we assuming that, if wrong, changes price or timeline?" },
+    "prerequisites_before":   { "type": "array", "items": { "type": "string" }, "x-question": "What must the customer have done BEFORE we start?" },
+    "prerequisites_ongoing":  { "type": "array", "items": { "type": "string" }, "x-question": "What must the customer keep doing DURING the engagement?" },
+    "success_criteria":       { "type": "array", "items": { "type": "string" }, "x-question": "What does done look like, in terms we can hold up at closure?" },
+
+    "pricing": {
+      "type": "object",
+      "required": ["total_fixed_price"],
+      "properties": {
+        "currency":          { "type": "string", "default": "USD" },
+        "total_fixed_price": { "type": "number", "x-question": "What is the total fixed price?" },
+        "line_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "amount"],
+            "properties": {
+              "label":  { "type": "string" },
+              "amount": { "type": "number", "description": "Negative for credits." },
+              "bold":   { "type": "boolean", "default": false }
+            }
+          },
+          "x-question": "How does the price break down?"
+        },
+        "google_funding":    { "type": "number", "x-question": "How much Google funding, and is it approved?", "x-source": "PSF amount. Always rendered as a negative credit line." },
+        "partner_investment": { "type": "number", "x-question": "Is Premier Cloud investing anything?" },
+        "funding_program":   { "type": "string", "enum": ["PSF", "Commit PSF", "none"], "default": "PSF" },
+        "funding_stage":     { "type": "string", "x-question": "What opportunity stage is the funding request at?", "x-source": "e.g. 'Stage 4'." },
+        "funding_clawback":  { "type": "boolean", "default": false, "x-question": "Does the customer get invoiced the full fee if funding is not approved?", "x-source": "TRUE when the customer pays a net amount (Miles). The clawback paragraph is a material commercial term - never omit it when net > 0." },
+        "google_data_sharing_consent": { "type": "boolean", "default": false, "description": "Adds the Google usage-data consent paragraph and third-party-beneficiary clause." },
+        "payment_terms":     { "type": "string" }
+      }
+    },
+
+    "appendices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title"],
+        "properties": { "title": { "type": "string" }, "body": { "type": "string" } }
+      }
+    },
+
+    "provenance": {
+      "type": "object",
+      "description": "Written by the extraction step. Keeps the SOW auditable back to the meeting.",
+      "properties": {
+        "sources":    { "type": "array", "items": { "type": "string" }, "description": "Doc IDs / file names / meeting dates the intake was built from." },
+        "extracted":  { "type": "string", "description": "Timestamp." },
+        "assumed":    { "type": "array", "items": { "type": "string" }, "description": "Values the model inferred rather than read. Every one needs human review." },
+        "unanswered": { "type": "array", "items": { "type": "string" }, "description": "Questions the notes did not answer." }
+      }
+    }
+  },
+
+  "$defs": {
+    "person": {
+      "type": "object",
+      "properties": {
+        "name":    { "type": "string" },
+        "title":   { "type": "string" },
+        "email":   { "type": "string" },
+        "phone":   { "type": "string" },
+        "address": { "type": "string" }
+      }
+    },
+    "bullet": {
+      "description": "A bullet, optionally with a bold lead-in label and nested children.",
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "required": ["text"],
+          "properties": {
+            "label":    { "type": "string" },
+            "text":     { "type": "string" },
+            "children": { "type": "array", "items": { "$ref": "#/$defs/bullet" } }
+          }
+        }
+      ]
+    }
+  }
+}

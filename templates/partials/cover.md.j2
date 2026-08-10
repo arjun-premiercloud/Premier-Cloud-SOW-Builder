@@ -1,0 +1,29 @@
+# {{ doc.title }}
+{% if doc.subtitle %}
+
+**{{ doc.subtitle }}**
+{% endif %}
+
+**Prepared by:** {{ doc.prepared_by or 'Premier Cloud Team' }}
+
+**Prepared for:** {{ customer.legal_name }}
+
+**Date:** {{ doc.date }}
+
+**Version:** {{ doc.version or '1.0' }}
+
+---
+{% if doc.include_toc is not defined or doc.include_toc %}
+
+## Table of Contents
+
+{% for s in section_list %}
+{{ s.n }}. {{ s.title }}
+{% endfor %}
+{% for a in appendices %}
+Appendix {{ alpha(loop.index0) }}: {{ a.title }}
+{% endfor %}
+
+---
+
+{% endif %}

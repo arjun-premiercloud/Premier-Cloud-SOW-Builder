@@ -1,0 +1,1153 @@
+# ---------------------------------------------------------------------------
+# Premier Cloud SOW clause library
+#
+# This is the house language. Every phrase here was lifted from an issued
+# Premier Cloud SOW - do not paraphrase it when generating. The renderer pulls
+# these defaults by `sow_type`; the intake file overrides or extends them.
+#
+# Editing rules:
+#   - Legal blocks (preamble, closure, expenses, taxes, compensation intro) are
+#     verbatim. Change them only with sign-off.
+#   - Scope, out-of-scope and assumption lists are the starting position. Deals
+#     add to them; deals rarely subtract.
+#   - Keep the voice: "Partner will...", "Customer will...", third person,
+#     counts written as "two (2) sessions".
+# ---------------------------------------------------------------------------
+
+partner:
+  legal_name: Premier Cloud Inc.
+  address: 504-1803 Douglas Street, Victoria BC
+  phone: "+1 888-866-2230"
+  contact:
+    name: Jason Murray-Rosel
+    title: Head of Client Success
+    email: jason@premiercloud.com
+    phone: "+1 888-866-2230"
+    address: 504-1803 Douglas Street, Victoria BC
+  signatory:
+    name: Jason Murray-Rosel
+    title: Head of Client Success
+    email: jason@premiercloud.com
+    phone: "+1 888-866-2230"
+  profile: >-
+    Premier Cloud is a Google Cloud Premier Partner with over two decades of
+    experience, specializing in Google Workspace and Google Cloud Platform (GCP)
+    services. We focus on accelerating digital transformation for our clients
+    through core expertise in large-scale cloud migrations, security
+    assessments, and AI implementations. Our value lies in our deep technical
+    knowledge across infrastructure and data - including our status as a Gemini
+    Enterprise partner - combined with the agility to deliver high-impact
+    results quickly for mid-market and enterprise customers.
+  specializations:
+    - label: AI & Data Modernization
+      text: >-
+        We are a Gemini Enterprise partner leveraging Vertex AI/Gemini/Agentspace
+        for AI agent building and data analytics solutions using BigQuery and
+        Looker.
+    - label: Migration & Infrastructure
+      text: >-
+        Our services include advanced cloud migrations and infrastructure
+        modernization, with a proven track record of large-scale Microsoft
+        365-to-Google Workspace migrations and Active Directory decommissioning.
+    - label: Agile Delivery & Support
+      text: >-
+        We provide rapid, friction-free pre-sales support, with technical
+        engineers incentivized to quickly identify and deliver solutions. This
+        focus on speed is a key differentiator in delivery.
+  target_market: >-
+    As a Priority Partner in North America, our focus is on mid-market and
+    enterprise customers (MME). We have deep industry expertise in Financial
+    Services, Healthcare, Media & Entertainment, Retail, and Logistics.
+
+# --------------------------------------------------------------------------
+# Legal preamble. `public_link` is the default; `dated_mpsa` is used when a
+# negotiated Master Professional Services Agreement exists.
+# --------------------------------------------------------------------------
+preamble:
+  public_link: >-
+    This Statement of Work ("SOW") is executed {{execution_date}} ("SOW Execution
+    Date") between *{{partner_name}}* ("Partner") and *{{customer_name}}*
+    ("Customer"). This SOW is entered into pursuant to the terms of the Master
+    Services Agreement ("Agreement"), available at {{msa_url}}. By signing this
+    SOW, Customer acknowledges that it has reviewed, understands, and agrees to
+    be bound by the terms of the Agreement. Any terms used in this SOW and not
+    otherwise defined herein shall have the definitions assigned to such terms
+    in the Agreement. Partner has agreed to perform Services and provide certain
+    Deliverables to Customer as contemplated and stated below in this SOW. Any
+    services performed or deliverables provided to Customer prior to the
+    Execution Date that are related to the Services or Deliverables detailed in
+    this SOW are subject to the same terms and conditions set forth in this SOW
+    and the Agreement. Except as otherwise permitted by the Agreement, in case
+    of any conflict between this SOW and the Agreement, the Agreement shall
+    control.
+  dated_mpsa: >-
+    This Statement of Work ("SOW") is executed {{execution_date}} ("SOW Execution
+    Date") between {{partner_name}}, ("Partner") and {{customer_name}}
+    ("Customer"), and is entered into pursuant to the terms of the [Master
+    Professional Services Agreement]({{msa_url}}) dated {{msa_date}} (the
+    "Agreement"). Any terms used in this SOW and not otherwise defined herein
+    shall have the definitions assigned to such terms in the Agreement. Partner
+    has agreed to perform Services and provide certain Deliverables to Customer
+    as contemplated and stated below in this SOW. Except as otherwise permitted
+    by the Agreement, in case of any conflict between this SOW and the
+    Agreement, the Agreement shall control.
+
+term:
+  standard: >-
+    The Term of this SOW will begin on the SOW Effective Date (as defined below)
+    and shall continue until an estimated end date of {{end_date}} ("Term"),
+    pending acceptance of all deliverables, unless earlier terminated by a Party
+    or the Parties in accordance with the Agreement.
+  extendable_sentence: >-
+    Subject to the agreement on services, deliverables, compensation and
+    expenses, the Term of this Statement of Work may be extended upon mutual
+    written agreement of Partner and Customer which agreement shall be in a
+    written amendment to this Statement of Work or the entering into another
+    Statement of Work between the Parties.
+  effective_date_sentence: '"SOW Effective Date" will be {{effective_date}}.'
+
+# --------------------------------------------------------------------------
+# Section 3 openers
+# --------------------------------------------------------------------------
+product_intro:
+  gemini_enterprise: >-
+    Gemini Enterprise is a managed service offering by Google Cloud, leveraging
+    advanced capabilities in machine learning and AI to deliver high-quality
+    search functionality and assistant experience. The solution integrates with
+    both first-party (1P) and third-party (3P) data connectors, enabling
+    seamless data retrieval and enhanced search experiences.
+  gemini_enterprise_cx: >-
+    Gemini Enterprise for Customer Experience (GECX) is Google Cloud's platform
+    for building and operating conversational agents across voice and digital
+    channels, with native telephony through the Google Telephony Platform (GTP),
+    tool calling into customer systems of record, and a shared observability and
+    governance plane across agents.
+
+scope_statement:
+  workspace_migration: >-
+    This engagement is delivered in parallel tracks executed over the Term.
+    Each track follows the migration tool's documented methodology, applied in
+    waves keyed to the source data distribution.
+  gemini_enterprise_implementation: >-
+    Partner will design and support Customer in this deployment of Gemini
+    Enterprise in Customer's Google Cloud environment, lead the development and
+    testing efforts, and enable Customer's users to leverage the solution's
+    intelligent search capabilities and versatile conversational assistant for
+    faster enterprise search, and access to information boosting user
+    productivity.
+
+# --------------------------------------------------------------------------
+# Section 4 "Summary of Scope" - the short prose version
+# --------------------------------------------------------------------------
+summary_blocks:
+  gemini_enterprise_implementation:
+    - heading: Kickoff & Discovery
+      body: >-
+        The project kickoff and discovery phase will establish project
+        governance, define success criteria, and confirm technical set up.
+        Activities to be performed will include understanding Customer's current
+        system, ensuring access to the necessary Google Cloud environment and
+        tools, acquiring sample question and answer pairs (golden data set)
+        provided by the customer, and conducting use case discovery workshops
+        with the Customer to identify and prioritize the target use cases for
+        the implementation.
+    - heading: Solution Design
+      body: >-
+        Design a solution architecture unique to Customer's environment to meet
+        the outlined business and technical requirements including specifics
+        around the security and system designs, data model design, and connector
+        configuration.
+    - heading: Datasource Connectors Set Up
+      bullets:
+        - "Configure {{identity_provider}} as the identity provider for Gemini Enterprise."
+        - text: >-
+            Configure and connect each of the identified data sources to Gemini
+            Enterprise, ensuring each connector supports user-specific access:
+          children_from: data_sources
+    - heading: Development & Testing
+      bullets:
+        - >-
+          Configure and test data source connections within Gemini Enterprise,
+          ensuring user-specific access and proper access controls.
+        - >-
+          Evaluate the solution against a customer-provided golden dataset and
+          refine based on feedback, with ongoing technical assistance provided
+          throughout testing.
+    - heading: User Adoption and Organizational Enablement
+      bullets:
+        - label: Sponsorship & Vision Alignment
+          text: >-
+            Identify, engage, and brief key executive sponsors and business
+            leaders to align on the vision and business objectives for Gemini
+            Enterprise. One (1) executive briefing will be delivered.
+        - label: Organizational Analysis
+          text: >-
+            Conduct workshops and analysis with the in scope users to assess the
+            impact of the change on their roles and workflows, and identify
+            opportunities for transformation. One (1) workshop will be conducted.
+        - label: Communication Strategy
+          text: >-
+            Develop a strategic communication plan, including key messages,
+            channels, and a timeline to create awareness, build momentum, and
+            provide ongoing updates to the organization. This includes the
+            creation of a powerful "elevator pitch" and a marketing strategy
+            intended to support a successful implementation.
+        - label: Onboarding and Enablement Plan
+          text: >-
+            Develop a customized Adoption Blueprint for the in scope cohort(s).
+            Deliver two (2) targeted enablement sessions designed to drive
+            immediate day-one value and guide users on taking full advantage of
+            Gemini Enterprise capabilities.
+        - label: Success Measurement
+          text: >-
+            Define clear, measurable success criteria and a plan for tracking
+            metrics to evaluate the program's effectiveness and demonstrate
+            business value.
+    - heading: Project Closure & Next Steps
+      body: >-
+        The project will conclude with a knowledge transfer meeting to review
+        goals, lessons learned, and deliverables, including a Technical Design
+        Document.
+
+# Injected into Solution Design when platform.cloud_foundations is true.
+cloud_foundations_block:
+  heading: Cloud Foundations
+  bullets:
+    - label: Identity & Access Configuration
+      text: "Establish Google Cloud Identity and Organization"
+      children:
+        - >-
+          Collaborate with appropriate stakeholders to establish a Google Cloud
+          Identity tenant integration, including importing user groups provided
+          by the project stakeholder.
+        - "Verify the project stakeholder's primary domain within Google Cloud."
+        - >-
+          Create a Google Cloud domain, working with the project stakeholder's
+          networking team to ensure domain record maintenance for validation
+          within two business days.
+        - "Set up all super admins, users, and groups within Google Cloud Identity."
+        - "Create the organization root in Google Cloud."
+    - label: Resource Implementation and Validation
+      text: "Implement core Google Cloud Resources and Policies"
+      children:
+        - >-
+          Configure the Google Cloud resource hierarchy, creating two folders
+          (one for production and one for non-production) and two projects (one
+          production and one non-production).
+        - >-
+          Assign users to corresponding Google Cloud pre-defined Identity and
+          Access Management (IAM) roles.
+        - "Create necessary service accounts (no more than three) for automated processes."
+        - "Allow-list essential Gemini Enterprise APIs (e.g., discoveryengine.googleapis.com)."
+        - >-
+          Create no more than five simple organizational policies as a starting
+          point for Google Cloud Security.
+    - label: Review the Google Cloud environment implementation
+      text: ""
+      children:
+        - >-
+          Conduct a thorough review of the configured Google Cloud environment
+          against the agreed-upon requirements.
+        - >-
+          Verify the set up of Google Cloud Identity, organization structure,
+          resource hierarchy, and core policies.
+        - >-
+          Confirm that essential Gemini Enterprise APIs are allow-listed and the
+          environment is prepared for Gemini Enterprise integration.
+
+# --------------------------------------------------------------------------
+# Section 5 "Description of Services" - the contractual long form
+# --------------------------------------------------------------------------
+service_sections:
+  gemini_enterprise_implementation:
+    - heading: Kickoff & Discovery
+      bullets:
+        - "Create a Project Plan for achieving the agreed-upon goals and objectives."
+        - text: >-
+            Facilitate discovery workshops (between one (1) - four (4) hours)
+            with the Customer teams to:
+          children:
+            - "Explore Customer's current workflows and system set-up."
+            - "Confirm understanding of the identified use cases and define success criteria."
+            - "Confirm understanding of user authentication and authorization set-up."
+            - >-
+              Identify, discuss, and prioritize the target use cases to be
+              exercised during the enablement sessions.
+        - >-
+          Document the prioritized use cases in a Use Cases Document for use in
+          the enablement sessions.
+        - "Document the results of the discovery workshops in a Discovery Findings Document."
+        - label: Project Set Up
+          text: ""
+          children:
+            - text: >-
+                Enable all necessary tools and services required for this
+                engagement in Customer's Google Cloud environment which is
+                expected to include at least the following:
+              children:
+                - "Source code control version management."
+                - >-
+                  Identify a Google Cloud project in Customer's
+                  {{environment}} environment where the implementation will take
+                  place.
+                - >-
+                  Confirm in the Google Cloud console that the Application
+                  Programming Interface (API) has been activated for the
+                  identified project.
+                - "Confirm the project is allowlisted to start using Gemini Enterprise."
+            - "Configure user authentication and authorization using the in-scope identity provider."
+    - heading: Solution Design
+      bullets:
+        - >-
+          Design a solution architecture to meet the outlined business and
+          technical requirements including specifics around the security and
+          system designs, data model design, and connector configuration.
+        - >-
+          Review the solution design with Customer prior to implementation,
+          refine the solution architecture as mutually agreed upon, and agree
+          upon the finalized solution design.
+    - heading: Gemini Enterprise Deployment and Datasource Connectors Set Up
+      bullets:
+        - >-
+          Configure and connect each of the in-scope data sources to Gemini
+          Enterprise, ensuring each connector supports user-specific access, per
+          the capabilities of the connector.
+        - >-
+          Verify that each connector respects access controls, allowing users to
+          search only the data they are permitted to view via test scenarios
+          mutually agreed upon with Customer.
+        - >-
+          Test different user roles and permission levels (e.g., admin vs.
+          regular user) to verify appropriate data access via test scenarios
+          mutually agreed upon with Customer.
+    - heading: User Testing and Optimization
+      bullets:
+        - >-
+          Validate the implemented solution against the prioritized use cases
+          documented during discovery, refining the configuration based on
+          Customer feedback.
+        - label: User Acceptance Testing
+          text: ""
+          children:
+            - >-
+              Onboard the user cohort (up to {{seats}} users) via the enablement
+              session, which serves as both the product training and the UAT
+              kickoff.
+            - >-
+              Support Customer users in testing the deployed solution against the
+              prioritized use cases over a one-week period.
+    - heading: User Adoption and Organizational Enablement
+      groups:
+        - title: "Planning and Strategy:"
+          bullets:
+            - label: Executive Sponsorship Assessment
+              text: >-
+                Conduct a formal assessment to identify the executive sponsor,
+                business leaders/managers, and change agents who will champion
+                the change.
+            - label: Sponsorship Engagement Plan
+              text: >-
+                Develop a plan to formalize the roles of the sponsorship groups,
+                including their responsibilities and the timing of their
+                engagement.
+            - label: Case for Change & Elevator Pitch
+              text: >-
+                Guide the customer in brainstorming the benefits of Gemini
+                Enterprise and creating a compelling vision and elevator pitch
+                for the organization.
+            - label: Organizational Analysis & Impact Assessment
+              text: >-
+                Lead workshop(s) with the in scope user group(s) to assess the
+                impact of Gemini Enterprise, considering new features,
+                behaviors, and the level of impact (high, medium, low).
+            - label: Policy & Process Impact
+              text: >-
+                Identify and document key policy and process changes that may be
+                required for a wider deployment, such as mobile device
+                management, data retention, and user support.
+            - label: Success Metrics Definition
+              text: >-
+                Define both qualitative and quantitative success metrics to track
+                and evaluate the program's effectiveness. This includes metrics
+                for deployment support, minimizing disruption, and enhancing
+                productivity.
+            - label: Project Governance & Communication Plan
+              text: >-
+                Establish a clear project governance structure, including a
+                communication plan for stakeholders and a RACI matrix for
+                deliverables.
+        - title: "Implementation and Execution:"
+          bullets:
+            - label: Communication Plan Development
+              text: >-
+                Develop a detailed communication plan that outlines key messages
+                for each in scope user group, the recommended sender,
+                communication channels, and a timeline for delivery.
+            - label: Enablement Needs Assessment
+              text: >-
+                Conduct an enablement needs assessment for each in scope user
+                group to define core learning objectives, relevant use cases,
+                and the most effective enablement format.
+            - label: Enablement Curriculum & Delivery
+              text: >-
+                Create an enablement curriculum that details the learning
+                objectives, delivery methods, and timing. Partner will host two
+                (2) targeted enablement sessions designed to guide users on
+                taking full advantage of Gemini Enterprise.
+            - label: "Establish a multi-layered support system"
+              text: >-
+                Create a support plan offering various channels for assistance
+                which may include one or more of the following: FAQs, Quick
+                Reference Guides, short tutorial videos, help/support tickets.
+        - title: "Sustain and Measure:"
+          bullets:
+            - label: Operational Guidelines
+              text: >-
+                Provide guidance on maintaining the user adoption program
+                post-deployment, including how to continue promoting adoption and
+                measuring success.
+    - heading: Project Closure & Next Steps
+      bullets:
+        - text: "Conduct a knowledge transfer and closeout meeting of up to two (2) hours to:"
+          children:
+            - "Recap the project goals."
+            - "Summarize lessons learned and accomplishments."
+            - >-
+              Review submitted deliverables including Technical Design Document,
+              user adoption, and organizational enablement assets.
+        - label: "Technical Documentation, Handover & Project Governance"
+          text: ""
+          children:
+            - "Prepare comprehensive Technical Design Documents (TDD)."
+            - >-
+              Conduct a session to provide operational guidelines to ensure
+              smooth solution operation and maintenance.
+
+  agent_pilot:
+    - heading: Kickoff & Discovery
+      bullets:
+        - >-
+          Project kickoff session with executive sponsors, Customer's technical
+          leadership, and the Premier Cloud delivery team.
+        - >-
+          Discovery workshops covering Customer's current operating model for
+          each in-scope workflow, and the scope each pilot agent will demonstrate.
+        - >-
+          Agent scoping sessions to define, per agent, the conversation flows,
+          decision trees, intent categories, and verification dialogues by caller
+          type, plus trigger and write-back behavior.
+        - >-
+          Collection of representative knowledge articles, call scripts, data
+          samples, and pilot-environment integration endpoints from Customer
+          systems to seed agent design.
+        - >-
+          Alignment on per-agent pilot success criteria, measured against the
+          agreed pilot scenarios.
+        - >-
+          Communication cadence and project governance setup, including weekly
+          status meetings, written status reporting, and escalation paths.
+        - >-
+          Confirmation of Customer-provided prerequisites: knowledge articles,
+          call flows and scripts, pilot-environment access, and named technical
+          contacts for the build phases.
+    - heading: Solution Design
+      bullets:
+        - >-
+          Agent architecture for each in-scope agent covering the conversation
+          flow, intent taxonomy, entity-extraction model, and decision trees.
+        - >-
+          Tool and function definitions for each agent, covering every read and
+          write against Customer's systems of record.
+        - >-
+          Integration architecture for Open API connectors between the Gemini
+          Enterprise agent platform and the chosen pilot configuration of
+          Customer's systems of record.
+        - >-
+          Conversational memory and session-state design covering caller context,
+          dialog history, and human-handoff escape paths.
+        - >-
+          Latency and reliability targets aligned with real-time voice
+          expectations on the GECX voice channel (Google Telephony Platform) in
+          the pilot environment.
+        - >-
+          Data-handling design covering information flowing through agent
+          context, transcript redaction prior to write-back, retention behavior
+          during the pilot, and observability boundaries.
+        - >-
+          Solution Design Document deliverable for Customer technical review and
+          written approval before build begins.
+    - heading: Gemini Enterprise Deployment and Datasource Connectors Set Up
+      bullets:
+        - >-
+          Build Open API connectors between the Gemini Enterprise agent platform
+          and Customer's pilot-environment systems of record.
+        - >-
+          Configure connector authentication, error handling, retries, and
+          timeout behavior aligned with pilot reliability targets.
+        - >-
+          Wire representative knowledge articles, call scripts, and verification
+          test records into the agent's accessible data layer to support
+          realistic exercise of the conversation flow.
+        - "Build the in-scope agents on the Gemini Enterprise agent platform per the approved Solution Design Document."
+        - >-
+          Implement, for each agent, the conversation flow, decision trees,
+          intent handling, and entity extraction on the GECX agent platform.
+        - "Integrate each agent with the Open API connectors delivered earlier in the pilot."
+        - "Document connector configuration, dependencies, and operational considerations for the handover package."
+    - heading: User Testing and Optimization
+      bullets:
+        - "Smoke-test each agent's connector path end-to-end against the pilot configuration."
+        - "Capture a baseline tool-call-accuracy measurement that will be tracked through the rest of the pilot."
+        - "Tune latency and conversation quality through iterative testing against representative pilot scenarios."
+        - "Architect-led build-review checkpoint to confirm implementation adheres to the Solution Design Document."
+        - >-
+          Internal Premier Cloud UAT alongside Customer's technical team,
+          exercising each agent end-to-end against its agreed pilot scenarios.
+        - "Capture measurements against the agreed per-agent success criteria."
+        - >-
+          Iterate on agent behavior based on UAT findings; document observations
+          and adjustments for the handover package.
+    - heading: User Adoption and Organizational Enablement
+      bullets:
+        - >-
+          Agent dashboard handover with Customer's technical team, covering
+          observability, conversational insights, and decision-tree traceability.
+        - "Hands-on training session covering day-to-day agent operation, monitoring, and tuning workflows."
+        - "Knowledge-transfer session on the Gemini Enterprise agent platform for future agent work."
+        - >-
+          Provision of curated Google Skills Boost learning paths and Generative
+          AI certification resources aligned with Customer's broader AI-fluency
+          program.
+        - "Adoption coordination with the technical team - schedules, attendee lists, and follow-up touchpoints."
+        - "Documented training materials packaged for the team's reference after Premier Cloud's engagement concludes."
+    - heading: Project Closure & Next Steps
+      bullets:
+        - >-
+          Final pilot report covering scope, activities, outcomes, and observed
+          measurements against the agreed success criteria.
+        - "Documented findings, lessons learned, and recommendations for Customer's technical team."
+        - >-
+          Follow-up roadmap aligned to Customer's continued evaluation of Google
+          Cloud's open agent platform, including potential next-pilot candidates
+          and broader opportunities.
+        - "Final pilot review meeting with Customer stakeholders to walk through outcomes and the proposed roadmap."
+        - "Administrative closure of the engagement and coordination of pilot environment cleanup and access transition to Customer."
+
+# --------------------------------------------------------------------------
+# Out of Scope. The standard list is applied automatically; deal-specific
+# exclusions come from intake `scope.out_of_scope_extra`.
+# --------------------------------------------------------------------------
+out_of_scope:
+  gemini_enterprise_implementation:
+    - "Development of production-grade custom/AutoML/gen AI-specific ML model or large-scale deployment."
+    - "Development of new or custom connectors and actions beyond what is described in this SOW."
+    - >-
+      Search tuning, the development of a data management system, the use of
+      custom embeddings, or fine-tuning foundational LLMs beyond basic
+      adjustments.
+    - "Technical assistance beyond the project's scope."
+    - "Hypercare or other post-deployment support."
+    - >-
+      Automatically updating the model's knowledge base or tuning based on user
+      interactions and feedback during conversations.
+    - "Redacting any PII data from any model/pipeline."
+    - "Developing solutions supporting non-English documents, queries, or answers."
+    - "Integrating the solution with or customizing any downstream applications."
+    - "Performing optimizations on existing code or queries."
+    - "Performing any work in Customer's existing production systems."
+    - "Creating new step-by-step documentation to set up and operate Customer's Google Cloud environment."
+    - >-
+      Benchmarking solution performance against any of the existing models used
+      by Customer or other open source models.
+    - "Providing advisory, support, or delivery services for third-party products or services."
+    - "Performing regulatory compliance audits or acting as a qualified security assessor."
+    - >-
+      Providing ongoing support, maintenance, or modifications beyond the
+      engagement's completion, including: technical support for delivered
+      artifacts; changes to the technical architecture post-completion;
+      contributions to or maintenance of customer CI/CD pipelines, IaC
+      frameworks, or associated configurations.
+    - >-
+      Providing contributions to internal Customer documentation or tools (e.g.,
+      Jira, Microsoft Project) for program management or backlog planning.
+    - "Developing any custom user interface (UI) or integrating the solution to an existing UI."
+    - "Evaluating search result quality from Vertex AI Search outside the context of Gemini Enterprise."
+  agent_pilot:
+    - >-
+      Production rollout of the agent to live customer-facing channels is out of
+      scope for the pilot; production go-live would be addressed under a separate
+      engagement following Customer's evaluation of the pilot outcomes.
+    - >-
+      Production integration with Customer's live telephony entry point for
+      routing of live calls is out of scope; pilot demonstrations exercise
+      representative call scenarios.
+    - >-
+      Replacement or migration of Customer's existing systems of record is out of
+      scope; the pilot agent integrates with a representative configuration of
+      these systems via Open API.
+    - >-
+      Migration of historical ticket or claims data into Google Cloud is out of
+      scope; the pilot uses representative data samples agreed in Phase 1.
+    - >-
+      24x7 production support of the pilot agent is out of scope; the agent is
+      operated and monitored by Customer during and after the pilot with Premier
+      Cloud reachable for follow-up questions.
+    - "Service-level commitments or production availability SLAs for the pilot agent are out of scope."
+    - "Compliance certifications (e.g., SOC 2, HIPAA, PCI-DSS) and the associated audit activities are out of scope."
+    - "Penetration testing or third-party security audits of the pilot environment are out of scope."
+    - "Hardware procurement and telephony-infrastructure provisioning are out of scope."
+    - "End-user (consumer) training and external customer communications are out of scope."
+    - "Multi-language agent support beyond the languages agreed for the pilot scenarios is out of scope."
+  workspace_migration:
+    - "End-user training programs beyond standard change-management templates (sample emails, FAQs)."
+    - >-
+      Re-creation of personal email artifacts that the migration tool does not
+      migrate: complex signatures (those with inline images), canned responses
+      (aka templates), and inbox filters/rules (users self-apply these
+      post-migration). Note that simple signatures will be migrated.
+    - >-
+      Migration of externally-shared file permissions that cannot be
+      re-established via the migration tool (re-sharing handled by users for
+      critical content; remaining external shares accepted as loss per customer
+      direction).
+    - "Procurement or deployment of third-party security or backup tools."
+    - "Ongoing managed services post-cutover."
+
+# Injected as its own Scope block and Services subsection when
+# platform.agentic_workflows is populated. `{{agent_line}}` is built per agent.
+agentic_workflow_section:
+  heading: Agentic Workflow
+  build_bullets:
+    - "Develop initial agent definitions and logic based on identified business needs."
+    - "Perform comprehensive testing of agent outputs against accuracy benchmarks."
+    - "Analyze testing outcomes to optimize prompt engineering and agent responses."
+    - >-
+      Provide Customer with one (1) formal revision cycle to incorporate final
+      feedback and finalize agent functionality.
+  summary_lead: 'Develop a "{{name}}" no-code agent that {{description}}'
+  services_lead: >-
+    Develop a "{{name}}" no-code agent with the Gemini Enterprise Agent Designer
+    that {{description}}
+
+# Conditional exclusions, appended when the intake shows the capability is absent.
+conditional_out_of_scope:
+  no_agentic_workflows: "Developing agentic workflows."
+  no_custom_agents: "Development of any custom agents or agentic workflows."
+  wif_customer_managed: "Configuration of Google Identity with Google Cloud Workforce Identity Federation."
+  single_idp: >-
+    Configuration, troubleshooting, or integration with any identity provider
+    (IdP) other than the agreed-upon {{identity_provider}}.
+
+# --------------------------------------------------------------------------
+# RAID
+# --------------------------------------------------------------------------
+risks:
+  standard:
+    - risk: Delay due to product feature issues
+      mitigation: >-
+        Partner will collaborate to resolve any product related issues and
+        revisit timelines to drive customer success.
+    - risk: Differing expectations between Partner and Customer
+      mitigation: >-
+        Conduct frequent stakeholder alignment meetings; define and document a
+        clear SOW and Acceptance Criteria at the outset; use RACI matrices to
+        clarify roles.
+    - risk: Compatibility issues between Customer's existing systems and Google Cloud architecture
+      mitigation: >-
+        Conduct a thorough technical discovery to identify integration points and
+        security requirements.
+    - risk: Data privacy and compliance concerns when moving to the cloud
+      mitigation: >-
+        Include a separately scoped security and compliance assessment as part of
+        onboarding; ensure Google Cloud services adhere to industry compliance
+        standards; provide transparent documentation about Google Cloud security
+        certifications.
+    - risk: Technical issues due to inadequate testing
+      mitigation: >-
+        Include comprehensive testing phases (unit, system, integration, UAT);
+        use automated testing tools; develop a checklist to validate key
+        onboarding milestones.
+  risks_intro: "Partner and Customer will meet at regular intervals to mitigate any risk as it comes up."
+
+assumptions:
+  gemini_enterprise_implementation:
+    - "Additional data connectors will impact the delivery schedule and cost."
+    - "Customer is using compatible versions of the identified connectors and source systems."
+    - >-
+      A single identity provider ({{identity_provider}}) will be supported for
+      this engagement.
+    - >-
+      If using the private access option for any connector, Customer will set up
+      Private Service Connect between their Google Cloud network environment and
+      the network of the third-party data source, prior to the start of the
+      engagement.
+    - 'Customer will provide valid, accessible, and "clean" data in the specified source systems.'
+    - >-
+      Customer will grant Partner's team the necessary administrative rights and
+      permissions within their environment to configure the required services for
+      the Gemini Enterprise implementation.
+    - >-
+      Customer shall assign qualified subject matter experts and technical points
+      of contact to support Partner during this engagement.
+    - "All Services will be performed remotely by Partner from North America."
+  agent_pilot:
+    - "Customer will provide access to the chosen pilot environment within timelines agreed in Phase 1."
+    - "Customer will be responsible for establishing the private connectivity between their local systems and Google Cloud."
+    - >-
+      Customer will supply representative call flows and scripts, knowledge
+      articles, sample interactions, and relevant data records during Phase 1 to
+      seed agent design.
+    - >-
+      Customer's technical team and named technical contacts will be available for
+      joint discovery, review, and UAT activities at the agreed cadence.
+    - >-
+      Open API endpoints to the chosen pilot configuration of Customer's systems
+      of record are documented and accessible to Premier Cloud during the build
+      phases.
+    - >-
+      Pilot scenarios and the associated use-case and decision-tree scope are
+      agreed in Phase 1; significant scope additions during the pilot are
+      addressed through a written Change Request.
+    - "The Google Cloud services referenced in this SOW are available in the region(s) Customer elects for the pilot environment."
+    - >-
+      Customer's organizational alignment supports the pilot timeline, including
+      the availability of executive and technical stakeholders for milestone
+      reviews and the final pilot review meeting.
+  workspace_migration:
+    - >-
+      Administrative credentials in both tenants are provisioned per the
+      migration tool's prerequisites (Global Admin in the source tenant; Super
+      Admin or equivalent in the Google Workspace destination).
+    - >-
+      Source-platform API throttling is absorbed by the migration worker pool
+      sizing; migration windows are scheduled around peak business hours where
+      throttling is heaviest.
+    - >-
+      Network bandwidth from the source platform to the migration worker pool is
+      sufficient for the total data volume; worker count and concurrency may be
+      tuned during pilot.
+    - "Premier Cloud and Customer maintain a weekly status cadence throughout the engagement."
+
+# Identity-provider assumption variants, selected by platform.workforce_identity_federation.
+wif_assumption:
+  not_required: >-
+    A single identity provider ({{identity_provider}}) will be supported for this
+    engagement. Customer's users are managed in Google Workspace; no Workforce
+    Identity Federation set-up is anticipated.
+  customer_preexisting: >-
+    A single identity provider ({{identity_provider}}) will be supported for this
+    engagement, using an existing Workforce Identity pool.
+  customer_to_configure: >-
+    A single identity provider ({{identity_provider}}) will be supported for this
+    engagement. Customer is expected to set up Workforce Identity Federation prior
+    to the engagement.
+
+prerequisites_before:
+  intro: "Customer will meet all of the following project prerequisites **BEFORE** the start of the Services:"
+  gemini_enterprise_implementation:
+    - "Provide the IAM roles and access to Customer's Google Cloud environment."
+    - >-
+      Provide access to identified systems for Gemini Enterprise connectors to be
+      integrated into the Gemini Enterprise product.
+    - "Identify users for product testing and providing feedback."
+    - "Ensure SMEs availability for discovery sessions, weekly meetings, and testing activities."
+    - "Participate in the use case discovery workshops and confirm the prioritized use cases."
+    - "Enable access to all required Google Cloud services needed for the successful performance of the Services."
+    - "Provide access to all third-party data sources/connectors for integrating connectors."
+    - >-
+      Ensure that users within Customer's organization are provided appropriate
+      permissions for the applications, before the start of the project.
+    - >-
+      Provide subject-matter input and representative content needed to define and
+      validate the prioritized use cases during discovery, preparation, and
+      prototyping activities.
+    - >-
+      Provide relevant discovery documentation covering the infrastructure,
+      deployment, integration, and application architecture (API contracts,
+      interfaces, proposed consuming client details, etc.) and configuration
+      details for in scope components.
+    - >-
+      Provide Partner with access to subject matter experts for technical and
+      business discussions to support decision making and information regarding
+      Customer information, infrastructure, and application security.
+    - "Assign a project sponsor who will serve as an escalation point for timely completion of tasks."
+    - "Align stakeholders to attend the kickoff meeting and regular calls as part of the engagement."
+    - >-
+      Provide a dedicated project manager responsible for Customer's engagement,
+      scheduling, managing communication with teams, change management, issue
+      escalation, and coordination with Partner.
+    - >-
+      Make available technical personnel with appropriate approvals, systems
+      access, and permissions to allow for the implementation of the solution.
+    - "Provide timely access to application owners that can respond to specific queries."
+    - "Provide program goals and target metrics."
+  agent_pilot:
+    - >-
+      Google Cloud Platform environment access provisioned in Customer's selected
+      region(s), with appropriate IAM, project structure, and network
+      configuration for the pilot.
+    - "Named executive sponsor, technical lead, operational reviewer, and business SME identified for the pilot."
+    - "Initial set of pilot scenarios identified and shared at a high level prior to Phase 1."
+    - "Pilot-environment selection (production sandbox, development, or sample-data layer) agreed in principle."
+    - "Documented API access for the pilot systems of record."
+    - "Counter-signed SOW and any required Master Services Agreement in place prior to engagement kickoff."
+
+prerequisites_ongoing:
+  intro: "Customer will perform the following **ONGOING** activities during the engagement:"
+  gemini_enterprise_implementation:
+    - "Provide the IAM Roles and access to Customer's Google Cloud environment."
+    - "Provide access to identified systems for Gemini Enterprise connectors to be integrated."
+    - "Identify users for product testing and providing feedback."
+    - "Ensure SMEs availability for discovery sessions, weekly meetings, and testing activities."
+    - >-
+      Perform all necessary prerequisite modifications or enhancements to their
+      foundations to accommodate successful onboarding of the Gemini Enterprise
+      product.
+    - "Ensure decisions are completed within one (1) business day, as part of project delivery."
+    - >-
+      Actively collaborate on requirements analysis, decision making,
+      documentation, coding, and testing as needed for Partner's successful
+      performance of the Services.
+    - >-
+      Provide timely access to necessary customer documentation, internal systems,
+      relevant SMEs, and logs/telemetry for delivery, troubleshooting, and
+      decision-making.
+    - >-
+      Provide, maintain, and deliver ongoing support for remote access to the
+      customer's internal collaboration suite as needed.
+    - "Provide the necessary review and feedback with Partner's team."
+    - "Complete requested feedback forms upon completion of the engagement."
+  agent_pilot:
+    - "Timely review and written approval of the Solution Design Document in Phase 2."
+    - "Active participation in joint discovery, scoping, and UAT sessions per the agreed cadence."
+    - >-
+      Stakeholder availability for milestone reviews, the project evaluation
+      checkpoint, and the final pilot review meeting.
+    - "Prompt communication of any organizational, technical, or scope changes that may affect pilot delivery."
+    - "Provision of any clarifications, access expansions, or representative data adjustments required during the pilot."
+
+connector_limitations:
+  - >-
+    Each connector enforces source-side access controls; users can only retrieve
+    data they are permitted to view in the source system. Correct entitlements in
+    the data sources are a Customer prerequisite.
+  - >-
+    Connectors that are not Generally Available in Gemini Enterprise may be
+    subject to inconsistencies, changes, and might require allowlisting.
+  - >-
+    Connector capabilities (search scope, freshness, action support) are subject
+    to the current Gemini Enterprise connector feature set for each source.
+
+# --------------------------------------------------------------------------
+# Governance
+# --------------------------------------------------------------------------
+governance:
+  meetings:
+    - sr: "01"
+      meeting: Project Kickoff
+      cadence: Once
+      purpose: >-
+        Project overview; alignment on timelines, deliverables, resources;
+        official engagement start; issue resolution process
+      customer: Required
+      partner: Required
+    - sr: "02"
+      meeting: Discovery Sessions
+      cadence: Week 1
+      purpose: "Discovery & data understanding sessions; understanding data sources; knowledge transfer"
+      customer: Required
+      partner: Required
+    - sr: "03"
+      meeting: Weekly Project Management Review
+      cadence: Weekly
+      purpose: "Track weekly progress; highlight risks/dependencies; update on action items"
+      customer: Required
+      partner: Required
+    - sr: "04"
+      meeting: Project Evaluation Review
+      cadence: Weekly
+      purpose: "Review of development progress; midpoint summary walkthrough"
+      customer: Required
+      partner: Required
+    - sr: "05"
+      meeting: Ad-Hoc Calls
+      cadence: On demand
+      purpose: "Highlight blockers/risks if any"
+      customer: Required
+      partner: Required
+    - sr: "06"
+      meeting: Project Closure & Next Steps
+      cadence: Final week
+      purpose: "Final review of deliverables; next steps"
+      customer: Required
+      partner: Required
+  raci:
+    - deliverable: Kickoff
+      partner: "R, A"
+      customer: "C, I"
+    - deliverable: Providing the Required Customer Environment Access
+      partner: "C, I"
+      customer: "R, A"
+    - deliverable: Setting Up Data Connection & Dashboard Activation
+      partner: "R, A"
+      customer: "C, I"
+    - deliverable: Documentation & Demo
+      partner: "R, A"
+      customer: "C, I"
+    - deliverable: Availability of Customer's SMEs
+      partner: "C, I"
+      customer: "R, A"
+    - deliverable: Highlighting Risks
+      partner: "R, A"
+      customer: "R, A"
+    - deliverable: Timely Customer Communication
+      partner: "R, A"
+      customer: "C"
+  escalation:
+    - level: Level 1
+      partner: Engagement Manager/TPM
+      customer: Project Lead
+    - level: Level 2
+      partner: Sales Contact
+      customer: Technical SME
+    - level: Level 3
+      partner: Portfolio Leader
+      customer: Business Stakeholder
+
+roles:
+  partner:
+    gemini_enterprise_implementation:
+      - role: PM
+        description: "Program lead, driving activities and deliverables in the SOW."
+      - role: Architect
+        description: >-
+          Design the implementation for the customer. Manage the project from a
+          technical point of view. Conduct bug reporting and bug fixes. Document
+          and report any potential feature requirements. Contribute feedback for
+          onboarding guide and documentation.
+      - role: AI Engineer (2)
+        description: >-
+          Guide the customer in the technical implementation. Resolve any
+          configuration issues. Conduct bug reporting and bug fixes.
+      - role: Identity Architect
+        description: >-
+          Design the identity implementation for the customer using
+          {{identity_provider}}, and provide general understanding of the auth
+          landscape (SAML, OIDC, OAuth).
+      - role: Business Consultant
+        description: >-
+          Guide the customer to identify the right business use case, to leverage
+          the solution and help with 1P & 3P systems integration.
+    agent_pilot:
+      - role: Engagement Director
+        description: "Overall delivery oversight and executive escalation path."
+      - role: Project Manager
+        description: "Day-to-day project coordination, status reporting, governance, and customer communication."
+      - role: Solution Architect
+        description: "Solution architecture, design reviews, technical strategy, and build-review checkpoints."
+      - role: Senior Engineer
+        description: "Open API integration design, connector implementation, and voice channel latency and reliability tuning."
+      - role: Engineer (ML / Agent)
+        description: "Agent build, decision-tree implementation, and conversation-flow engineering."
+      - role: Customer Engineer
+        description: "Discovery facilitation, training delivery, dashboard handover, and adoption coordination."
+  customer:
+    gemini_enterprise_implementation:
+      - role: PM
+        description: "Program lead who can provide approvals, driving activities and deliverables in the SOW."
+      - role: Engineers
+        description: "Engineering team who will own the project elements after the project is moved to production."
+      - role: System Admins
+        description: >-
+          Provide access controls for 3P connectors. Support
+          {{identity_provider}} configuration and general understanding of
+          Customer's IAM tooling.
+      - role: UAT testers (different Personas)
+        description: >-
+          Responsible for validating software functionality by ensuring it meets
+          business requirements, user needs, and quality standards through
+          real-world scenario testing before release.
+    agent_pilot:
+      - role: Executive Sponsor
+        description: "Executive alignment, strategic direction, and L2 escalation."
+      - role: Technical Lead
+        description: "Technical leadership for the pilot, decision-tree input, UAT participation."
+      - role: Business SME
+        description: "Use-case sponsorship, call-flow and knowledge-article input, UAT participation."
+      - role: Infrastructure Liaison
+        description: "Pilot-environment provisioning and Google Cloud landing-zone alignment."
+
+# --------------------------------------------------------------------------
+# Milestones and deliverables
+# --------------------------------------------------------------------------
+milestones:
+  gemini_enterprise_implementation:
+    - id: M1
+      task: Kickoff & Discovery
+      name: Use Case Finalization
+      description: "Identify and document targeted use cases and user personas for the implementation."
+      week: 1
+    - id: M2
+      task: Solution Design
+      name: Solution Design Sign-off
+      description: >-
+        Finalize and agree the solution architecture (security, data model, and
+        connector configuration) prior to implementation.
+      week: 2
+    - id: M3
+      task: Gemini Enterprise Deployment & Connectors
+      name: Solution Deployment
+      description: >-
+        Configure identity/authentication and deploy Gemini Enterprise app with
+        all in-scope connectors and access controls.
+      week: 3
+    - id: M4
+      task: Development & Testing
+      name: Testing and Validation
+      description: "Develop test cases, conduct system and integration testing, and secure Customer sign-off."
+      week: 4
+    - id: M5
+      task: User Adoption & Organizational Enablement
+      name: User Adoption and Organizational Enablement
+      description: "Provide guidance on maintaining change management and measuring success."
+      week: 5
+    - id: M6
+      task: Project Closure & Next Steps
+      name: Documentation and Transition
+      description: "Deliver comprehensive documentation and conduct a formal handover."
+      week: 5
+
+deliverables:
+  workspace_migration:
+    - detail: "Pre-Migration Discovery Report: source-tenant scan results, user mapping baseline, decision register"
+    - detail: "Pilot Validation Report: data fidelity, endpoint login, sign-off criteria"
+    - detail: "Weekly Migration Status Reports: wave progress, throughput, blocking issues"
+    - detail: "Cutover Runbook: DNS sequence, freeze windows, rollback plan"
+    - detail: "Post-Migration Validation Report: reconciliation summary, audit results, outstanding remediation items"
+  gemini_enterprise_implementation:
+    - detail: "Use Cases Document - prioritized use cases to be exercised during the enablement session"
+      timeline: End of Milestone 1
+    - detail: "Project Kickoff Deck, Delivery Guide, and Discovery Findings Document"
+      timeline: End of Milestone 1
+    - detail: Solution Architecture Design
+      timeline: End of Milestone 2
+    - detail: End to end solution design and deployment
+      timeline: End of Milestone 3
+    - detail: User Testing Findings Document
+      timeline: End of Milestone 4
+    - detail: >-
+        User Adoption and Organizational Enablement workshop(s) complete and
+        related assets shared with the customer
+      timeline: End of Milestone 5
+    - detail: Final TDD & Project Closeout documentation
+      timeline: End of Milestone 6
+
+success_criteria:
+  workspace_migration:
+    - >-
+      100% of in-scope mailboxes migrated to Google Workspace with delta sync
+      validated against the migration tool's reconciliation report.
+    - "100% of in-scope file content migrated to Google Drive and Shared Drives."
+    - "Mail flow cutover (MX, SPF, DKIM, Autodiscover) completed with no inbound mail loss."
+    - "Final cutover and decommission completed within the agreed window."
+    - "Final reports reviewed and validated by Customer stakeholders."
+  gemini_enterprise_implementation:
+    - "Complete end-to-end set up and system integration on Customer's Google Cloud environment with functional connectors."
+    - "Users can effectively search and retrieve information across integrated systems."
+    - >-
+      Timely onboarding of users using a scalable framework with minimal
+      technical issues with adoption across the organization.
+    - >-
+      Positive customer feedback and successful handover, ensuring readiness for
+      future scalability and collaboration.
+  success_criteria_intro: >-
+    The success criteria for the approval of the Services and the acceptable
+    Deliverables is:
+  acceptance_sentence: >-
+    The procedure for accepting the Services and Deliverables shall be as set
+    forth in the Agreement.
+
+# --------------------------------------------------------------------------
+# Closure and commercials - verbatim legal
+# --------------------------------------------------------------------------
+closure: >-
+  Upon completion of the knowledge and documentation transfer, Partner will
+  conduct a final project closure meeting with Customer to review and complete
+  the Project Closure Checklist. After the project closure meeting, Partner will
+  generate the Project Acceptance Form. Customers will complete and sign the
+  Project Acceptance Form and return in five (5) business days time, at which
+  time the SOW will be closed. If the partner has not received the Project
+  Acceptance Form by the end of the 5th business day, the Project will be deemed
+  accepted and will proceed with closing this SOW.
+
+compensation:
+  intro: >-
+    Compensation for the Services performed and the Deliverables provided shall
+    be paid subject to formal approval by Google Cloud. Unless otherwise approved
+    in writing as an amendment to this Agreement, the total compensation under
+    this Agreement (excluding cost or expenses specified below) is a fixed price
+    of {{total}}. Throughout the delivery of Services by Partner and any
+    subsequent execution of Services or Deliverables, Customer bears full
+    responsibility for the costs associated with Google Cloud usage within their
+    tenant. This includes expenses related to various Google Cloud services, such
+    as compute, storage, networking, and other resources.
+  google_data_sharing: >-
+    Following the execution of this SOW, Customer consents to Google LLC or
+    affiliate (collectively, "Google") sharing your usage data, and other metrics
+    from Google Cloud related to the services implemented under this SOW with
+    Partner. This SOW is between Customer and Partner; for the avoidance of
+    doubt, Google is not a party to this SOW. Google is a third party beneficiary
+    to the consent given in this section, and Google is entitled to enforce and
+    benefit from this section.
+  breakdown_lead: "The fixed price cost breakdown is as follows:"
+  fully_funded_note: >-
+    *This engagement is Google-funded; net cost to Customer is $0. The Google
+    funding line equals the total fixed-price professional-services fee, payable
+    subject to formal approval by Google Cloud.*
+  partner_and_google_funded_note: >-
+    *This engagement is Partner and Google-funded; net cost to Customer is $0.
+    The Google funding line equals the total fixed-price professional-services
+    fee, payable subject to formal approval by Google Cloud.*
+  funding_disclosure: >-
+    ***Funding Disclosure:*** *This engagement is a {{funding_stage}} opportunity
+    utilizing {{funding_program}} funding to support the implementation. This
+    engagement is 100% Google-funded; net cost to Customer is $0. The Google
+    funding line equals the total fixed-price professional-services fee, payable
+    subject to formal approval by Google Cloud.*
+  fixed_fee_note: >-
+    Premier Cloud will provide the Services on a fixed-fee basis in accordance
+    with the table above, which includes the total Google Funding amount as a
+    line item.
+  clawback: >-
+    *The Google Funding credit of {{funding}} is provided through Google's Partner
+    Services Funding (PSF) program and is contingent on Premier Cloud receiving
+    funding approval from Google. {{customer_name}} cooperation, including
+    providing and removing system access, participating in scheduled project
+    activities, and timely execution of required proof of execution
+    documentation, is a dependency for Google Funding approval. If
+    {{customer_name}} does not execute the required proof of execution
+    documentation, or does not cooperate in a manner that allows Premier Cloud to
+    secure Google Funding approval, the Google Funding credit will be reversed and
+    {{customer_name}} will be invoiced the full project fee of {{total}}.*
+  expenses: >-
+    All expenses, if agreed to between Customer and Partner, shall be paid by
+    Customer in accordance with Customer's expense reimbursement policies. If
+    Customer does not provide notice of objection to any such expenses, Customer
+    agrees to pay all such expenses set forth in an invoice provided by Partner.
+  taxes: >-
+    Customer shall be liable for and pay all applicable U.S. federal, state, or
+    local sales taxes properly payable by Customer upon and in connection with
+    the provision of the Services under this SOW. Customer shall provide a valid
+    sales tax exemption certificate in case it is exempt from sales & use tax in
+    the state.
+
+signature:
+  intro: "The Parties hereto have executed this SOW as of the date first written above."
+  intro_migration: >-
+    The parties have caused this SOW to be executed by its duly authorized
+    representatives as of the effective date set forth above.
+
+activation_plan_intro: >-
+  This project is expected to enable activation of at least
+  {{target_activation_percent}}% of Customer's purchased Gemini Enterprise
+  Licenses as described below.

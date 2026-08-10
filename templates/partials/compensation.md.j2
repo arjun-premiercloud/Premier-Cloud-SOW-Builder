@@ -1,0 +1,31 @@
+### **{{ sections.compensation.n }}.1 Compensation**
+
+{{ clauses.compensation.intro }}
+{% if pricing.data_sharing %}
+
+{{ clauses.compensation.google_data_sharing }}
+{% endif %}
+
+{{ clauses.compensation.breakdown_lead }}
+
+{{ table(['**Services**', '**Cost**'], pricing.rows) }}
+{% if pricing.note %}
+
+{{ pricing.note }}
+{% endif %}
+{% if pricing.clawback %}
+
+{{ clauses.compensation.clawback }}
+{% endif %}
+{% if pricing.payment_terms %}
+
+{{ pricing.payment_terms }}
+{% endif %}
+
+### **{{ sections.compensation.n }}.2 Expenses**
+
+{{ clauses.compensation.expenses }}
+
+### **{{ sections.compensation.n }}.3 Taxes**
+
+{{ clauses.compensation.taxes }}

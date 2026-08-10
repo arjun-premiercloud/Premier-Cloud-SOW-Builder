@@ -1,0 +1,160 @@
+{% include "partials/cover.md.j2" %}
+{% include "partials/preamble.md.j2" %}
+
+## **{{ sections.contacts.n }}. {{ sections.contacts.title }}**
+
+{% include "partials/contacts.md.j2" %}
+
+## **{{ sections.term.n }}. {{ sections.term.title }}**
+
+{% include "partials/term.md.j2" %}
+
+## **{{ sections.background.n }}. {{ sections.background.title }}**
+
+{{ background.product_intro or clauses.product_intro.gemini_enterprise }}
+
+Gemini Enterprise is intended to address the following business challenge(s) for Customer:
+
+{{ bullets(challenges) }}
+{% if background.objective %}
+
+{{ background.objective }}
+{% endif %}
+
+{{ platform.identity_provider or 'Google Identity' }} will serve as the identity provider for this engagement.{% if platform.seats %} {{ customer.short_name }} will be provisioned {{ platform.seats }} Gemini Enterprise seats.{% endif %}
+{% if platform.user_community %}
+
+
+The intended user community{% if platform.seats %} (up to {{ platform.seats }} active users, aligned to the provisioned seats){% endif %} for this implementation includes the following:
+
+{{ bullets(platform.user_community) }}
+{% endif %}
+{% if data_sources %}
+
+Gemini Enterprise will be integrated with the following data sources for this implementation:
+
+{{ bullets(data_sources) }}
+{% endif %}
+
+## **{{ sections.scope.n }}. {{ sections.scope.title }}**
+
+{{ scope_statement }}
+
+### **Summary of Scope**
+
+{% for block in summary_blocks %}
+#### **{{ block.heading }}**
+{% if block.body %}
+
+{{ block.body }}
+{% endif %}
+{% if block.bullets %}
+
+{{ bullets(block.bullets) }}
+{% endif %}
+
+{% endfor %}
+## **{{ sections.services.n }}. {{ sections.services.title }}**
+
+Partner will perform the following Services as per the Scope defined above in Customer's environment:
+
+### **In Scope Services**
+
+{% for s in service_sections %}
+#### **{{ sections.services.n }}.{{ loop.index }} {{ s.heading }}**
+{% if s.intro %}
+
+{{ s.intro }}
+{% endif %}
+{% if s.bullets %}
+
+{{ bullets(s.bullets) }}
+{% endif %}
+{% for g in s.groups or [] %}
+
+**{{ g.title }}**
+
+{{ bullets(g.bullets) }}
+{% endfor %}
+
+{% endfor %}
+### **Out of Scope**
+
+{{ bullets(out_of_scope) }}
+{% if sections.activation %}
+
+## **{{ sections.activation.n }}. {{ sections.activation.title }}**
+
+{{ clauses.activation_plan_intro }}
+
+{{ table(['Purchased Gemini Enterprise Licenses', '**' ~ platform.activation_plan.purchased_licenses ~ ' licenses**'], [
+  ['Number of Active Users estimated at Project Start:', (platform.activation_plan.active_at_start or 0) ~ ' users'],
+  ['Number of Active Users expected at Project End:', platform.activation_plan.active_at_end ~ ' users'],
+  ['Number of Active Users expected at Project End + 4 weeks', platform.activation_plan.active_at_end_plus_4w ~ ' users'],
+]) }}
+{% endif %}
+
+## **{{ sections.timeline.n }}. {{ sections.timeline.title }}**
+
+{% include "partials/timeline.md.j2" %}
+
+## **{{ sections.governance.n }}. {{ sections.governance.title }}**
+
+{% include "partials/governance.md.j2" %}
+
+### **{{ sections.governance.n }}.1 RACI Matrix During Delivery**
+
+{{ table(['**Deliverable**', '**Partner**', '**Customer**'],
+         rows(governance.raci, ['deliverable', 'partner', 'customer'])) }}
+
+## **{{ sections.deliverables.n }}. {{ sections.deliverables.title }}**
+
+{% include "partials/deliverables.md.j2" %}
+
+## **{{ sections.roles.n }}. {{ sections.roles.title }}**
+
+### **{{ sections.roles.n }}.1 Roles**
+
+{% include "partials/roles.md.j2" %}
+
+### **{{ sections.roles.n }}.2 Escalation Matrix**
+
+{% include "partials/escalation.md.j2" %}
+
+## **{{ sections.raid.n }}. {{ sections.raid.title }}**
+
+### **{{ sections.raid.n }}.1 Risks**
+
+{% include "partials/risks.md.j2" %}
+
+### **{{ sections.raid.n }}.2 Assumptions**
+
+{{ bullets(assumptions) }}
+
+### **{{ sections.raid.n }}.3 Customer Dependencies and Prerequisites**
+
+{% include "partials/prerequisites.md.j2" %}
+{% if data_sources %}
+
+### **{{ sections.raid.n }}.4 Connector Prerequisites & Limitations**
+
+{{ bullets(clauses.connector_limitations) }}
+{% endif %}
+
+## **{{ sections.success.n }}. {{ sections.success.title }}**
+
+{{ clauses.success_criteria.success_criteria_intro }}
+
+{{ bullets(success_criteria) }}
+
+{{ clauses.success_criteria.acceptance_sentence }}
+
+## **{{ sections.closure.n }}. {{ sections.closure.title }}**
+
+{{ clauses.closure }}
+
+## **{{ sections.compensation.n }}. {{ sections.compensation.title }}**
+
+{% include "partials/compensation.md.j2" %}
+
+{% include "partials/signature.md.j2" %}

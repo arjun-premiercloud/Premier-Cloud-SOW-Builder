@@ -1,0 +1,18 @@
+{{ clauses.signature.intro }}
+
+{{ table(['**Partner**', '**Customer**'], [
+  ['**Authorized Signature:**', '**Authorized Signature:**'],
+  ['**Printed Name:** ' ~ (partner.signatory.name or ''), '**Printed Name:** ' ~ (customer.signatory.name or '')],
+  ['**Title:** ' ~ (partner.signatory.title or ''), '**Title:** ' ~ (customer.signatory.title or 'TBD')],
+  ['**Email Address:** ' ~ (partner.signatory.email or ''), '**Email Address:** ' ~ (customer.signatory.email or '')],
+  ['**Phone Number:** ' ~ (partner.signatory.phone or ''), '**Phone Number:** ' ~ (customer.signatory.phone or 'TBD')],
+  ['**Date:**', '**Date:**'],
+]) }}
+{% for a in appendices %}
+
+---
+
+# **APPENDIX {{ alpha(loop.index0) }}: {{ a.title }}**
+
+{{ a.body }}
+{% endfor %}

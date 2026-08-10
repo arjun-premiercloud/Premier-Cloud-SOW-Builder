@@ -1,0 +1,5 @@
+{% if agreement.msa_style == 'dated_mpsa' %}
+{{ clauses.preamble.dated_mpsa }}
+{% else %}
+{{ clauses.preamble.public_link }}
+{% endif %}

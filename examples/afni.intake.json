@@ -1,0 +1,265 @@
+{
+  "_comment": "Reconstruction of the Afni GECX pilot SOW. Reference example for sow_type=agent_pilot. Note how much of this document is meeting-derived: the Current Solution of each use case, the baseline metrics, and the named stakeholders all came out of discovery, not a template.",
+
+  "sow_type": "agent_pilot",
+
+  "document": {
+    "title": "Gemini Enterprise Pilot Statement of Work",
+    "subtitle": "Gemini Enterprise for CX Voice Agent Pilots — IT Service Desk, Progressive CCC & FNOL",
+    "date": "Jun 22, 2026",
+    "version": "1.0",
+    "prepared_by": "Premier Cloud Inc.",
+    "product_short": "Gemini Enterprise for Customer Experience (GECX)"
+  },
+
+  "customer": {
+    "legal_name": "Afni, Inc.",
+    "short_name": "Afni",
+    "address": "Afni, Inc., 404 Brock Drive, Bloomington, IL 61701, USA",
+    "industry": "Business process outsourcing",
+    "employee_count": 12000,
+    "profile": "Afni, Inc. is a 12,000-employee business process outsourcing provider headquartered in Bloomington, Illinois, delivering telecommunications and insurance services across the Philippines, the United States, and Mexico. The company operates a long-running subrogation claims practice and an active intelligent-automation team within its insurance technology organization, and is exploring AI-augmented service delivery as a strategic capability across roles and workflows.",
+    "contact": {
+      "name": "Mike Schwermin",
+      "email": "mikeschwermin@afni.com",
+      "phone": "To be confirmed",
+      "address": "Afni, Inc., 404 Brock Drive, Bloomington, IL 61701, USA"
+    },
+    "signatory": { "name": "Mike Schwermin", "title": "CIO / SVP" },
+    "stakeholders": [
+      { "role": "Executive Sponsor", "name": "Mike Schwermin", "title": "CIO / SVP", "description": "Executive alignment, strategic direction, and L2 escalation" },
+      { "role": "Technical Lead", "name": "Kaushik Srinivasapuram", "title": "Manager, Intelligent Automation", "description": "Technical leadership for the pilot, decision-tree input, UAT participation" },
+      { "role": "IT Service Desk SME", "name": "Jessa Basbas", "title": "IT Service Desk Sr. Manager", "description": "Use-case sponsorship, call-flow and knowledge-article input, UAT participation" },
+      { "role": "Infrastructure Liaison", "name": "Adam Whiles / Nikki Fulfer", "description": "Pilot-environment provisioning, Terraform support, and Google Cloud landing-zone alignment" },
+      { "role": "Insurance / Subrogation SME", "name": "Zachary Starr", "title": "Senior Director, Insurance Technology", "description": "Subrogation and FNOL use-case sponsorship, claim-flow and call-script input, and UAT participation" }
+    ]
+  },
+
+  "partner": {
+    "profile": "Premier Cloud is a Google-focused cloud services provider supporting customers exclusively on Google Cloud Platform and Google Workspace. The Premier Cloud team brings dedicated Solution Architects, Senior Engineers, Customer Engineers, and Machine Learning Engineers — including direct experience deploying agents on the Gemini Enterprise platform — and has supported customers across telecommunications, insurance, retail, and BPO industries.",
+    "contact": {
+      "name": "Kendall Turner",
+      "email": "kendall.turner@premiercloud.com",
+      "phone": "+1 (817) 501-7106",
+      "address": "1803 Douglas Street, Victoria, BC, Canada"
+    },
+    "signatory": { "name": "Lee Henwood", "title": "" },
+    "team": [
+      { "role": "Engagement Director", "name": "Kendall Turner", "description": "Overall delivery oversight and executive escalation path" },
+      { "role": "Project Manager", "description": "Day-to-day project coordination, status reporting, governance, and customer communication" },
+      { "role": "Solution Architect", "name": "Adel Ben Rzouga", "description": "Solution architecture, design reviews, technical strategy, and build-review checkpoints" },
+      { "role": "Senior Engineer", "description": "Open API integration design, connector implementation, GECX voice (GTP) channel latency and reliability tuning" },
+      { "role": "Engineer (ML / Agent)", "name": "Mohamed Ali Meddeb", "description": "Voice-agent build, decision-tree implementation, and conversation-flow engineering" },
+      { "role": "Customer Engineer", "description": "Discovery facilitation, training delivery, dashboard handover, and adoption coordination" }
+    ]
+  },
+
+  "agreement": {
+    "msa_style": "dated_mpsa",
+    "msa_url": "https://premiercloud.com/master-services-agreement.pdf",
+    "msa_date": "August 10, 2026",
+    "execution_date": "the date of last signature"
+  },
+
+  "term": {
+    "effective_date": "August 10, 2026",
+    "end_date": "September 21, 2026",
+    "duration_weeks": 8,
+    "extendable_note": true
+  },
+
+  "platform": { "environment": "non-production" },
+
+  "background": {
+    "objective": "The objective of this pilot is to prove the value of Gemini Enterprise for Customer Experience (GECX) against Afni-prioritized workflows. Premier Cloud and Afni will collaborate to design and build voice agents exercised against representative Afni scenarios and data samples, and measured on Afni-relevant criteria such as call containment and deflection, intent-resolution accuracy, average handle time versus Afni's 44-minute baseline, and tool-call accuracy. The pilot produces a tangible reference point that lets Afni's intelligent-automation team evaluate GECX, its native voice channel on the Google Telephony Platform (GTP), and Google Cloud's open agent platform on Afni-specific evidence.",
+    "business_challenges": [
+      "Level 1 interactions are high-volume, repeatable, and knowledge-article-driven — L1 resolves up to ~80% of reported issues by following existing knowledge articles — and the team is exploring whether a voice-agent capability could measurably extend service delivery without proportional headcount expansion.",
+      "The team is interested in expanding multi-channel customer-facing agent deployment — voice, chat, and website-embedded — and is evaluating capability that fits this without the per-channel licensing constraints observed with current tooling.",
+      "Agent experimentation runs in parallel across UiPath, Copilot Studio, custom Python, and emerging open frameworks (LangChain, LangGraph), and the team is looking for a unified governance and observability plane across these multi-platform efforts.",
+      "Afni's broader push to embed AI into more roles benefits from concrete, observable evidence on a near-term timeline to inform investment direction and to demonstrate progress to executive stakeholders."
+    ],
+    "baseline_metrics": [
+      { "metric": "IT Service Desk tickets (90 days)", "value": "approximately 12,350", "source": "ServiceNow, March–May 2026" },
+      { "metric": "Phone hours (90 days)", "value": "5,198", "source": "ServiceNow, March–May 2026" },
+      { "metric": "Average handle time", "value": "44 minutes", "source": "ServiceNow, March–May 2026" },
+      { "metric": "IT Service Desk team size", "value": "41 analysts", "source": "Afni IT Operations" }
+    ]
+  },
+
+  "scope": {
+    "statement": "Afni's high-volume, script-driven contact workflows — across both its internal IT Service Desk and its insurance subrogation operations — are strong candidates for AI-augmented voice, where a GECX agent can measurably extend service delivery and recovery capacity.",
+    "out_of_scope_extra": [
+      "The Workspace License sales motion currently in progress with Afni's identity-management group is a separate Premier Cloud engagement and not part of this SOW.",
+      "A full Azure-to-Google-Cloud infrastructure migration is out of scope for this pilot and will be addressed under separate Premier Cloud engagements.",
+      "Configuration, deployment, or licensing of the Wiz security platform is out of scope.",
+      "The Progressive CCC follow-up / status-chase cycle and the broader insurance FNOL intake workflow beyond adverse-carrier identification are out of scope for this pilot.",
+      "Production outbound-dialing infrastructure and telephony compliance for the insurance agents at scale are out of scope for the pilot; the pilot exercises representative outbound calls through the Google Telephony Platform, with the production approach delivered as a recommendation.",
+      "Building or deploying a centralized multi-agent governance dashboard for Afni's UiPath, Copilot Studio, and custom-agent estates is a potential future phase and not included in this pilot.",
+      "Net-new chatbot deployments outside the pilot's voice-agent scope (e.g., website-embedded support chat) are out of scope.",
+      "Development of new machine-learning models within Azure or Azure AI Foundry is out of scope.",
+      "Modification, refactoring, or migration of Afni's existing UiPath Robotic Process Automation flows is out of scope.",
+      "Modification, refactoring, or migration of Afni's existing Microsoft Copilot Studio agents is out of scope."
+    ]
+  },
+
+  "use_cases": [
+    {
+      "name": "IT Service desk",
+      "summary": "demonstrates end-to-end Level 1 handling — mandatory employee verification on every call, then resolution of the priority use cases (login & MFA assistance, Citrix troubleshooting, VPN & connectivity, and the new-hire technical check) by retrieving the relevant service-desk knowledge article and guiding the caller step by step.",
+      "current_solution": "The current IT Service Desk workflow proceeds as follows:",
+      "current_solution_steps": [
+        "**Initial Contact:** Calls arrive at the Cisco / WebEx Contact Center IVR, which performs basic triage and automatically creates an IMS interaction ticket in ServiceNow.",
+        "**Routing:** The call is routed to a live Level 1 (L1) analyst.",
+        "**Identity Verification:** The L1 analyst verifies the caller's identity across several systems, including UMS, Angel, ServiceNow, and the Work From Home Helper App.",
+        "**Triage and Resolution:** The analyst gathers the user's concern, converts the initial IMS interaction into an official Request or Incident ticket, and attempts resolution using the appropriate knowledge article.",
+        "**Escalation:** If the L1 analyst cannot resolve the issue, the call is escalated to Level 2."
+      ],
+      "proposed_solution": "Premier Cloud will design, build, and demonstrate an IT Service Desk voice agent powered by Gemini Enterprise for Customer Experience, in a controlled pilot environment within Afni's Google Cloud Platform. The pilot will be designed to exercise realistic service-desk workflows while avoiding disruption to live operations. The voice agent will integrate with a representative configuration of Afni's ServiceNow environment and employee-verification sources through OpenAPI-based connectors. The voice agent's guided resolution experience will be grounded in Afni's existing service-desk knowledge articles. During each call, the agent will identify the employee's intent, guide the caller through approved troubleshooting steps, determine whether the issue can be resolved, and create or update a ServiceNow ticket when required. For unresolved or higher-complexity issues, the agent will support a warm transfer to Level 2 support, including relevant context captured during the interaction. Call transcripts will be redacted on the Partner side before being attached to ServiceNow records.",
+      "trigger": "Inbound call via the Google Telephony Platform voice channel",
+      "systems": ["ServiceNow", "UMS", "Angel", "Work From Home Helper App"],
+      "success_metrics": [
+        "Call containment / deflection rate",
+        "Verification success rate",
+        "Intent-resolution accuracy",
+        "Average handle time versus the 44-minute baseline",
+        "Tool-call accuracy",
+        "ServiceNow ticket accuracy and transcript quality"
+      ],
+      "figures": [
+        "The voice agent at a glance: caller, agent, and connected services",
+        "The IT Service Desk target call flow",
+        "The IT Service Desk Architecture"
+      ],
+      "price": 19200
+    },
+    {
+      "name": "Insurance Services — Progressive CCC (Outbound Claim Filing)",
+      "summary": "an API-triggered agent that calls the Other Insurance Carrier (OIC) to file subrogation claims, validate claim/policy details, and confirm coverage and liability — writing the outcome and a case note back to Subro Assist, CCT, and ClaimPro.",
+      "current_solution": "Progressive CCC subrogation claim filing is an outbound process run against the CCT, ClaimPro, and Subro Assist systems of record. Today, an analyst first reviews the claim — confirming the ClaimPro contact assignment and fault, and locating the Other Insurance Carrier (OIC) details and the claim adjuster contact — then calls the OIC to file the claim, validating the claim or policy/reference number, confirming active coverage, and assessing liability. Voicemail or hold scenarios remain in the phone-filing cycle. Where an online filing path is available it is attempted first, converting to a phone call when the online filing cannot be completed, and the analyst documents throughout in ClaimPro.",
+      "proposed_solution": "Premier Cloud will build and demonstrate an outbound Progressive CCC voice agent on Gemini Enterprise for Customer Experience within a controlled pilot environment in Afni's Google Cloud tenant. Execution is triggered via an API endpoint — callable manually by project administrators or driven by automated processes tracking a work list — enabling dispatch from internal source environments without manual initiation of dialer sequences. Briefed with pre-call data from CCT, ClaimPro, and Subro Assist, the agent dials the OIC, identifies itself as an automated agent working on Afni's behalf, files the claim, validates policy details, and confirms coverage and liability on-script per the documented system prompt and decision tree. Within the pilot scope, effort is concentrated on core claim execution; multi-day status tracking is a candidate for a future phase. The agent writes results, final disposition, and redacted transcript summaries back to the systems of record, publishing case notes to Subro Assist via API. Exceptions and unresolved interactions are routed to a live analyst with full interaction context. Outbound calls are delivered through the Google Telephony Platform as the pilot entry channel; the production dialing strategy and compliance framework are delivered as a recommendation.",
+      "trigger": "API endpoint — manual dispatch by a project administrator, or automated from a work list",
+      "systems": ["CCT", "ClaimPro", "Subro Assist"],
+      "success_metrics": [
+        "Outbound-call completion",
+        "Data-capture and validation accuracy",
+        "Write-back accuracy to Subro Assist"
+      ],
+      "figures": [
+        "The Progressive CCC agent at a glance: agent, the carrier it calls, and connected services",
+        "The Progressive CCC target outbound call flow",
+        "The Progressive CCC Architecture"
+      ],
+      "price": 11200
+    },
+    {
+      "name": "Insurance Services — FNOL (Outbound Adverse-Carrier Identification)",
+      "summary": "a separate agent, triggered from Subro Assist work baskets, that calls across carriers to identify the adverse/third-party carrier and returns the result to the underwriting (UM) team, with the same case-note write-back.",
+      "current_solution": "First Notice of Loss (FNOL) adverse-carrier identification is a separate outbound process that spans multiple carriers. When the subrogation team identifies that insurance exists on a claim, it routes the claim to the FNOL team through work baskets in Subro Assist, provided third-party carrier (TPC) information is present. The FNOL team then calls to identify and confirm the adverse / third-party carrier — multiple calls across clients and carriers may be required — and, once identified, files the information via phone or online and returns it to the underwriting (UM) / insurance team.",
+      "proposed_solution": "Premier Cloud will design, build, and demonstrate a separate outbound FNOL voice agent powered by Gemini Enterprise for Customer Experience. It is kept independent from the Progressive CCC agent because it spans multiple carriers and serves a distinct objective — carrier identification rather than claim filing. The agent is triggered from Subro Assist work baskets: it queries the Subro Assist API for the items assigned to the voice agent, then places the outbound call to identify the adverse / third-party carrier. Briefed pre-call from CCT, ClaimPro, and Subro Assist, it conducts the call on-script per the prompt and decision tree, captures and validates the identified carrier information, and returns it to the UM / insurance team. The outcome, status, and a redacted conversation summary are written back as case notes to Subro Assist via API, and exceptions or unresolved cases are handed off to a human analyst with the captured context.",
+      "trigger": "Subro Assist work basket, wired through a queue or Pub/Sub topic",
+      "systems": ["Subro Assist", "CCT", "ClaimPro"],
+      "success_metrics": [
+        "Outbound-call completion",
+        "Carrier-identification accuracy",
+        "Write-back accuracy to Subro Assist"
+      ],
+      "figures": [
+        "The FNOL agent at a glance: agent, the carrier it calls, and connected services",
+        "The FNOL target outbound call flow",
+        "The FNOL Infrastructure diagram"
+      ],
+      "price": 11200
+    }
+  ],
+
+  "timeline": {
+    "weeks": 8,
+    "note": "The pilot will run for eight (8) weeks, beginning August 10, 2026.",
+    "schedule_note": "Indicative task schedule — the project will start on August 10, 2026; exact dates and cadence are confirmed at the Phase 1 kickoff:",
+    "milestones": [
+      { "id": "M1", "task": "1. Kickoff & Discovery", "name": "Kickoff & Discovery Complete", "description": "Project kickoff completed, discovery findings documented, pilot scope and success criteria agreed.", "week": 2 },
+      { "id": "M2", "task": "2. Solution Design", "name": "Solution Design Approved", "description": "Solution Design Document delivered and written approval received from Afni.", "week": 3 },
+      { "id": "M3", "task": "3. Datasource Connectors Setup", "name": "Connectors Operational", "description": "Open API connectors built, smoke tests passed, baseline tool-call-accuracy captured.", "week": 4 },
+      { "id": "M4", "task": "4. Development & Testing", "name": "Voice Agent Demonstrations Ready", "description": "All three agents (IT Service Desk, Progressive CCC, FNOL) built, integrated, and exercised through UAT; per-agent success-metric measurements captured.", "week": 7 },
+      { "id": "M5", "task": "5. User Adoption & Enablement", "name": "Adoption Handover Complete", "description": "Training delivered, dashboard handed over, learning paths shared.", "week": 8 },
+      { "id": "M6", "task": "6. Project Closure & Next Steps", "name": "Pilot Closed", "description": "Final pilot report, follow-up roadmap, and pilot review meeting completed.", "week": 8 }
+    ],
+    "schedule": [
+      { "phase": "Kickoff & Discovery", "activity": "Kickoff & governance setup", "start_date": "August 10, 2026", "end_date": "August 13, 2026" },
+      { "phase": "Kickoff & Discovery", "activity": "Discovery workshops (3 agents)", "start_date": "August 16, 2026", "end_date": "August 20, 2026" },
+      { "phase": "Kickoff & Discovery", "activity": "Scope, success criteria & prerequisites sign-off", "start_date": "August 23, 2026", "end_date": "August 25, 2026" },
+      { "phase": "Solution Design", "activity": "Solution design — IT Service Desk agent", "start_date": "August 26, 2026", "end_date": "August 27, 2026" },
+      { "phase": "Solution Design", "activity": "Solution design — Progressive CCC & FNOL agents", "start_date": "August 30, 2026", "end_date": "August 31, 2026" },
+      { "phase": "Solution Design", "activity": "Integration & telephony design + SDD approval", "start_date": "September 1, 2026", "end_date": "September 3, 2026" },
+      { "phase": "Connectors", "activity": "Connectors — ServiceNow + employee verification", "start_date": "September 6, 2026", "end_date": "September 8, 2026" },
+      { "phase": "Connectors", "activity": "Connectors — Subro Assist / CCT / ClaimPro + outbound dispatch", "start_date": "September 9, 2026", "end_date": "September 10, 2026" },
+      { "phase": "Development & Testing", "activity": "Build — IT Service Desk agent", "start_date": "September 13, 2026", "end_date": "September 17, 2026" },
+      { "phase": "Development & Testing", "activity": "Build — Progressive CCC agent", "start_date": "September 20, 2026", "end_date": "September 22, 2026" },
+      { "phase": "Development & Testing", "activity": "Build — FNOL agent", "start_date": "September 23, 2026", "end_date": "September 24, 2026" },
+      { "phase": "Development & Testing", "activity": "Integration, GTP outbound tuning & build review", "start_date": "September 27, 2026", "end_date": "September 28, 2026" },
+      { "phase": "Development & Testing", "activity": "Smoke tests, UAT (per agent) & iteration", "start_date": "September 29, 2026", "end_date": "October 1, 2026" },
+      { "phase": "Adoption & Enablement", "activity": "Dashboard handover, training, KT & materials", "start_date": "October 4, 2026", "end_date": "October 5, 2026" },
+      { "phase": "Project Closure", "activity": "Final report, roadmap & pilot review", "start_date": "October 10, 2026", "end_date": "October 10, 2026" },
+      { "phase": "Project Management", "activity": "Project management & governance (ongoing)", "start_date": "August 10, 2026", "end_date": "October 10, 2026" }
+    ]
+  },
+
+  "governance": {
+    "raci": [
+      { "deliverable": "Pilot scope definition and change management", "partner": "Lead day-to-day scope tracking; initiate Change Requests when scope shifts materially", "customer": "Approve scope and any Change Requests; provide timely scope clarifications" },
+      { "deliverable": "Solution architecture and Solution Design Document", "partner": "Architect leads design and authors the SDD; senior engineer co-designs integration", "customer": "Provide review feedback; written approval before build begins" },
+      { "deliverable": "Voice-agent build and integration", "partner": "Engineer leads build; senior engineer leads integration; architect reviews", "customer": "Provide pilot-environment access, decision-tree clarifications, and data samples" },
+      { "deliverable": "Connector smoke testing", "partner": "Engineer executes smoke tests and captures baseline measurements", "customer": "Confirm test data accessibility and validate smoke-test outputs" },
+      { "deliverable": "UAT and success-metric measurement", "partner": "PM coordinates; engineer executes UAT scenarios; CE captures measurements", "customer": "Participate in UAT sessions and review measurement outputs" },
+      { "deliverable": "Training, enablement, and dashboard handover", "partner": "CE leads training delivery and dashboard handover; PM coordinates schedules", "customer": "Identify trainees; participate in sessions; review materials" },
+      { "deliverable": "Project management, status reporting, and pilot closure", "partner": "PM owns status, governance, closure documentation, and final pilot review meeting", "customer": "Receive status; provide approvals at milestones; attend final review" }
+    ],
+    "escalation": [
+      { "level": "Level 1", "partner": "Project Manager (Premier Cloud)", "customer": "Kaushik Srinivasapuram (Manager, Intelligent Automation)" },
+      { "level": "Level 2", "partner": "Engagement Director (Kendall Turner, Premier Cloud)", "customer": "Mike Schwermin (CIO / SVP, Afni)" },
+      { "level": "Level 3", "partner": "Premier Cloud Portfolio Leader", "customer": "Afni Executive Sponsor (designated by CIO)" }
+    ]
+  },
+
+  "deliverables": [
+    { "detail": "Project kickoff and governance setup, including discovery findings document", "timeline": "M1" },
+    { "detail": "Solution Design Document (SDD) covering the three agents' architecture and integration design", "timeline": "M2" },
+    { "detail": "Open API connector configuration with smoke-test results and baseline tool-call-accuracy measurement", "timeline": "M3" },
+    { "detail": "Working demonstration of all three voice agents (IT Service Desk, Progressive CCC, FNOL) on Gemini Enterprise CX, with a per-agent UAT measurement summary across the agreed success metrics", "timeline": "M4" },
+    { "detail": "Training materials package and voice-agent dashboard handover to Afni's intelligent-automation team", "timeline": "M5" },
+    { "detail": "Final pilot report and follow-up roadmap reviewed at pilot-closure meeting", "timeline": "M6" }
+  ],
+
+  "risks": [
+    { "risk": "Pilot-environment access delays from Afni IT", "mitigation": "Phase 1 prerequisite confirmation, named technical contact for pilot-environment provisioning, escalation path via PM and Technical Lead" },
+    { "risk": "Backend API integration complexity exceeds initial estimates", "mitigation": "Phase 2 architecture and design review checkpoint, formal written Change Request process for material scope changes" },
+    { "risk": "Decision-tree complexity for the pilot scenarios exceeds the agreed pilot scope", "mitigation": "Phase 1 scoping session with explicit boundary on conversation flows, intent categories, and entity-extraction coverage" },
+    { "risk": "GECX voice (GTP) channel latency variance under representative load", "mitigation": "Phase 2 latency-target design, Phase 4 latency tuning iterations, observability captured in conversational-insights dashboard" },
+    { "risk": "Afni-side resource availability constraining joint UAT participation", "mitigation": "Weekly PM cadence, early surfacing of resource blockers, flexible UAT scheduling around Afni operational windows" },
+    { "risk": "Stakeholder turnover during the pilot impacting continuity of approvals and scope decisions", "mitigation": "Documented decisions and design approvals, clear RACI, named alternate technical contacts, final pilot review meeting to formalize close-out" },
+    { "risk": "Outbound-calling infrastructure for the insurance agents is unresolved (GECX-native outbound vs. a separate telephony path)", "mitigation": "Phase 1/2 infrastructure research and a design decision with Afni; the pilot exercises representative outbound calls via the Google Telephony Platform, with the production dialing approach and compliance delivered as a recommendation" },
+    { "risk": "Subro Assist / CCT / ClaimPro API availability, schema, or access is not confirmed", "mitigation": "Phase 1 prerequisite for documented endpoints and access; sample-data fallback where needed; written Change Request if integration complexity exceeds estimates" },
+    { "risk": "Three agents within a fixed-price, eight-week pilot constrains the depth achievable per agent", "mitigation": "Per-agent MVP scope bounded in Phase 1 with representative scenarios; complex items deferred to the follow-up roadmap or addressed through a written Change Request" }
+  ],
+
+  "success_criteria": [
+    "Each of the three agents demonstrates end-to-end handling across the pilot scenarios agreed in Phase 1 — the IT Service Desk agent performing mandatory employee verification and guided Level 1 resolution; the Progressive CCC agent placing an API-triggered outbound call to file a claim and confirm coverage and liability; and the FNOL agent placing an outbound call to identify the adverse / third-party carrier — each writing results back to its system of record (ServiceNow or Subro Assist).",
+    "Measurements against the agreed per-agent success metrics are captured and shared with Afni stakeholders.",
+    "Afni's intelligent-automation team is trained on agent operation, monitoring, and platform tuning, with documented training materials delivered.",
+    "A final pilot report and follow-up roadmap are delivered and reviewed with Afni stakeholders at the pilot close."
+  ],
+
+  "pricing": {
+    "currency": "USD",
+    "total_fixed_price": 71200,
+    "google_funding": 71200,
+    "funding_program": "PSF",
+    "funding_clawback": false
+  },
+
+  "provenance": {
+    "sources": ["Google Doc 1GdY1ShbyrSXik_9dqT51PWu147B3sL4MTn8dL7k3qj4"],
+    "assumed": [],
+    "unanswered": ["Partner signatory title was blank in the issued document."]
+  }
+}
