@@ -122,6 +122,8 @@ def validate(intake: dict) -> dict:
         if _empty(sowlib.get(intake, path)):
             blocking.append({"field": path, **schema_meta(schema, path)})
     for path in _paths(RECOMMENDED, sow_type):
+        if not _applicable(path, intake):
+            continue
         if _empty(sowlib.get(intake, path)):
             warnings.append({"field": path, **schema_meta(schema, path)})
 
@@ -130,6 +132,14 @@ def validate(intake: dict) -> dict:
         "warnings": warnings,
         "checks": consistency_checks(intake),
     }
+
+
+def _applicable(path: str, intake: dict) -> bool:
+    """Suppress prompts that do not apply to this engagement's shape."""
+    if path == "migration.sso_apps":
+        # Only meaningful when an identity directory is being left behind.
+        return bool(sowlib.get(intake, "migration.endpoints"))
+    return True
 
 
 def _empty(value) -> bool:

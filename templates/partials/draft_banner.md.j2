@@ -1,0 +1,11 @@
+{% if unresolved %}
+> **DRAFT — NOT FOR ISSUE.** {{ unresolved | length }} required input(s) are unresolved.
+> This document cannot be sent to the customer until each is answered:
+>
+{% for gap in unresolved %}
+> - **{{ gap.field }}** — {{ gap.question }}
+{% endfor %}
+
+---
+
+{% endif %}

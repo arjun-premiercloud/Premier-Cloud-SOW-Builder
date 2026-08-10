@@ -1114,6 +1114,9 @@ compensation:
     engagement is 100% Google-funded; net cost to Customer is $0. The Google
     funding line equals the total fixed-price professional-services fee, payable
     subject to formal approval by Google Cloud.*
+  fixed_fee_note_no_funding: >-
+    Premier Cloud will provide the Services on a fixed-fee basis in accordance
+    with the table above.
   fixed_fee_note: >-
     Premier Cloud will provide the Services on a fixed-fee basis in accordance
     with the table above, which includes the total Google Funding amount as a

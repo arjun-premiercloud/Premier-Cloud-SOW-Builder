@@ -1,3 +1,4 @@
+{% include "partials/draft_banner.md.j2" %}
 {% include "partials/cover.md.j2" %}
 {% include "partials/preamble.md.j2" %}
 
@@ -116,7 +117,7 @@ The following Customer decisions are required on the schedule noted; each is a d
 The complete and live project plan, including all tasks, effort estimates, and the visual Gantt chart, is maintained here: {{ intake.migration.plan_link }}
 {% endif %}
 
-## **{{ sections.activities.n }}.2 Activity Schedule**
+## **{{ sections.activities.n }}.{{ 2 if migration.plan_link else 1 }} Activity Schedule**
 {% if track_schedules %}
 {% for track_name, items in track_schedules %}
 
@@ -133,7 +134,7 @@ The complete and live project plan, including all tasks, effort estimates, and t
 {% endif %}
 {% if resources %}
 
-## **{{ sections.activities.n }}.3 Resource Allocation**
+## **{{ sections.activities.n }}.{{ 3 if migration.plan_link else 2 }} Resource Allocation**
 
 {{ table(['**Resources**', '**Total Hours**', '**Responsibilities**'],
          rows(resources, ['role', 'hours', 'responsibilities'])) }}
@@ -156,9 +157,17 @@ The complete and live project plan, including all tasks, effort estimates, and t
 
 # **{{ sections.investment.n }}. {{ sections.investment.title }}**
 
+{% if pricing.price_tbd %}
+**[TBD: total fixed price not yet agreed — investment table omitted]**
+{% else %}
 {{ table(['Category', 'Cost (' ~ pricing.currency ~ ')'], pricing.rows) }}
+{% endif %}
 
+{% if pricing.funding %}
 {{ clauses.compensation.fixed_fee_note }}
+{% else %}
+{{ clauses.compensation.fixed_fee_note_no_funding }}
+{% endif %}
 {% if pricing.clawback %}
 
 {{ clauses.compensation.clawback }}

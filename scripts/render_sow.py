@@ -91,16 +91,51 @@ def main() -> int:
 
 
 def _stub_missing(intake: dict, gaps: list) -> None:
-    """Insert [TBD: question] placeholders so --force output is obviously incomplete."""
+    """Fill gaps with type-appropriate blanks and record them for the draft banner.
+
+    A string field gets a visible [TBD: ...] marker inline. Numeric and list
+    fields cannot carry one without breaking arithmetic or iteration, so they
+    are left empty and surface in the banner instead.
+    """
+    schema = sowlib.load_schema()
+    unresolved = []
+
     for gap in gaps:
         parts = gap["field"].split(".")
         cur = intake
-        for p in parts[:-1]:
-            cur = cur.setdefault(p, {})
-            if not isinstance(cur, dict):
+        for part in parts[:-1]:
+            nxt = cur.setdefault(part, {})
+            if not isinstance(nxt, dict):
                 break
+            cur = nxt
         else:
-            cur.setdefault(parts[-1], f"[TBD: {gap['question']}]")
+            kind = _schema_type(schema, gap["field"])
+            if kind == "string":
+                cur.setdefault(parts[-1], f"[TBD: {gap['question']}]")
+            elif kind == "array":
+                cur.setdefault(parts[-1], [])
+            elif kind == "object":
+                cur.setdefault(parts[-1], {})
+            # numbers stay absent - a string there would break the cost table
+        unresolved.append(gap)
+
+    intake["_unresolved"] = unresolved
+
+
+def _schema_type(schema: dict, dotted: str) -> str:
+    node = schema
+    for part in dotted.split("."):
+        props = node.get("properties") or {}
+        if part in props:
+            node = props[part]
+        elif node.get("type") == "array" and node.get("items"):
+            node = node["items"].get("properties", {}).get(part, {})
+        else:
+            return ""
+    kind = node.get("type", "")
+    if isinstance(kind, list):
+        kind = next((k for k in kind if k != "null"), "")
+    return kind
 
 
 if __name__ == "__main__":

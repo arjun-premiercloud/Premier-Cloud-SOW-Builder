@@ -223,9 +223,12 @@ def section_plan(sow_type: str, intake: dict):
 def build_pricing(intake: dict, clauses: dict) -> dict:  # noqa: ARG001
     p = intake.get("pricing", {}) or {}
     cur = p.get("currency", "USD")
-    total = p.get("total_fixed_price") or 0
-    funding = p.get("google_funding")
-    investment = p.get("partner_investment")
+    total = _num(p.get("total_fixed_price"))
+    funding = _num(p.get("google_funding")) or None
+    investment = _num(p.get("partner_investment")) or None
+    # A draft with no agreed price still has to render; the cost table says so
+    # rather than quietly showing $0.
+    price_tbd = _num(p.get("total_fixed_price"), None) is None
 
     lines = []
     if p.get("line_items"):
@@ -280,6 +283,7 @@ def build_pricing(intake: dict, clauses: dict) -> dict:  # noqa: ARG001
 
     return {
         "currency": cur,
+        "price_tbd": price_tbd,
         "total": total,
         "total_str": money(total, cur),
         "funding": funding,
@@ -293,6 +297,13 @@ def build_pricing(intake: dict, clauses: dict) -> dict:  # noqa: ARG001
         "data_sharing": p.get("google_data_sharing_consent", False),
         "payment_terms": p.get("payment_terms"),
     }
+
+
+def _num(value, default=0):
+    """Coerce to a number, or `default` when absent or non-numeric."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return default
+    return value
 
 
 def build_out_of_scope(intake: dict, clauses: dict, sow_type: str) -> list:
@@ -321,6 +332,9 @@ def build_assumptions(intake: dict, clauses: dict, sow_type: str) -> list:
     variant = clauses["wif_assumption"].get(wif)
     if variant:
         base = [variant if a.startswith("A single identity provider") else a for a in base]
+    suppress = [s.lower() for s in (intake.get("assumptions_suppress") or [])]
+    if suppress:
+        base = [a for a in base if not any(s in a.lower() for s in suppress)]
     return base + (intake.get("assumptions") or [])
 
 
@@ -424,6 +438,7 @@ def build_context(intake: dict, clauses: dict | None = None) -> dict:
         "customer_roles": customer.get("stakeholders") or cl["roles"]["customer"].get(sow_type, []),
         "pricing": pricing,
         "appendices": intake.get("appendices") or [],
+        "unresolved": intake.get("_unresolved") or [],
         "data_sources": data_source_names(get(intake, "platform.data_sources")),
         "sections": {s["key"]: s for s in section_plan(sow_type, intake)},
         "section_list": section_plan(sow_type, intake),

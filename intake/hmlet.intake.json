@@ -1,0 +1,303 @@
+{
+  "_comment": "Habyt -> Hmlet Google Workspace migration, Phase 1. Extracted from: GWS migration discovery call (2026-07-15), Habyt/Hmlet sync (2026-08-06), Ian/Arjun sync (2026-08-06), and the Hmlet x Habyt mapping spreadsheet. Price, dates and signatory are deliberately absent - they were not in any source.",
+  "sow_type": "workspace_migration",
+  "document": {
+    "title": "Google Workspace Migration - Habyt to Hmlet",
+    "subtitle": "Phase 1: Active User and Shared Drive Migration",
+    "date": "2026-08-10",
+    "version": "1.0",
+    "prepared_by": "Premier Cloud Inc."
+  },
+  "customer": {
+    "legal_name": "Hmlet",
+    "short_name": "Hmlet",
+    "industry": "Co-living and flexible accommodation",
+    "profile": "Hmlet operates the destination Google Workspace environment (hmlet.com) and is the contracting party for this migration. Habyt operates the source environment (habyt.com); the two organisations are separating into independent entities, and this engagement transfers an agreed subset of historical Habyt data into the pre-existing Hmlet accounts. Hmlet's technical and IT operations are managed by ZenAdmin, who act as Hmlet's technical point of contact for this engagement. Scope, commercials and timeline run directly between Premier Cloud and Hmlet.",
+    "contact": {
+      "name": "Ashok Kumar Sarma R",
+      "title": "ZenAdmin - IT Operations, Hmlet",
+      "email": "ashokkumarsarma.r@zenadmin.ai"
+    },
+    "stakeholders": [
+      {
+        "role": "Technical Lead",
+        "name": "Ashok Kumar Sarma R",
+        "title": "ZenAdmin",
+        "email": "ashokkumarsarma.r@zenadmin.ai",
+        "description": "Primary technical point of contact for Hmlet; owns the final user, shared drive and group lists, and assumes IT operations for the destination environment on completion"
+      },
+      {
+        "role": "Hmlet Stakeholder",
+        "name": "Aditya Anand",
+        "email": "aditya.anand@hmlet.com",
+        "description": "Hmlet business stakeholder"
+      },
+      {
+        "role": "Source Environment Owner (Habyt)",
+        "name": "Edoardo Archetti",
+        "description": "Habyt-side point of contact; approves migration scope and source-environment access. Not a party to this SOW"
+      }
+    ]
+  },
+  "partner": {
+    "team": [
+      {
+        "role": "Account Manager",
+        "name": "Sarah Giles",
+        "description": "Commercial ownership, client communication, and engagement governance"
+      },
+      {
+        "role": "Project Manager",
+        "name": "Arjun Bellur",
+        "description": "Project plan, status reporting, milestone tracking, and closure documentation"
+      },
+      {
+        "role": "Operations Manager / Lead Engineer",
+        "name": "Ian Basham",
+        "description": "Migration lead; CloudM configuration, batch execution, cutover and delta management"
+      },
+      {
+        "role": "Migration Support",
+        "name": "Ahmed Ketari",
+        "description": "Migration execution support, error log review and remediation"
+      },
+      {
+        "role": "Migration Engineer",
+        "name": "Bruno",
+        "description": "Environment scan, admin console analysis and migration support"
+      }
+    ]
+  },
+  "agreement": {
+    "msa_style": "public_link"
+  },
+  "term": {},
+  "background": {
+    "objective": "Hmlet is engaging Premier Cloud Inc., a Google Cloud Premier Partner, to migrate an agreed subset of historical Google Workspace data from the Habyt source environment (habyt.com) into Hmlet's existing destination environment (hmlet.com).\n\nThis is a Google-to-Google migration of historical data only. Both environments remain independent: no DNS, MX or Autodiscover records are changed, the source domain is not added as an alias or secondary domain under the destination, and destination accounts are already provisioned and in active use. Premier Cloud will transfer mail, Drive, calendar and contacts data for the in-scope accounts, together with the in-scope shared drives, and Habyt will delete the migrated source accounts following the final delta pass.\n\nThis SOW covers Phase 1 only. Phase 2 - restoration of archived user data currently held in Spin AI - is a separate engagement and is not scoped, priced or scheduled here.",
+    "key_focus_areas": [
+      {
+        "label": "Historical Data Migration",
+        "text": "CloudM-driven transfer of mail, Drive, calendar and contacts from habyt.com into pre-existing hmlet.com accounts, using an agreed source-to-destination mapping"
+      },
+      {
+        "label": "Consolidated Mailbox Handling",
+        "text": "163 source accounts are consolidated into a single destination account (oldemails@hmlet.com), with each source account preserved as a distinct label so the originating mailbox remains identifiable"
+      },
+      {
+        "label": "Shared Drive Migration",
+        "text": "Migration of the in-scope shared drives with memberships preserved as they exist in the source environment"
+      },
+      {
+        "label": "Controlled Source Access",
+        "text": "Access to the Habyt source environment is limited to named Premier Cloud individuals for the duration of the work, performed without subcontracting, and revoked on completion"
+      }
+    ],
+    "engagement_type": "This is an execution engagement. Premier Cloud will perform the migration end-to-end, including environment scan, configuration, pilot, bulk historical migration, delta sync and post-migration validation. No DNS cutover, domain transfer, user provisioning or user renaming is performed, as destination accounts already exist and both domains remain independent."
+  },
+  "migration": {
+    "source_platform": "Google Workspace (habyt.com)",
+    "destination_platform": "Google Workspace (hmlet.com)",
+    "tool": "CloudM Migrate",
+    "user_count": 221,
+    "volumes": [
+      {
+        "label": "Total in-scope data",
+        "size": "approximately 2.2 TB",
+        "notes": "Active user data across the agreed mapping; distinct from the ~10 TB total in the source environment, which includes accounts not in scope"
+      },
+      {
+        "label": "User drives",
+        "size": "223 drives",
+        "notes": ""
+      },
+      {
+        "label": "Shared drives",
+        "size": "1.079 TB across 29 drives",
+        "notes": "Largest: All Properties (447.5 GB), Visual Content - APAC (423 GB), Marketing APAC (292 GB), DAS - Projects and Work (188 GB)"
+      }
+    ],
+    "tracks": [
+      {
+        "name": "Google Workspace Data Migration (CloudM)",
+        "description": "A single execution track. Migration is performed with CloudM Migrate configured to transfer only the accounts named in the agreed mapping, so that no data moves between the two environments outside the approved scope.",
+        "phases": [
+          {
+            "name": "Phase 1: Preparation & Environment Setup",
+            "activities": [
+              "Environment scan of the Habyt source environment to establish data volumes, account states and migration complexity",
+              "Confirmation of the final migration mapping with Hmlet: in-scope user accounts, shared drives and groups",
+              "Provisioning of super administrator access on both the source and destination environments for named Premier Cloud individuals",
+              "Creation of a Google Cloud project with domain-wide delegation and the required API scopes on both source and destination",
+              "Installation and configuration of GAM on both environments to support account administration during the migration",
+              "CloudM Migrate configured to migrate only the accounts specified in the agreed mapping, preventing any transfer outside the approved scope",
+              "Configuration of the consolidated-mailbox rule: the 163 source accounts mapping to oldemails@hmlet.com are migrated with each source account preserved as a distinct label"
+            ]
+          },
+          {
+            "name": "Phase 2: Pilot Migration",
+            "activities": [
+              "Pilot migration of a small cohort of representative users and the more complex shared drives",
+              "Validation of data fidelity, label structure on the consolidated mailbox, and shared drive membership preservation",
+              "Measurement of achieved throughput against CloudM API rate limits to inform bulk-wave sequencing",
+              "Pilot acceptance reviewed with Hmlet before bulk migration begins"
+            ]
+          },
+          {
+            "name": "Phase 3: Bulk Historical Migration",
+            "activities": [
+              "Bulk transfer of historical mail and Drive data for all in-scope accounts",
+              "Migration of the in-scope shared drives with memberships preserved as they exist in the source environment",
+              "Ongoing monitoring of CloudM for API rate limiting and throttling, with concurrency tuned in response",
+              "Review of error logs and remediation of failures, including ownership issues on suspended or archived source accounts"
+            ]
+          },
+          {
+            "name": "Phase 4: Delta Migration & Completion",
+            "activities": [
+              "Notification to Hmlet ahead of the final delta window",
+              "Delta pass to capture mail and Drive changes since the bulk transfer",
+              "Final delta pass on the agreed completion date, after which no further data is transferred",
+              "Confirmation to Hmlet that migration is complete, enabling Habyt to proceed with deletion of the migrated source accounts"
+            ]
+          },
+          {
+            "name": "Phase 5: Post-Migration Validation & Handover",
+            "activities": [
+              "Review of CloudM reconciliation reports for each migration batch",
+              "Spot-check audit of migrated mailboxes, Drive content and shared drive memberships against source counts",
+              "Documented list of outstanding remediation items and any known non-migrating content",
+              "Deletion by Premier Cloud of any copies of Habyt data held, with written confirmation to Habyt",
+              "Project closeout meeting and handover of IT operations for the destination environment to ZenAdmin"
+            ]
+          }
+        ]
+      }
+    ],
+    "decisions_pending": [
+      "Hmlet to confirm the final in-scope user list. The source environment holds 331 active accounts; the agreed mapping covers 221, of which 163 consolidate into a single destination account. Required before the environment scan is signed off",
+      "Hmlet to confirm whether Google Groups are in scope. The migration intake sheet records Groups as out of scope; the July 15 discovery call recorded an intent to migrate all groups with their memberships. Required before Phase 1 completes",
+      "Hmlet to confirm the final shared drive list. Three drives in the current mapping could not be located as shared drives in the source environment and may be subfolders of All Properties",
+      "Hmlet and Habyt to identify any third-party applications authenticating against Habyt accounts (for example Salesforce, Jira or Zendesk), so that dependencies are resolved before the source accounts are deleted",
+      "Habyt to review and approve the final migration scope before source-environment access is granted"
+    ]
+  },
+  "scope": {
+    "statement": "This engagement transfers historical Google Workspace data for an agreed subset of accounts from the Habyt source environment into the pre-existing Hmlet destination environment, using CloudM Migrate. Both environments remain independent throughout and after the engagement.",
+    "out_of_scope_extra": [
+      "Phase 2 - restoration and migration of archived user data currently held in Spin AI. Spin AI does not provide migration services and permits restoration only to the originating domain; the technical approach is undetermined and will be scoped, priced and scheduled as a separate engagement",
+      "Migration of Slack data. The Habyt Slack subscription permits export of public channels only, excluding direct messages and private channels; Slack is separately operational on the Hmlet side and is not part of this engagement",
+      "Migration of Google Chat data. Recorded as out of scope in the agreed migration mapping",
+      "Migration of non-Workspace Google products, including Google Analytics and YouTube accounts",
+      "Any change to DNS, MX, SPF, DKIM or Autodiscover records on either domain. Mail delivery for the source domain is unchanged by this engagement",
+      "Addition of the source domain as an alias or secondary domain under the destination environment. The two domains remain independent entities",
+      "Provisioning, renaming or password management of destination user accounts. Destination accounts already exist and are in active use",
+      "Deletion of the migrated source accounts. Premier Cloud will confirm migration completion; account deletion is performed by Habyt",
+      "Identification, remediation or reconfiguration of third-party applications that authenticate against Habyt source accounts and may be disrupted when those accounts are deleted",
+      "Migration of data for any account not named in the agreed source-to-destination mapping reviewed and approved by Habyt"
+    ]
+  },
+  "assumptions": [
+    "Hmlet is the contracting party for this engagement. Scope, commercials and timeline run directly between Premier Cloud and Hmlet",
+    "Destination accounts on hmlet.com already exist and are in active use; no user provisioning is performed by Premier Cloud",
+    "Super administrator access is provided on both the source and destination environments for the duration of the work",
+    "Access to the Habyt source environment is limited to named Premier Cloud individuals, is revoked on completion, and the work is performed by Premier Cloud directly without subcontracting. Elevated or admin-level access will not be extended to Hmlet personnel or any other third party without Habyt's prior written approval",
+    "Access and transfer are limited to the approved migration scope, which Habyt will review before work begins",
+    "On completion, Premier Cloud will delete any copies of Habyt data it holds and confirm this to Habyt in writing",
+    "Premier Cloud will notify Habyt promptly of any unauthorised access to or disclosure of Habyt data",
+    "Destination accounts are newly created within a separate Google Workspace tenant, so CloudM throughput is subject to Google API rate limiting on those accounts. Concurrency may be tuned during the pilot and bulk phases, and achieved throughput is not within Premier Cloud's control",
+    "The dates in the project plan are target dates. Migration duration depends on throughput achieved against API rate limits, which is measured during the pilot",
+    "Habyt provides the source-side information and approvals required for the migration. Premier Cloud and Hmlet are dependent on Habyt for source-environment visibility"
+  ],
+  "success_criteria": [
+    "All in-scope accounts named in the agreed mapping migrated from habyt.com to hmlet.com, validated against the CloudM reconciliation report",
+    "The 163 consolidated source accounts migrated into oldemails@hmlet.com with each source account preserved as a distinct, identifiable label",
+    "All in-scope shared drives migrated with memberships preserved as they exist in the source environment",
+    "Final delta pass completed and migration completion confirmed to Hmlet, enabling Habyt to proceed with source account deletion",
+    "No data transferred outside the migration scope approved by Habyt",
+    "Premier Cloud copies of Habyt data deleted and confirmed in writing on completion",
+    "Post-migration validation report reviewed and accepted by Hmlet stakeholders"
+  ],
+  "risks": [
+    {
+      "risk": "CloudM API throttling against newly created destination accounts constrains migration throughput",
+      "mitigation": "Measure achieved throughput during the pilot cohort before committing bulk-wave dates; monitor CloudM for rate limiting throughout the bulk phase and tune worker concurrency in response; treat all project plan dates as target dates and communicate throughput risk to Hmlet before it affects a milestone"
+    },
+    {
+      "risk": "The in-scope user list is not final. The source environment holds 331 active accounts against an agreed mapping of 221",
+      "mitigation": "Confirm the final list with Hmlet before the environment scan is signed off; configure CloudM to migrate only named accounts so that scope changes are explicit and controlled"
+    },
+    {
+      "risk": "Third-party applications authenticating against Habyt source accounts break when those accounts are deleted",
+      "mitigation": "Identify dependencies with Hmlet and Habyt during Phase 1; flag affected accounts before the final delta; deletion is performed by Habyt on their own schedule once dependencies are resolved"
+    },
+    {
+      "risk": "Premier Cloud and Hmlet have limited visibility of the Habyt source environment, and source-side information depends on a single Habyt contact",
+      "mitigation": "Route source-side requests through the named Habyt contact with agreed response expectations; escalate through the Premier Cloud account manager where responses would affect a milestone"
+    },
+    {
+      "risk": "Three shared drives in the current mapping cannot be located as shared drives in the source environment and may be subfolders of another drive",
+      "mitigation": "Resolve during the environment scan and confirm the final shared drive list with Hmlet before bulk migration begins"
+    },
+    {
+      "risk": "Scope disagreement on Google Groups, recorded as out of scope in the migration mapping but as in scope in the discovery call",
+      "mitigation": "Confirm with Hmlet before Phase 1 completes; if groups are in scope, address the additional effort through a written change request"
+    }
+  ],
+  "pricing": {
+    "currency": "USD"
+  },
+  "provenance": {
+    "sources": [
+      "Hmlet & Habyt x Premier Cloud - GWS migration, discovery call, 2026-07-15 (doc 1RbGzocsq3WriQ_VB-OmgdMGknA5wnD10KMQjv36xm2o)",
+      "Habyt / Hmlet Sync, Sarah Giles and Arjun Bellur, 2026-08-06 (doc 17NbOf_LRwS4Ux09zfiM8U0GdsCTlLLOxMqsaB3S6bps)",
+      "Ian / Arjun: Hamlet/Habyt Sync, 2026-08-06 (doc 1AJzT6eNzFOgS1Zds_nCjIKnCtQV0od91igfGPjzvDeA)",
+      "[INT] Mapping Spreadsheet - Hmlet x Habyt (sheet 1w9mqbdPjSZXCDkwgpXGLf5_TDJ0egVh4htVmbTS_8pM)"
+    ],
+    "assumed": [
+      "Five-phase track structure derived from the migration intake sheet, with the Phase 4 tasks 'domain transfer', 'rename users' and 'update DKIM records' REMOVED - they contradict the approach agreed on the 2026-07-15 call, where both domains remain independent and no DNS changes are made. The intake sheet appears to be an untailored generic template. Confirm with Ian Basham.",
+      "A pilot phase is included. Sarah Giles noted a ~5-user pilot is standard on previous migrations and Arjun Bellur assumed one would run, but Ian Basham stated on 2026-08-06 that a pilot had not been discussed. Confirm before issuing.",
+      "Hypercare and a post-migration support window appear in the intake sheet (14 days) but were not discussed in any call and are excluded from this draft, consistent with prior Premier Cloud SOWs. Confirm whether Hmlet expects post-cutover support.",
+      "Customer legal entity recorded as 'Hmlet' - the registered legal name was not stated in any source.",
+      "Shared drive count of 29 taken from the mapping sheet header; the drive tab lists 28 rows of which 4 are marked FALSE, implying 24 in scope. Reconcile before issuing."
+    ],
+    "unanswered": [
+      "PRICE. Sarah Giles priced Phase 1 from initial estimates of user data, shared drive volume and engineering hours, and Hmlet signed off - but the figure does not appear in any meeting note. Required before this SOW can be issued.",
+      "START AND END DATES. No firm dates have been given to the client. Hmlet has a hard internal deadline and wants to start ASAP. Effort estimates per task are still outstanding from Ian Basham and Ahmed Ketari.",
+      "EFFORT ESTIMATES per task, needed for the activity schedule and resource allocation tables. Outstanding from Ian and Ahmed via the intake sheet.",
+      "Hmlet signatory name and title.",
+      "Hmlet registered legal entity name and billing address.",
+      "User count reconciliation: 331 active in source, 221 in the agreed mapping, ~116 described as 'active Google Workspace users' by Sarah Giles, and 163 consolidating into oldemails@hmlet.com. These four figures need to resolve into one in-scope number.",
+      "Whether Google Groups are in scope (mapping sheet says No, discovery call said yes).",
+      "Whether the environment scan started 2026-08-06 has completed, and what it changed about complexity.",
+      "Whether a pilot cohort is being run, and its size."
+    ]
+  },
+  "assumptions_suppress": [
+    "Global Admin in the source tenant",
+    "Source-platform API throttling is absorbed",
+    "Network bandwidth from the source platform"
+  ],
+  "deliverables": [
+    {
+      "detail": "Environment Scan Report: source-environment data volumes, account states and migration complexity"
+    },
+    {
+      "detail": "Confirmed Migration Mapping: agreed source-to-destination user, shared drive and group list, reviewed and approved by Habyt"
+    },
+    {
+      "detail": "Pilot Validation Report: data fidelity, consolidated-mailbox label structure, shared drive membership preservation, and achieved throughput"
+    },
+    {
+      "detail": "Weekly Migration Status Reports: batch progress, throughput against API rate limits, and blocking issues"
+    },
+    {
+      "detail": "Migration Completion Confirmation: written confirmation that the final delta is complete, enabling Habyt to delete the migrated source accounts"
+    },
+    {
+      "detail": "Post-Migration Validation Report: CloudM reconciliation summary, spot-check audit results, and outstanding remediation items"
+    },
+    {
+      "detail": "Data Deletion Confirmation: written confirmation to Habyt that Premier Cloud has deleted all copies of Habyt data it held"
+    }
+  ]
+}

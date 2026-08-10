@@ -8,7 +8,11 @@
 
 {{ clauses.compensation.breakdown_lead }}
 
+{% if pricing.price_tbd %}
+**[TBD: total fixed price not yet agreed — cost table omitted]**
+{% else %}
 {{ table(['**Services**', '**Cost**'], pricing.rows) }}
+{% endif %}
 {% if pricing.note %}
 
 {{ pricing.note }}
