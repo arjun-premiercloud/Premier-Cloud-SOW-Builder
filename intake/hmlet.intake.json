@@ -116,22 +116,32 @@
     "source_platform": "Google Workspace (habyt.com)",
     "destination_platform": "Google Workspace (hmlet.com)",
     "tool": "CloudM Migrate",
-    "user_count": 108,
+    "user_count": 220,
     "volumes": [
+      {
+        "label": "In-scope user accounts",
+        "size": "220 source accounts",
+        "notes": "57 individually mapped to named hmlet.com accounts (Faisal Aditya excluded at Habyt's instruction), plus 163 consolidated into oldemails@hmlet.com"
+      },
       {
         "label": "User data",
         "size": "approximately 1.07 TB",
-        "notes": "108 in-scope users per the executed Order Form"
+        "notes": ""
       },
       {
         "label": "Shared drives",
-        "size": "approximately 1.08 TB",
-        "notes": "Largest: All Properties (447.5 GB), Visual Content - APAC (423 GB), Marketing APAC (292 GB), DAS - Projects and Work (188 GB)"
+        "size": "approximately 1.08 TB across 25 drives",
+        "notes": "Largest: All Properties (447.5 GB), Marketing APAC (292 GB), DAS - Projects and Work (188 GB). Excludes Studio, Visual Content and Visual Content - APAC per Habyt"
+      },
+      {
+        "label": "Google Groups",
+        "size": "1 group",
+        "notes": "people.apac@habyt.com to people.apac@hmlet.com; Habyt to confirm whether further groups are required"
       },
       {
         "label": "Total initial scope",
         "size": "approximately 2.15 TB",
-        "notes": "Distinct from the ~10 TB total in the source environment, which includes accounts not in scope"
+        "notes": "Distinct from the ~10 TB total in the source environment; Habyt retains and continues to use the accounts that are not in scope"
       }
     ],
     "tracks": [
@@ -192,16 +202,19 @@
       }
     ],
     "decisions_pending": [
-      "Hmlet to confirm the final in-scope user list. The executed Order Form contracts 108 users; the mapping spreadsheet lists 221 rows, of which 163 consolidate into a single destination account. Confirm which figure governs delivery before the environment scan is signed off",
-      "Hmlet to confirm whether Google Groups are in scope. The migration intake sheet records Groups as out of scope; the July 15 discovery call recorded an intent to migrate all groups with their memberships. Required before Phase 1 completes",
-      "Hmlet to confirm the final shared drive list. Three drives in the current mapping could not be located as shared drives in the source environment and may be subfolders of All Properties",
-      "Hmlet and Habyt to identify any third-party applications authenticating against Habyt accounts (for example Salesforce, Jira or Zendesk), so that dependencies are resolved before the source accounts are deleted",
-      "Habyt to review and approve the final migration scope before source-environment access is granted"
+      "Hmlet and Premier Cloud to reconcile the in-scope account count against the executed Order Form. Habyt has confirmed 220 accounts (57 mapped + 163 consolidated); the Order Form records 108 users. This must be resolved before delivery commits to a figure",
+      "Habyt to confirm whether any Google Groups beyond people.apac@ are required. Habyt has not yet reviewed the group list",
+      "Hmlet to confirm whether any third-party applications authenticate against Habyt accounts and would be disrupted when those accounts are deleted. Referred to the Hmlet team by Habyt",
+      "Hmlet to confirm whether any post-cutover support is expected. Not included in the executed Order Form"
     ]
   },
   "scope": {
     "statement": "This engagement transfers historical Google Workspace data for an agreed subset of accounts from the Habyt source environment into the pre-existing Hmlet destination environment, using CloudM Migrate. Both environments remain independent throughout and after the engagement.",
     "out_of_scope_extra": [
+      "Migration of the Studio, Visual Content and Visual Content - APAC shared drives. Excluded at Habyt's instruction",
+      "Migration of the account faisal.aditya@habyt.com. Excluded at Habyt's instruction",
+      "Migration of any Habyt account outside the agreed 220-account mapping. Habyt retains and continues to use the remaining accounts in the source environment",
+      "Migration of Google Groups beyond people.apac@habyt.com, unless Habyt identifies further groups and the parties agree the additional scope in writing",
       "Phase 2 - restoration and migration of archived user data currently held in Spin AI. Spin AI does not provide migration services and permits restoration only to the originating domain; the technical approach is undetermined and will be scoped, priced and scheduled as a separate engagement",
       "Migration of Slack data. The Habyt Slack subscription permits export of public channels only, excluding direct messages and private channels; Slack is separately operational on the Hmlet side and is not part of this engagement",
       "Migration of Google Chat data. Recorded as out of scope in the agreed migration mapping",
@@ -210,8 +223,7 @@
       "Addition of the source domain as an alias or secondary domain under the destination environment. The two domains remain independent entities",
       "Provisioning, renaming or password management of destination user accounts. Destination accounts already exist and are in active use",
       "Deletion of the migrated source accounts. Premier Cloud will confirm migration completion; account deletion is performed by Habyt",
-      "Identification, remediation or reconfiguration of third-party applications that authenticate against Habyt source accounts and may be disrupted when those accounts are deleted",
-      "Migration of data for any account not named in the agreed source-to-destination mapping reviewed and approved by Habyt"
+      "Identification, remediation or reconfiguration of third-party applications that authenticate against Habyt source accounts and may be disrupted when those accounts are deleted"
     ]
   },
   "assumptions": [
@@ -230,6 +242,7 @@
     "All in-scope accounts named in the agreed mapping migrated from habyt.com to hmlet.com, validated against the CloudM reconciliation report",
     "The 163 consolidated source accounts migrated into oldemails@hmlet.com with each source account preserved as a distinct, identifiable label",
     "All in-scope shared drives migrated with memberships preserved as they exist in the source environment",
+    "The in-scope Google Group migrated with its membership preserved",
     "Final delta pass completed and migration completion confirmed to Hmlet, enabling Habyt to proceed with source account deletion",
     "No data transferred outside the migration scope approved by Habyt",
     "Premier Cloud copies of Habyt data deleted and confirmed in writing on completion",
@@ -237,12 +250,12 @@
   ],
   "risks": [
     {
-      "risk": "CloudM API throttling against newly created destination accounts constrains migration throughput",
-      "mitigation": "Measure achieved throughput during the pilot cohort before committing bulk-wave dates; monitor CloudM for rate limiting throughout the bulk phase and tune worker concurrency in response; treat all project plan dates as target dates and communicate throughput risk to Hmlet before it affects a milestone"
+      "risk": "The in-scope account count confirmed by Habyt (220) exceeds the 108 users recorded in the executed Order Form",
+      "mitigation": "Reconcile the two figures with Hmlet before delivery begins. If the agreed scope is 220 accounts, confirm whether the fixed fee in the Order Form remains applicable or whether a revised Order Form or written change request is required."
     },
     {
-      "risk": "The in-scope user list is not final. The source environment holds 331 active accounts against an agreed mapping of 221",
-      "mitigation": "Confirm the final list with Hmlet before the environment scan is signed off; configure CloudM to migrate only named accounts so that scope changes are explicit and controlled"
+      "risk": "CloudM API throttling against newly created destination accounts constrains migration throughput",
+      "mitigation": "Measure achieved throughput during the pilot cohort before committing bulk-wave dates; monitor CloudM for rate limiting throughout the bulk phase and tune worker concurrency in response; treat all project plan dates as target dates and communicate throughput risk to Hmlet before it affects a milestone"
     },
     {
       "risk": "Third-party applications authenticating against Habyt source accounts break when those accounts are deleted",
@@ -251,14 +264,6 @@
     {
       "risk": "Premier Cloud and Hmlet have limited visibility of the Habyt source environment, and source-side information depends on a single Habyt contact",
       "mitigation": "Route source-side requests through the named Habyt contact with agreed response expectations; escalate through the Premier Cloud account manager where responses would affect a milestone"
-    },
-    {
-      "risk": "Three shared drives in the current mapping cannot be located as shared drives in the source environment and may be subfolders of another drive",
-      "mitigation": "Resolve during the environment scan and confirm the final shared drive list with Hmlet before bulk migration begins"
-    },
-    {
-      "risk": "Scope disagreement on Google Groups, recorded as out of scope in the migration mapping but as in scope in the discovery call",
-      "mitigation": "Confirm with Hmlet before Phase 1 completes; if groups are in scope, address the additional effort through a written change request"
     }
   ],
   "pricing": {
@@ -272,24 +277,23 @@
       "Habyt / Hmlet Sync, Sarah Giles and Arjun Bellur, 2026-08-06 (doc 17NbOf_LRwS4Ux09zfiM8U0GdsCTlLLOxMqsaB3S6bps)",
       "Ian / Arjun: Hamlet/Habyt Sync, 2026-08-06 (doc 1AJzT6eNzFOgS1Zds_nCjIKnCtQV0od91igfGPjzvDeA)",
       "[INT] Mapping Spreadsheet - Hmlet x Habyt (sheet 1w9mqbdPjSZXCDkwgpXGLf5_TDJ0egVh4htVmbTS_8pM)",
-      "Order Form: Hmlet Central Pte Ltd, executed 5 August 2026 (file 1WJrF0C7sQcUPfEJW5D_F-iYo9b376EV-)"
+      "Order Form: Hmlet Central Pte Ltd, executed 5 August 2026 (file 1WJrF0C7sQcUPfEJW5D_F-iYo9b376EV-)",
+      "Email from Edoardo Archetti (Habyt) to Sarah Giles, 2026-08-11, confirming account count, group scope and shared drive exclusions"
     ],
     "assumed": [
       "Five-phase track structure derived from the migration intake sheet, with the Phase 4 tasks 'domain transfer', 'rename users' and 'update DKIM records' REMOVED - they contradict the approach agreed on the 2026-07-15 call, where both domains remain independent and no DNS changes are made. The intake sheet appears to be an untailored generic template. Confirm with Ian Basham.",
       "A pilot phase is included. Sarah Giles noted a ~5-user pilot is standard on previous migrations and Arjun Bellur assumed one would run, but Ian Basham stated on 2026-08-06 that a pilot had not been discussed. Confirm before issuing.",
       "Hypercare and a post-migration support window appear in the intake sheet (14 days) but were not discussed in any call and are excluded from this draft, consistent with prior Premier Cloud SOWs. Confirm whether Hmlet expects post-cutover support.",
-      "Shared drive count of 29 taken from the mapping sheet header; the drive tab lists 28 rows of which 4 are marked FALSE, implying 24 in scope. Reconcile before issuing.",
       "SOW execution date set to 'the date of last signature', matching the house pattern used on the Afni SOW. The Order Form was executed 5 August 2026; the SOW execution date was not stated separately.",
       "Term end date mirrors the Order Form's 'TBD upon completion of environment scan'. This leaves the Term open-ended, which is weaker in a SOW than in an Order Form - consider an estimated outside date once the scan lands."
     ],
     "unanswered": [
+      "ORDER FORM RECONCILIATION. Habyt confirms 220 in-scope accounts; the executed Order Form records 108 users at a $30,000 fixed fee. Resolve before issuing - it may require a revised Order Form or a change request.",
       "EFFORT ESTIMATES per task, needed for the activity schedule and resource allocation tables. Outstanding from Ian Basham and Ahmed Ketari.",
       "Term end date - deliberately open pending the environment scan, per the Order Form.",
-      "User count: Order Form contracts 108; mapping sheet lists 221 rows including 163 consolidating into oldemails@hmlet.com. Which governs delivery?",
-      "Whether Google Groups are in scope (mapping sheet says No, discovery call said yes).",
-      "Final shared drive list - three drives could not be located as shared drives in the source.",
-      "Whether Hmlet expects post-cutover support (Ian's intake sheet has a 14-day hypercare line; not discussed on any call and not priced in the Order Form).",
-      "Third-party applications authenticating against Habyt accounts, to be resolved before source account deletion."
+      "Whether any Google Groups beyond people.apac@ are required - Habyt has not reviewed the group list.",
+      "Whether any third-party applications authenticate against Habyt accounts - referred to the Hmlet team.",
+      "Whether Hmlet expects post-cutover support - not in the Order Form, not discussed on any call."
     ]
   },
   "assumptions_suppress": [
