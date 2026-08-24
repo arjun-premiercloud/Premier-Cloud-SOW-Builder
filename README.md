@@ -77,6 +77,23 @@ form. Every field carries an `x-question` (what to ask) and an `x-source` (where
 the answer normally lives) — which is how the gap report turns a missing field
 into a question you can paste into an email.
 
+## Sharing it with a colleague
+
+```bash
+python3 scripts/package_skill.py            # -> dist/sow-builder-skill.zip
+```
+
+Assembles a self-contained `sow-builder/` folder — skill, clause library,
+templates, schema, scripts and reference examples — runs the test suite inside
+the staged copy to prove it works standalone, then zips it. The recipient drops
+the folder into `.claude/skills/` and runs `pip install -r requirements.txt`;
+`INSTALL.md` in the package covers the rest.
+
+`intake/` and `build/` are never packaged. The reference examples are, and they
+carry real customer names, contacts and contract values — fine internally, worth
+a look before it leaves Premier Cloud. `--no-examples` drops them, at the cost of
+the test suite and the reference reconstructions.
+
 ## Layout
 
 ```
