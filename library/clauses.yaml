@@ -124,6 +124,10 @@ product_intro:
     governance plane across agents.
 
 scope_statement:
+  infrastructure_build: >-
+    Partner will act as a hands-on technical extension of Customer's engineering
+    team, providing the infrastructure and platform engineering effort required
+    to deliver the target architecture described above.
   workspace_migration: >-
     This engagement is delivered in parallel tracks executed over the Term.
     Each track follows the migration tool's documented methodology, applied in
@@ -538,6 +542,17 @@ service_sections:
 # exclusions come from intake `scope.out_of_scope_extra`.
 # --------------------------------------------------------------------------
 out_of_scope:
+  infrastructure_build:
+    - "Application-level refactoring beyond what is required for platform compatibility."
+    - "Ongoing support, maintenance, or operation of the delivered environment beyond the engagement's completion."
+    - >-
+      Performance tuning or cost optimization of the delivered environment beyond
+      the configuration described in this SOW.
+    - "Security assessments, penetration testing, or third-party compliance audits."
+    - "Procurement of licences, third-party software, or committed spend agreements."
+    - >-
+      Ongoing cloud consumption or hosting costs, which are billed directly to
+      Customer under Customer's own account.
   gemini_enterprise_implementation:
     - "Development of production-grade custom/AutoML/gen AI-specific ML model or large-scale deployment."
     - "Development of new or custom connectors and actions beyond what is described in this SOW."
@@ -670,6 +685,14 @@ risks:
   risks_intro: "Partner and Customer will meet at regular intervals to mitigate any risk as it comes up."
 
 assumptions:
+  infrastructure_build:
+    - >-
+      Customer will provide timely access to the technical points of contact
+      required for architecture decisions and reviews.
+    - >-
+      Customer's existing infrastructure-as-code is well-structured and can be
+      adapted to the target platform without substantial refactoring.
+    - "All Services will be performed remotely by Partner."
   gemini_enterprise_implementation:
     - "Additional data connectors will impact the delivery schedule and cost."
     - "Customer is using compatible versions of the identified connectors and source systems."
@@ -916,6 +939,15 @@ governance:
 
 roles:
   partner:
+    infrastructure_build:
+      - role: Account Manager
+        description: "Commercial ownership, engagement governance, and customer communication."
+      - role: Cloud Architect
+        description: >-
+          Solution architecture, platform design, infrastructure-as-code
+          adaptation, and technical delivery.
+      - role: Executive Sponsor
+        description: "Executive oversight and escalation path."
     gemini_enterprise_implementation:
       - role: PM
         description: "Program lead, driving activities and deliverables in the SOW."
@@ -952,6 +984,13 @@ roles:
       - role: Customer Engineer
         description: "Discovery facilitation, training delivery, dashboard handover, and adoption coordination."
   customer:
+    infrastructure_build:
+      - role: Technical Lead
+        description: "Architecture decisions, reviews, and approvals."
+      - role: Infrastructure Engineer
+        description: "Environment access, configuration detail, and joint validation."
+      - role: Executive Sponsor
+        description: "Commercial approvals and escalation path."
     gemini_enterprise_implementation:
       - role: PM
         description: "Program lead who can provide approvals, driving activities and deliverables in the SOW."
@@ -1043,6 +1082,10 @@ deliverables:
       timeline: End of Milestone 6
 
 success_criteria:
+  infrastructure_build:
+    - "The target environment is provisioned and operating to the agreed design."
+    - "Customer's engineering team can deploy, observe, and troubleshoot the delivered environment."
+    - "Documentation and knowledge transfer are complete and accepted by Customer."
   workspace_migration:
     - >-
       100% of in-scope mailboxes migrated to Google Workspace with delta sync
@@ -1099,7 +1142,24 @@ compensation:
     doubt, Google is not a party to this SOW. Google is a third party beneficiary
     to the consent given in this section, and Google is entitled to enforce and
     benefit from this section.
+  intro_no_funding: >-
+    Unless otherwise approved in writing as an amendment to this SOW, the total
+    compensation under this SOW (excluding costs or expenses specified below) is
+    a fixed price of {{total}}. Throughout the delivery of Services by Partner
+    and any subsequent execution of Services or Deliverables, Customer bears full
+    responsibility for the costs associated with cloud usage within their own
+    tenant. This includes expenses related to compute, storage, networking, and
+    other resources.
+  intro_estimate: >-
+    The compensation for the Services performed and the Deliverables provided
+    under this SOW is estimated at {{estimate_range}}. This is a pre-discovery
+    estimate and not a fixed price. Throughout the delivery of Services by
+    Partner and any subsequent execution of Services or Deliverables, Customer
+    bears full responsibility for the costs associated with cloud usage within
+    their own tenant. This includes expenses related to compute, storage,
+    networking, and other resources.
   breakdown_lead: "The fixed price cost breakdown is as follows:"
+  breakdown_lead_estimate: "The estimate is broken down as follows:"
   fully_funded_note: >-
     *This engagement is Google-funded; net cost to Customer is $0. The Google
     funding line equals the total fixed-price professional-services fee, payable
@@ -1121,6 +1181,10 @@ compensation:
     Premier Cloud will provide the Services on a fixed-fee basis in accordance
     with the table above, which includes the total Google Funding amount as a
     line item.
+  estimate_note: >-
+    *This is a pre-discovery estimate, not a fixed price. The fee will be
+    confirmed in writing on completion of Phase 1 discovery, and this SOW
+    amended accordingly before the corresponding work begins.*
   clawback: >-
     *The Google Funding credit of {{funding}} is provided through Google's Partner
     Services Funding (PSF) program and is contingent on Premier Cloud receiving

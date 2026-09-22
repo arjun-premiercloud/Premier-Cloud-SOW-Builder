@@ -1,15 +1,19 @@
 ### **{{ sections.compensation.n }}.1 Compensation**
 
-{{ clauses.compensation.intro }}
+{{ pricing.intro }}
 {% if pricing.data_sharing %}
 
 {{ clauses.compensation.google_data_sharing }}
 {% endif %}
 
-{{ clauses.compensation.breakdown_lead }}
+{{ pricing.breakdown_lead }}
 
 {% if pricing.price_tbd %}
 **[TBD: total fixed price not yet agreed — cost table omitted]**
+{% elif pricing.is_range %}
+{{ table(['**Services**', '**Estimate**'], [[doc.title, '**Estimated at ' ~ pricing.range_str ~ '**']]) }}
+
+{{ clauses.compensation.estimate_note }}
 {% else %}
 {{ table(['**Services**', '**Cost**'], pricing.rows) }}
 {% endif %}

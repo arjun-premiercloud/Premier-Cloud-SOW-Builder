@@ -1,0 +1,256 @@
+{
+  "_comment": "Artificial Agency - AWS to GCP infrastructure replication for Google Cloud Marketplace readiness. Reformatted from the v0.2 draft (Google Doc 1bniyGbwgChngKB92aA6hVlB6P-d_cSL5KrBZ_JD2yi4) into the Premier Cloud house SOW format. Content is preserved; house sections absent from the source are added and the gaps flagged.",
+
+  "sow_type": "infrastructure_build",
+
+  "document": {
+    "title": "AWS to GCP Infrastructure Replication",
+    "subtitle": "Google Cloud Marketplace Readiness",
+    "date": "September 2, 2026",
+    "version": "0.3 (Draft)",
+    "prepared_by": "Premier Cloud Inc."
+  },
+
+  "customer": {
+    "legal_name": "Artificial Agency",
+    "short_name": "AA",
+    "industry": "AI agent platforms for video game studios and entertainment",
+    "contact": { "name": "Randy Hildebrand", "title": "Head of Platform", "email": "" },
+    "stakeholders": [
+      { "role": "CEO", "name": "Brian Tanner", "title": "CEO", "description": "Executive sponsor and commercial approver" },
+      { "role": "Head of Platform", "name": "Randy Hildebrand", "title": "Head of Platform", "description": "Technical point of contact; architecture decisions, reviews and approvals" },
+      { "role": "Senior Infrastructure Engineer", "name": "Karl Parkinson", "title": "Senior Infrastructure Engineer", "description": "Environment detail, configuration input, and joint validation" }
+    ],
+    "third_parties": [
+      { "organization": "Google Cloud", "name": "Ryan Ramkaran", "role": "Google Account Manager" },
+      { "organization": "Google Cloud", "name": "Sagar Malla", "role": "Google Customer Engineer" }
+    ]
+  },
+
+  "partner": {
+    "contact": { "name": "Mateo McIsaac", "title": "Account Manager", "email": "", "phone": "+1 888-866-2230", "address": "504-1803 Douglas Street, Victoria BC" },
+    "team": [
+      { "role": "Account Manager", "name": "Mateo McIsaac", "description": "Commercial ownership, engagement governance, and customer communication" },
+      { "role": "Cloud Architect", "name": "Saleh Ramadan", "description": "Solution architecture, platform design, Terraform adaptation, and technical delivery" },
+      { "role": "Marketplace Technical Specialist", "name": "Jesus Montoya", "description": "Marketplace Procurement API integration, entitlement plumbing, and Producer Portal liaison" },
+      { "role": "CTO / Executive Sponsor", "name": "Adel Ben Rzouga", "description": "Executive oversight and escalation path" }
+    ]
+  },
+
+  "agreement": { "msa_style": "public_link", "msa_url": "https://premiercloud.com/master-services-agreement.pdf" },
+
+  "term": { "duration_weeks": 6 },
+
+  "background": {
+    "objective": "Artificial Agency (\"AA\") operates the Bagel Platform, an AI agent platform for video game studios and entertainment companies, currently deployed on AWS. To list Bagel on the Google Cloud Marketplace, AA requires a functioning infrastructure presence on Google Cloud.\n\nThis engagement is **not** a migration off AWS. AA will continue to operate and serve existing customers on AWS. The objective is to **replicate** the AWS architecture on Google Cloud as a greenfield deployment, adapting AA's existing Terraform codebase to GCP-native services, so that AA can onboard an initial set of three (3) to five (5) pilot customers on Google Cloud and satisfy Google Cloud Marketplace technical requirements. Minimal data migration is required, scoped to the initial pilot tenants only.\n\nPartner will act as a hands-on technical extension of AA's engineering team, providing the infrastructure and platform engineering effort that AA's own team does not currently have bandwidth for. The Google Cloud Marketplace listing process itself (documentation, submission, approval) is handled directly by Google and is not part of this SOW."
+  },
+
+  "architecture": {
+    "current_state": {
+      "intro": "AA's production environment runs on Amazon EKS with Karpenter autoscaling and Argo Rollouts for progressive delivery. Traffic is routed through Route 53 and an Application Load Balancer to a set of FastAPI-based services. Infrastructure is defined in Terraform (modules for network, EKS, IAM, S3, RDS, event-stream) and Ansible, maintained across the application repositories.",
+      "layers": [
+        { "layer": "Edge / Routing", "components": "Route 53, Application Load Balancer" },
+        { "layer": "Compute", "components": "EKS, Karpenter, Argo Rollouts, OpenTelemetry" },
+        { "layer": "Application Services", "components": "Bagel API (:8000), Admin Backend (:8001), Dashboard Backend (:8002), Skunkworks Backend (:8003), Job Queue Worker, Eval Runner, Rex Remote Worker" },
+        { "layer": "Data", "components": "RDS PostgreSQL (primary database), S3 (agent state, chalk logs, artifacts, ML data)" },
+        { "layer": "Auth & Secrets", "components": "WorkOS SSO (SAML/OAuth), AWS Secrets Manager" },
+        { "layer": "Observability", "components": "OpenTelemetry, Prometheus, Grafana Cloud, Sentry, RDS Performance Insights" },
+        { "layer": "External Dependencies", "components": "OpenAI, Google Gemini, Cohere, AWS Bedrock (LLM providers)" },
+        { "layer": "Identity", "components": "Pod identity via IRSA (IAM Roles for Service Accounts)" }
+      ],
+      "notes": [
+        { "label": "Recently retired", "text": "MongoDB, DynamoDB and Kinesis (consolidated into RDS PostgreSQL, May-July 2026); AppRunner (migrated to EKS)." },
+        { "label": "Being retired independently of this project", "text": "OpenSearch and Qdrant (vector/full-text search). Not part of GCP parity scope." }
+      ]
+    },
+    "target_state": {
+      "intro": "The Google Cloud deployment mirrors the AWS topology component-for-component wherever a direct equivalent exists, minimizing application-level changes and maximizing reuse of AA's existing Terraform.",
+      "mapping": [
+        { "from": "Route 53 + ALB", "to": "Cloud DNS + HTTPS Load Balancer + Cloud Armor", "notes": "Cloud Armor adds WAF-equivalent protection at the edge" },
+        { "from": "EKS", "to": "GKE", "notes": "Node pools re-mapped from EKS node groups" },
+        { "from": "Karpenter", "to": "GKE node auto-provisioning", "notes": "Equivalent autoscaling behavior" },
+        { "from": "Argo Rollouts", "to": "Argo Rollouts on GKE", "notes": "Same tool, redeployed on GKE" },
+        { "from": "RDS PostgreSQL", "to": "Cloud SQL for PostgreSQL", "notes": "Shared tables with row-level org_id tenancy (no schema-per-tenant isolation); schema/DDL replicated by Partner, pilot tenant data imported from pg_dump exports provided by AA" },
+        { "from": "S3", "to": "Cloud Storage (GCS)", "notes": "Phase 1 via S3 XML Interoperability API + HMAC keys (no application refactor)" },
+        { "from": "AWS Secrets Manager", "to": "Secret Manager", "notes": "Runtime secret injection, same pattern" },
+        { "from": "IRSA (pod identity)", "to": "Workload Identity Federation", "notes": "Trust Zone 3 locked down from Day 1 for the Rex experiment runners; minor YAML annotation changes required" },
+        { "from": "WorkOS SSO", "to": "WorkOS SSO (unchanged)", "notes": "Cloud-agnostic, no change required" },
+        { "from": "Prometheus / Grafana Cloud / Sentry / OTel", "to": "Cloud Monitoring, Cloud Logging + Grafana / Sentry / OTel (unchanged)", "notes": "Parity dashboards rebuilt on GCP-native telemetry sources" },
+        { "from": "New to Google Cloud only", "to": "Cloud Run, Pub/Sub", "notes": "Marketplace event handling" },
+        { "from": "Optional, new to Google Cloud only", "to": "Vertex AI (Gemini)", "notes": "Additional LLM provider option alongside existing providers" }
+      ],
+      "sections": [
+        { "heading": "Environments & Projects",
+          "bullets": [
+            { "label": "Production", "text": "dedicated Google Cloud project" },
+            { "label": "Development / Sandbox", "text": "dedicated Google Cloud project" },
+            { "label": "Marketplace public listing (artificialagency-public)", "text": "dedicated Google Cloud project for Marketplace-facing components" }
+          ] },
+        { "heading": "Compute Scale",
+          "body": "GKE cluster(s) sized for a combined ceiling of 60-100 nodes across environments at peak, split across:",
+          "bullets": [
+            "Baseline application/services node pool",
+            "Rex experiment-runner node pool",
+            "GPU/TPU inference node pool (8 reserved H100s, or 10-20 RTX Pro 6000 / TPU v6e nodes), using Spot VMs and Dynamic Workload Scheduler Flex for cost-efficient scaling"
+          ] },
+        { "heading": "Network & Trust Zone Design",
+          "body": "Private GKE clusters with PSC / Private Service Access for Cloud SQL and Cloud Storage, preserving AA's existing five-trust-zone security model (External/Untrusted to API Edge to Internal Trusted to Data Persistence to External Dependencies).\n\nCell-based routing (api.gcp.us-central1.artificial.agency) is used for regional session locality during the pilot; Global Load Balancing is a later-phase optimization." }
+      ]
+    }
+  },
+
+  "scope": {
+    "service_sections": [
+      { "heading": "Landing Zone & Networking",
+        "bullets": [
+          "Validate existing Google Cloud organization, billing, and committed spend setup.",
+          "Provision dedicated Google Cloud projects (Production, Development/Sandbox, Marketplace public listing).",
+          "Design and provision VPC, subnets, and PSC/PSA for Cloud SQL and Cloud Storage.",
+          "Establish IAM baseline and configure GKE Workload Identity Federation, replacing IRSA directly rather than stepping down to static API keys or service account JSON keys."
+        ] },
+      { "heading": "Compute Platform (GKE)",
+        "bullets": [
+          "Provision private GKE cluster(s) mirroring the EKS topology.",
+          "Configure node pools for baseline services, Rex experiment runners, and GPU/TPU inference (Spot + DWS Flex).",
+          "Port Kubernetes workload manifests/Helm charts from EKS to GKE, adjusting for GCP-specific ingress, storage classes, and annotations.",
+          "Redeploy Argo Rollouts for progressive delivery on GKE."
+        ] },
+      { "heading": "Data Layer Replication",
+        "bullets": [
+          "Provision Cloud SQL for PostgreSQL and migrate the existing schema (table definitions, relationships/foreign keys, sequences). The Bagel Platform uses shared tables filtered by row-level org_id, not schema-per-tenant isolation.",
+          { "text": "Provision Cloud Storage buckets configured for:",
+            "children": [
+              "the S3 XML Interoperability API with HMAC keys;",
+              "Uniform Bucket-Level Access (removing canned ACLs);",
+              "the 5MB multipart minimum chunk size."
+            ] },
+          "Configure Storage Transfer Service for continuous delta sync ahead of cutover.",
+          "Import pilot tenant data (sessions, agents, moments) from the pg_dump exports provided by AA for the pilot customers. AA owns selection and export of the exact data scope."
+        ] },
+      { "heading": "Marketplace Integration Plumbing",
+        "bullets": [
+          "Pub/Sub entitlement listener for Google Cloud Marketplace Procurement events.",
+          "Procurement API approval handler.",
+          "Dashboard OIDC signup/token handler for Marketplace-originated sign-ups.",
+          "Supporting Cloud SQL schema/tables for entitlements and Marketplace accounts.",
+          "Ensure the deployment supports Marketplace Transactable Model A (Managed SaaS): proprietary model weights and execution logic remain inside AA's own VPC."
+        ] },
+      { "heading": "Observability, Security & Secrets Management",
+        "bullets": [
+          "Configure Secret Manager for database credentials and LLM API keys.",
+          "Build Cloud Monitoring/Cloud Logging and Grafana dashboards for parity with the existing Grafana Cloud/Prometheus setup.",
+          "Configure Cloud Armor policies at the load balancer for WAF-equivalent protection.",
+          "Carry forward existing Sentry and OpenTelemetry instrumentation (cloud-agnostic, minimal change required)."
+        ] },
+      { "heading": "CI/CD & Infrastructure-as-Code Adaptation",
+        "bullets": [
+          "Convert and extend Terraform modules (network, GKE, Cloud SQL, Cloud Storage, IAM) from AWS to GCP providers.",
+          "Configure a versioned Cloud Storage bucket for Terraform remote state with native state locking, or continue using the existing remote state backend as mutually agreed.",
+          "Configure Google Cloud Artifact Registry and adapt the existing CI pipeline (Pytest with testcontainers) for GCP-hosted builds and deploys, or integrate with the existing repository as mutually agreed."
+        ] },
+      { "heading": "Data Migration & Cutover Support",
+        "bullets": [
+          "Migrate the Cloud SQL schema (tables, relationships, sequences) for the pilot tenant set and import AA-provided pg_dump exports of pilot tenant data.",
+          "Validate data integrity."
+        ] },
+      { "heading": "Validation & Handover",
+        "bullets": [
+          "End-to-end smoke testing of GKE services, data layer, and Marketplace plumbing.",
+          "Deliver runbook and architecture documentation for the Google Cloud environment.",
+          "Conduct knowledge transfer session(s) with AA's engineering team."
+        ] }
+    ],
+    "out_of_scope_extra": [
+      "Full migration or decommissioning of AA's AWS environment. AWS remains live for existing customers.",
+      "Google Cloud Marketplace listing documentation, submission, and approval process, which is handled directly by Google.",
+      "Native Cloud Storage SDK migration to use Workload Identity Federation for storage access, replacing the S3-interoperability/HMAC key approach. Planned as a later phase; pod-level Workload Identity Federation itself is provisioned in Phase 1.",
+      "Global Load Balancing and full multi-region routing. Cell-based routing only in this phase.",
+      "Data migration for AA's full customer base beyond the initial pilot tenants.",
+      "Real-time usage-based metering and billing automation. Phase 1 uses Marketplace Private Offers with Flat Fee/Installment billing.",
+      "Replacing OpenSearch or Qdrant capabilities in Google Cloud, both of which are already being retired independently of this project."
+    ]
+  },
+
+  "timeline": {
+    "weeks": 6,
+    "note": "Estimated overall duration: four (4) to six (6) weeks from kickoff, contingent on timely access to the information described in the Dependencies section.",
+    "phases": [
+      { "phase": "1. Discovery & Landing Zone", "timeframe": "Week 1", "activities": "Validate GCP projects/billing; confirm scale via AWS billing data; finalize network/trust-zone design; configure GKE Workload Identity Federation (Terraform pod annotations)", "deliverable": "Landing zone provisioned; confirmed scope document" },
+      { "phase": "2. Core Infrastructure Build", "timeframe": "Weeks 2-3", "activities": "Stand up GKE cluster and node pools; provision Cloud SQL and Cloud Storage; convert Terraform; wire CI/CD", "deliverable": "GKE environment running core Bagel services in Dev/Sandbox" },
+      { "phase": "3. Marketplace Integration & Data Layer", "timeframe": "Weeks 3-4", "activities": "Build entitlement listener, procurement handler, OIDC signup handler; configure Storage Transfer Service sync; migrate pilot tenant schema and import AA-provided data exports", "deliverable": "Marketplace plumbing deployed; pilot tenant data replicated" },
+      { "phase": "4. Observability, Security & Validation", "timeframe": "Weeks 4-5", "activities": "Configure Secret Manager, Cloud Armor, monitoring/Grafana parity; run end-to-end smoke tests", "deliverable": "Production-ready Google Cloud environment; test results report" },
+      { "phase": "5. Handover", "timeframe": "Weeks 5-6", "activities": "Document runbooks; conduct knowledge transfer", "deliverable": "Final architecture and runbook documentation; sign-off" }
+    ]
+  },
+
+  "assumptions": [
+    "AA's existing Terraform codebase is well-structured and can be adapted to Google Cloud with minimal refactoring.",
+    "AA's Google Cloud organization, billing, and committed spend agreement are already active and accessible to Partner.",
+    "AA will share required AWS configuration details, architecture diagrams, and scale/usage data asynchronously via a shared chat channel, rather than granting direct access to the AWS environment.",
+    "Scope is limited to the Production and Development/Sandbox environments.",
+    "Initial data migration covers only the three (3) to five (5) pilot customer tenants, not AA's full AWS customer base.",
+    "AA will export the specific pilot tenant data using pg_dump, since the data is separated by row-level tenant identifier rather than separate tables or datasets. Partner migrates schema and structure but is not responsible for extracting row-level tenant data from AA's production database.",
+    "The Google Cloud Marketplace listing submission and approval process is handled directly by Google and is outside this engagement.",
+    "Further discovery and assessment is to be conducted around the use of HMAC keys."
+  ],
+
+  "prerequisites_before": [
+    "Provide Partner with access to AA's Google Cloud organization, billing account, and the projects in scope.",
+    "Provide access to the Google Cloud Marketplace Producer Portal and Procurement API credentials.",
+    "Provide AWS billing/usage exports and a resource inventory sufficient to validate scale assumptions (node ceilings, storage volumes, network costs).",
+    "Provide AA's architecture diagrams and the AWS configuration detail required for replication.",
+    "Identify the three (3) to five (5) pilot customer tenants in scope for data import."
+  ],
+  "prerequisites_ongoing": [
+    "Ensure timely availability of AA's technical point of contact for architecture questions and reviews.",
+    "Deliver the required pg_dump files for the pilot tenant data, and confirm their scope and integrity before migration begins.",
+    "Provide review and written approval at each phase boundary.",
+    "Promptly communicate any organizational, technical, or scope changes affecting delivery."
+  ],
+
+  "risks": [
+    { "risk": "An incomplete AWS resource inventory delays accurate scoping", "mitigation": "Confirm scale via AWS billing export and architecture diagram review during Phase 1." },
+    { "risk": "S3 to Cloud Storage interoperability API gaps require application-level changes", "mitigation": "Validate interoperability compatibility early against a sandbox bucket before full replication." },
+    { "risk": "GPU/TPU capacity constraints (H100 / RTX Pro 6000 / TPU v6e availability)", "mitigation": "Use Spot VMs plus Dynamic Workload Scheduler Flex; reserve capacity where critical." },
+    { "risk": "Marketplace Procurement API integration surfaces unforeseen requirements", "mitigation": "Gain early access to the Producer Portal sandbox for iterative testing." },
+    { "risk": "AA team bandwidth constraints slow reviews and approvals", "mitigation": "Default to async collaboration via a shared chat channel; minimize required live meetings." },
+    { "risk": "AA-provided pg_dump exports are incomplete or inconsistent", "mitigation": "AA confirms export scope and the integrity of the exported files before migration begins." }
+  ],
+
+  "success_criteria": [
+    "**Functional Parity** - Core Bagel Platform services (API, dashboard, admin, skunkworks, job queue, Rex runners) run on GKE with functional parity to the AWS EKS deployment.",
+    "**Data Layer Readiness** - Cloud SQL and Cloud Storage are provisioned, populated with initial pilot tenant data, and validated for integrity.",
+    "**Marketplace Compliance** - Required Marketplace integration plumbing (entitlement listener, procurement handler, OIDC signup handler) is deployed and end-to-end testable.",
+    "**Operational Readiness** - AA's engineering team can observe, deploy, and troubleshoot the Google Cloud environment using documented runbooks and parity observability tooling."
+  ],
+
+  "change_management": "Any change to the scope, timeline, or cost described in this SOW must be agreed in writing by both Parties before related work begins. Minor clarifications that do not affect scope, timeline, or cost may be handled informally via the shared collaboration channel.",
+
+  "pricing": {
+    "currency": "USD",
+    "estimate_low": 40000,
+    "estimate_high": 60000,
+    "payment_terms": "This estimate excludes ongoing Google Cloud consumption and hosting costs, which are billed directly by Google under Artificial Agency's own Google Cloud account and committed spend agreement."
+  },
+
+  "provenance": {
+    "sources": ["Statement of Work v0.2 draft, Artificial Agency, 2026-09-02 (Google Doc 1bniyGbwgChngKB92aA6hVlB6P-d_cSL5KrBZ_JD2yi4)"],
+    "assumed": [
+      "sow_type recorded as infrastructure_build - a fourth archetype added for this engagement. It is neither a Gemini Enterprise rollout, an agent pilot, nor a Workspace migration.",
+      "Randy Hildebrand recorded as the SOW point of contact, being the named Head of Platform. The source draft lists stakeholders but does not designate a SOW contact.",
+      "Term duration taken as six (6) weeks, the upper bound of the source draft's 4-6 week estimate. No dates are stated in the source.",
+      "Standard house sections absent from the source draft have been added: legal preamble binding the SOW to the MSA, Term, Project Governance and Communication Plan, RACI matrix, Roles and Responsibilities, Escalation Matrix, Customer Dependencies and Prerequisites, Project Closure, Expenses and Taxes. Review each before issuing.",
+      "The source draft's Dependencies list has been split into BEFORE-start prerequisites and ONGOING obligations, per house convention."
+    ],
+    "unanswered": [
+      "PRICE IS A RANGE. The source quotes $40,000-$60,000 as a pre-discovery estimate. Every issued Premier Cloud SOW states a single fixed price. A range is not signable as-is - either fix the fee, or split into a paid Phase 1 discovery SOW with the build priced on completion.",
+      "Customer registered legal entity name. 'Artificial Agency' is the trading name; the contracting entity is not stated.",
+      "Customer billing/registered address.",
+      "Customer signatory name and title (Brian Tanner, CEO, is the likely signatory but is not designated in the source).",
+      "Email addresses for Randy Hildebrand and Mateo McIsaac, for the point-of-contact table.",
+      "SOW execution date, effective date and estimated end date. The source gives a 4-6 week duration but no dates.",
+      "Whether a negotiated MSA exists with Artificial Agency, or the public MSA link applies.",
+      "Escalation matrix contacts - currently the house default roles rather than named individuals."
+    ]
+  }
+}

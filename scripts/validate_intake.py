@@ -46,6 +46,11 @@ REQUIRED = {
         "use_cases",
         "customer.profile",
     ],
+    "infrastructure_build": [
+        "background.objective",
+        "scope.service_sections",
+        "timeline.phases",
+    ],
     "workspace_migration": [
         "migration.source_platform",
         "migration.user_count",
@@ -74,6 +79,11 @@ RECOMMENDED = {
         "background.baseline_metrics",
         "customer.stakeholders",
         "timeline.schedule",
+    ],
+    "infrastructure_build": [
+        "architecture.current_state",
+        "architecture.target_state",
+        "prerequisites_before",
     ],
     "workspace_migration": [
         "migration.sso_apps",
@@ -119,6 +129,8 @@ def validate(intake: dict) -> dict:
 
     blocking, warnings = [], []
     for path in _paths(REQUIRED, sow_type):
+        if not _applicable(path, intake):
+            continue
         if _empty(sowlib.get(intake, path)):
             blocking.append({"field": path, **schema_meta(schema, path)})
     for path in _paths(RECOMMENDED, sow_type):
@@ -139,6 +151,10 @@ def _applicable(path: str, intake: dict) -> bool:
     if path == "migration.sso_apps":
         # Only meaningful when an identity directory is being left behind.
         return bool(sowlib.get(intake, "migration.endpoints"))
+    if path == "pricing.total_fixed_price":
+        # An explicit estimate range stands in for it; consistency_checks warns.
+        return not (sowlib.get(intake, "pricing.estimate_low") is not None
+                    and sowlib.get(intake, "pricing.estimate_high") is not None)
     return True
 
 
@@ -155,6 +171,16 @@ def consistency_checks(intake: dict) -> list:
     funding = abs(g(intake, "pricing.google_funding") or 0)
     investment = abs(g(intake, "pricing.partner_investment") or 0)
     net = total - funding - investment
+
+    low, high = g(intake, "pricing.estimate_low"), g(intake, "pricing.estimate_high")
+    if low is not None and high is not None:
+        out.append(
+            f"Price is an estimate range ({low:,.0f}-{high:,.0f}), not a fixed price. Every "
+            "issued Premier Cloud SOW states a single fixed fee. Fix the price before signature, "
+            "or split into a paid discovery phase with the build priced on its completion."
+        )
+        if high <= low:
+            out.append("pricing.estimate_high is not greater than pricing.estimate_low.")
 
     if funding > total:
         out.append(f"Google funding ({funding:,.0f}) exceeds the total fixed price ({total:,.0f}).")

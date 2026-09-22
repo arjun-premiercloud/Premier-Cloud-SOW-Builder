@@ -1,0 +1,159 @@
+{% include "partials/draft_banner.md.j2" %}
+{% include "partials/cover.md.j2" %}
+{% include "partials/preamble.md.j2" %}
+
+## **{{ sections.contacts.n }}. {{ sections.contacts.title }}**
+
+{% include "partials/contacts.md.j2" %}
+{% if customer.stakeholders %}
+
+The following stakeholders are engaged on this project:
+
+{{ table(['**Organization**', '**Name**', '**Role**'],
+         stakeholder_rows(customer, partner, customer_roles, partner_roles)) }}
+{% endif %}
+
+## **{{ sections.term.n }}. {{ sections.term.title }}**
+
+{% include "partials/term.md.j2" %}
+
+## **{{ sections.background.n }}. {{ sections.background.title }}**
+
+{{ background.objective }}
+{% if challenges %}
+
+This engagement is intended to address the following business challenge(s) for Customer:
+
+{{ bullets(challenges) }}
+{% endif %}
+{% if sections.current_state %}
+
+## **{{ sections.current_state.n }}. {{ sections.current_state.title }}**
+
+{{ architecture.current_state.intro }}
+{% if architecture.current_state.layers %}
+
+{{ table(['**Layer**', '**Components**'],
+         rows(architecture.current_state.layers, ['layer', 'components'])) }}
+{% endif %}
+{% if architecture.current_state.notes %}
+
+{{ bullets(architecture.current_state.notes) }}
+{% endif %}
+{% endif %}
+{% if sections.target_state %}
+
+## **{{ sections.target_state.n }}. {{ sections.target_state.title }}**
+
+{{ architecture.target_state.intro }}
+{% if architecture.target_state.mapping %}
+
+### **{{ sections.target_state.n }}.1 Service Mapping**
+
+{{ table(['**Current**', '**Target**', '**Notes**'],
+         rows(architecture.target_state.mapping, ['from', 'to', 'notes'])) }}
+{% endif %}
+{% for block in architecture.target_state.sections or [] %}
+
+### **{{ sections.target_state.n }}.{{ loop.index + (1 if architecture.target_state.mapping else 0) }} {{ block.heading }}**
+{% if block.body %}
+
+{{ block.body }}
+{% endif %}
+{% if block.bullets %}
+
+{{ bullets(block.bullets) }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+## **{{ sections.scope.n }}. {{ sections.scope.title }}**
+
+{{ scope_statement }}
+
+### **In Scope Services**
+
+{% for s in service_sections %}
+#### **{{ sections.scope.n }}.{{ loop.index }} {{ s.heading }}**
+{% if s.intro %}
+
+{{ s.intro }}
+{% endif %}
+{% if s.bullets %}
+
+{{ bullets(s.bullets) }}
+{% endif %}
+
+{% endfor %}
+### **Out of Scope**
+
+{{ bullets(out_of_scope) }}
+
+## **{{ sections.timeline.n }}. {{ sections.timeline.title }}**
+{% if timeline_note %}
+
+{{ timeline_note }}
+{% endif %}
+{% if phase_rows %}
+
+{{ table(['**Phase**', '**Timeframe**', '**Key Activities**', '**Deliverable**'], phase_rows) }}
+{% endif %}
+{% if milestones %}
+
+{{ table(gantt.headers, gantt.rows) }}
+{% endif %}
+
+## **{{ sections.governance.n }}. {{ sections.governance.title }}**
+
+{% include "partials/governance.md.j2" %}
+
+### **{{ sections.governance.n }}.1 RACI Matrix During Delivery**
+
+{{ table(['**Deliverable**', '**Partner**', '**Customer**'],
+         rows(governance.raci, ['deliverable', 'partner', 'customer'])) }}
+
+## **{{ sections.roles.n }}. {{ sections.roles.title }}**
+
+### **{{ sections.roles.n }}.1 Roles**
+
+{% include "partials/roles.md.j2" %}
+
+### **{{ sections.roles.n }}.2 Escalation Matrix**
+
+{% include "partials/escalation.md.j2" %}
+
+## **{{ sections.raid.n }}. {{ sections.raid.title }}**
+
+### **{{ sections.raid.n }}.1 Risks**
+
+{% include "partials/risks.md.j2" %}
+
+### **{{ sections.raid.n }}.2 Assumptions**
+
+{{ bullets(assumptions) }}
+
+### **{{ sections.raid.n }}.3 Customer Dependencies and Prerequisites**
+
+{% include "partials/prerequisites.md.j2" %}
+
+## **{{ sections.success.n }}. {{ sections.success.title }}**
+
+{{ clauses.success_criteria.success_criteria_intro }}
+
+{{ bullets(success_criteria) }}
+
+{{ clauses.success_criteria.acceptance_sentence }}
+
+## **{{ sections.closure.n }}. {{ sections.closure.title }}**
+
+{{ clauses.closure }}
+{% if intake.change_management %}
+
+{{ intake.change_management }}
+{% endif %}
+
+## **{{ sections.compensation.n }}. {{ sections.compensation.title }}**
+
+{% include "partials/compensation.md.j2" %}
+
+{% include "partials/signature.md.j2" %}

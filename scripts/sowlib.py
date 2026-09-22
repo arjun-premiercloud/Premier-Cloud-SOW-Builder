@@ -25,6 +25,7 @@ SOW_TYPES = (
     "gemini_enterprise_implementation",
     "agent_pilot",
     "workspace_migration",
+    "infrastructure_build",
 )
 
 # Section keys in document order, per SOW type. Optional sections are filtered
@@ -60,6 +61,21 @@ SECTION_ORDER = {
         ("success", "Success Criteria"),
         ("closure", "Project Closure"),
         ("compensation", "Compensation, Invoicing, and Payment Schedule"),
+    ],
+    "infrastructure_build": [
+        ("contacts", "SOW Point of Contacts"),
+        ("term", "Term"),
+        ("background", "Project Background and Objective"),
+        ("current_state", "Current State"),
+        ("target_state", "Target State: Proposed Architecture"),
+        ("scope", "Scope of Work"),
+        ("timeline", "Estimated Timeline and Deliverables"),
+        ("governance", "Project Governance & Communication Plan (Sample)"),
+        ("roles", "Roles & Responsibilities"),
+        ("raid", "Risks, Assumptions, Dependencies, and Prerequisites"),
+        ("success", "Success Criteria"),
+        ("closure", "Project Closure"),
+        ("compensation", "Compensation, Invoicing and Payment Schedule"),
     ],
     "workspace_migration": [
         ("summary", "Executive Summary"),
@@ -215,6 +231,10 @@ def section_plan(sow_type: str, intake: dict):
             continue
         if key == "usecases" and not intake.get("use_cases"):
             continue
+        if key == "current_state" and not get(intake, "architecture.current_state"):
+            continue
+        if key == "target_state" and not get(intake, "architecture.target_state"):
+            continue
         n += 1
         plan.append({"key": key, "title": title, "n": n})
     return plan
@@ -223,15 +243,19 @@ def section_plan(sow_type: str, intake: dict):
 def build_pricing(intake: dict, clauses: dict) -> dict:  # noqa: ARG001
     p = intake.get("pricing", {}) or {}
     cur = p.get("currency", "USD")
-    total = _num(p.get("total_fixed_price"))
+    low, high = _num(p.get("estimate_low"), None), _num(p.get("estimate_high"), None)
+    is_range = low is not None and high is not None
+    total = _num(p.get("total_fixed_price")) or (high or 0)
     funding = _num(p.get("google_funding")) or None
     investment = _num(p.get("partner_investment")) or None
     # A draft with no agreed price still has to render; the cost table says so
     # rather than quietly showing $0.
-    price_tbd = _num(p.get("total_fixed_price"), None) is None
+    price_tbd = _num(p.get("total_fixed_price"), None) is None and not is_range
 
     lines = []
-    if p.get("line_items"):
+    if is_range:
+        lines = []  # a range cannot be summed into a cost table
+    elif p.get("line_items"):
         for li in p["line_items"]:
             lines.append({"label": li["label"], "amount": li["amount"], "bold": li.get("bold", False)})
     elif any((uc.get("price") or 0) for uc in intake.get("use_cases") or []):
@@ -261,10 +285,11 @@ def build_pricing(intake: dict, clauses: dict) -> dict:  # noqa: ARG001
         lines.append({"label": "Partner investment", "amount": -abs(investment), "bold": False})
 
     net = total - abs(funding or 0) - abs(investment or 0)
-    lines.append({"label": "Net cost to customer", "amount": net, "bold": True})
+    if not is_range:
+        lines.append({"label": "Net cost to customer", "amount": net, "bold": True})
 
     rows = []
-    for li in lines:
+    for li in lines or []:
         label = f"**{li['label']}**" if li["bold"] else li["label"]
         val = money(li["amount"], cur)
         if li["bold"]:
@@ -284,6 +309,9 @@ def build_pricing(intake: dict, clauses: dict) -> dict:  # noqa: ARG001
     return {
         "currency": cur,
         "price_tbd": price_tbd,
+        "is_range": is_range,
+        "range_str": (f"{money(low, cur).replace(' ' + cur, '')} \u2013 {money(high, cur)}"
+                      if is_range else ""),
         "total": total,
         "total_str": money(total, cur),
         "funding": funding,
@@ -367,12 +395,25 @@ def build_context(intake: dict, clauses: dict | None = None) -> dict:
         "funding_stage": get(intake, "pricing.funding_stage", ""),
         "funding_program": get(intake, "pricing.funding_program", "PSF"),
         "target_activation_percent": get(intake, "platform.activation_plan.target_activation_percent", 50),
+        "estimate_range": pricing["range_str"],
     }
     cl = interpolate(clauses, placeholders)
     # The funding note carries {{funding_stage}} etc., so it can only be
     # resolved once the clause library has been interpolated.
     if pricing["note_key"]:
         pricing["note"] = cl["compensation"][pricing["note_key"]]
+
+    # The stock compensation intro asserts a fixed price and Google Cloud funding
+    # approval. Neither holds for an estimate, nor for an unfunded engagement.
+    if pricing["is_range"]:
+        pricing["intro"] = cl["compensation"]["intro_estimate"]
+        pricing["breakdown_lead"] = cl["compensation"]["breakdown_lead_estimate"]
+    elif not pricing["funding"]:
+        pricing["intro"] = cl["compensation"]["intro_no_funding"]
+        pricing["breakdown_lead"] = cl["compensation"]["breakdown_lead"]
+    else:
+        pricing["intro"] = cl["compensation"]["intro"]
+        pricing["breakdown_lead"] = cl["compensation"]["breakdown_lead"]
 
     # --- scope -----------------------------------------------------------
     summary_blocks = get(intake, "scope.summary_blocks") or cl["summary_blocks"].get(sow_type, [])
@@ -438,6 +479,10 @@ def build_context(intake: dict, clauses: dict | None = None) -> dict:
         "customer_roles": customer.get("stakeholders") or cl["roles"]["customer"].get(sow_type, []),
         "pricing": pricing,
         "appendices": intake.get("appendices") or [],
+        "architecture": intake.get("architecture") or {},
+        "phase_rows": [[ph.get("phase", ""), ph.get("timeframe", ""),
+                        ph.get("activities", ""), ph.get("deliverable", "")]
+                       for ph in (get(intake, "timeline.phases") or [])],
         "unresolved": intake.get("_unresolved") or [],
         "data_sources": data_source_names(get(intake, "platform.data_sources")),
         "sections": {s["key"]: s for s in section_plan(sow_type, intake)},
@@ -450,6 +495,7 @@ def build_context(intake: dict, clauses: dict | None = None) -> dict:
         "spell": spell,
         "alpha": lambda i: chr(65 + i),
         "role_rows": role_rows,
+        "stakeholder_rows": stakeholder_rows,
     }
     ctx["challenges"] = _normalise_challenges(ctx["background"].get("business_challenges"))
     ctx["gantt"] = build_gantt(milestones, weeks)
@@ -480,6 +526,22 @@ def build_gantt(milestones, weeks: int) -> dict:
         cells[week - 1] = f"**{m.get('id', '')}**"
         rows.append([m.get("task") or m.get("name", ""), *cells])
     return {"headers": headers, "rows": rows}
+
+
+def stakeholder_rows(customer, partner, customer_roles, partner_roles):
+    """Named-people table grouped by organization, as infrastructure SOWs use."""
+    out = []
+    cname = customer.get("legal_name") or customer.get("short_name", "Customer")
+    for r in customer.get("stakeholders") or []:
+        if r.get("name"):
+            out.append([cname, r["name"], r.get("title") or r.get("role", "")])
+    for r in partner_roles or []:
+        if r.get("name"):
+            out.append([partner.get("legal_name", "Premier Cloud Inc."),
+                        r["name"], r.get("role", "")])
+    for r in customer.get("third_parties") or []:
+        out.append([r.get("organization", ""), r.get("name", ""), r.get("role", "")])
+    return out
 
 
 def role_rows(items):
