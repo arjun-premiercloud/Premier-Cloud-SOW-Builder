@@ -94,6 +94,29 @@ carry real customer names, contacts and contract values — fine internally, wor
 a look before it leaves Premier Cloud. `--no-examples` drops them, at the cost of
 the test suite and the reference reconstructions.
 
+## Google Workspace CLI
+
+`tools/gws/bootstrap.sh` installs and authenticates the `gws` CLI, and is wired
+as a SessionStart hook in `.claude/settings.json` so it runs every session. It is
+idempotent and never fails a session — it exits 0 with a message if anything is
+missing.
+
+Three things about `gws` that are not discoverable:
+
+- The environment injects `GOOGLE_WORKSPACE_CLI_CREDENTIALS` inline, but the CLI
+  **only** reads `..._CREDENTIALS_FILE`, `$GOOGLE_WORKSPACE_CLI_CONFIG_DIR/credentials.json`
+  or `..._TOKEN`. The inline variable is silently ignored; bootstrap stages it to
+  a 0600 file.
+- `gws auth status` reports `credential_source: none` **even when auth works**.
+  Judge by `token_valid`, `user`, and a real API call.
+- Drive v3 hides shared-drive content by default and returns `{"files": []}`
+  rather than an error. Pass `"supportsAllDrives":true` on every files call,
+  `"includeItemsFromAllDrives":true` when listing, and `"corpora":"allDrives"`
+  when searching across drives. Premier Cloud's SOW library lives on a shared
+  drive, so omitting these silently returns nothing.
+
+`gws schema drive.files.list` prints any method's parameters without calling it.
+
 ## Layout
 
 ```
