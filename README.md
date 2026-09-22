@@ -174,5 +174,49 @@ than reproduced as-is:
   architecture and call-flow figures are pasted in during review.
 - Pricing derivation. The deal team sets the price; the builder formats it and
   checks it adds up.
-- Direct Google Docs writing. Render to Markdown, then paste with
-  *Paste from Markdown* enabled, or convert with the `docx` skill.
+## Producing the customer-facing document
+
+```bash
+python3 scripts/render_docx.py build/foo-sow.md -o build/Foo-SOW.docx \
+        --prepared-for "Customer Name"
+
+# upload + convert to a Google Doc
+gws drive files create --upload build/Foo-SOW.docx \
+  --upload-content-type "application/vnd.openxmlformats-officedocument.wordprocessingml.document" \
+  --json '{"name":"...","mimeType":"application/vnd.google-apps.document"}' \
+  --params '{"supportsAllDrives":true,"fields":"id,webViewLink"}'
+```
+
+All design comes from `assets/premier-cloud-sow-template.docx` — the real issued
+template with its body and customer logos stripped out. It keeps the styles,
+embedded Google Sans, the letterhead header, A4 page setup and numbering.
+`render_docx.py` rebuilds only `word/document.xml`. **To change how a SOW looks,
+change the template, not the script.**
+
+Inherited design (do not re-specify it elsewhere): A4 portrait, 1in margins,
+Google Sans 11pt body, Heading1 18pt `#6D9EEB`, Heading2 14pt `#6D9EEB`,
+Heading3 `#434343`, Heading4 12pt `#666666`, tables with black `sz=8` borders and
+a `#4285F4` header row in white bold.
+
+Note the SOW template's heading blue is `#6D9EEB`, which is **not** the
+`#1E66AB` in the `premier-cloud-style` skill — that skill covers decks. For SOWs,
+the document wins.
+
+## Visual QA
+
+LibreOffice cannot convert in this environment, so verify through Drive instead:
+upload, convert to a Google Doc, export to PDF, rasterise and look at it.
+
+```bash
+gws drive files export --params '{"fileId":"<id>","mimeType":"application/pdf"}' -o build/qa/x.pdf
+python3 -c "import pymupdf; d=pymupdf.open('build/qa/x.pdf'); [d[i].get_pixmap(dpi=82).save(f'build/qa/p{i+1}.png') for i in range(3)]"
+```
+
+## Not handled
+
+- Diagrams. Templates emit `[INSERT DIAGRAM: …]` placeholders with the caption;
+  architecture and call-flow figures are pasted in during review.
+- Pricing derivation. The deal team sets the price; the builder formats it and
+  checks it adds up.
+- Customer logos on the cover. The house cover centres them above the title;
+  add manually, or extend the renderer once there is a logo source.
