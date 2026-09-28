@@ -118,7 +118,7 @@
           "description": "public_link = the standard 'available at premiercloud.com/...' preamble. dated_mpsa = 'pursuant to the Master Professional Services Agreement dated <date>' (used when a negotiated MSA exists).",
           "x-question": "Is there a signed MSA with this customer, or do we point at the public one?"
         },
-        "msa_url":  { "type": "string", "default": "https://premiercloud.com/wp-content/uploads/2024/06/MASTER-SERVICES-AGREEMENT-PREMIER-CLOUD-INC.pdf" },
+        "msa_url":  { "type": "string", "x-source": "Leave unset. The canonical URL lives in library/clauses.yaml and is the stable redirect; overriding it is flagged by the validator.", "default": "https://premiercloud.com/master-services-agreement.pdf" },
         "msa_date": { "type": "string", "format": "date", "description": "Required when msa_style = dated_mpsa.", "x-question": "What is the date of the executed MSA?" },
         "execution_date": {
           "type": "string",

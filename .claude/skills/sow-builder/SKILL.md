@@ -1,6 +1,6 @@
 ---
 name: sow-builder
-description: Build a Premier Cloud Statement of Work from meeting notes, a transcript, a discovery call summary, or a Google Doc. Use whenever the user asks to draft, generate, build, or update a SOW or Statement of Work, mentions turning notes or a discovery call into a SOW, or asks what inputs are needed to scope one. Handles Gemini Enterprise implementations, agent/CX pilots, and Workspace migrations.
+description: Build a Premier Cloud Statement of Work from meeting notes, a transcript, a discovery call summary, or a Google Doc, and render it in the house design as .docx or a Google Doc. Use whenever the user asks to draft, generate, build, reformat or update a SOW or Statement of Work, mentions turning notes or a discovery call into a SOW, asks to put a document into the Premier Cloud SOW format, or asks what inputs are needed to scope one. Handles Gemini Enterprise implementations, agent/CX pilots, Workspace migrations, and cloud infrastructure builds. Every SOW it produces binds to the Master Services Agreement.
 ---
 
 # SOW Builder
@@ -23,7 +23,8 @@ meeting notes  ──►  intake .json  ──►  validate_intake.py  ──►
 |---|---|---|
 | `gemini_enterprise_implementation` | Seat-based Gemini Enterprise rollout: connectors, enablement, adoption | `examples/coachhub.intake.json` |
 | `agent_pilot` | Fixed-term pilot proving one or more agents against named use cases | `examples/afni.intake.json` |
-| `workspace_migration` | M365 (or similar) → Google Workspace data and/or identity migration | `examples/miles-partnership.intake.json` |
+| `workspace_migration` | M365 or Google-to-Google Workspace data and/or identity migration | `examples/miles-partnership.intake.json` |
+| `infrastructure_build` | Cloud platform build or replication (e.g. AWS → GCP), with current-state / target-state architecture sections | — |
 
 If the notes describe something else, pick the nearest type and say so in your
 summary — do not invent a fourth template silently.
@@ -82,6 +83,20 @@ the funding-reversal paragraph must be present or Premier Cloud carries the risk
 python3 scripts/render_sow.py intake/<customer>.intake.json -o build/<customer>-sow.md
 ```
 
+## The MSA reference is not optional
+
+Every SOW binds itself to the Master Services Agreement in its opening
+paragraph. The SOW carries scope, timeline and fee; liability, IP,
+confidentiality and termination all come from the Agreement. A SOW without that
+reference leaves those terms unstated.
+
+It renders on all four types with no opt-out, and the test suite fails any SOW
+produced without it. Leave `agreement.msa_url` unset so the canonical URL from
+`library/clauses.yaml` is used. Set `agreement.msa_style: dated_mpsa` plus
+`agreement.msa_date` only when a negotiated MPSA has been signed.
+
+Read `references/msa-clause.md` before changing anything in this area.
+
 ## Step 6 — Review before it goes anywhere
 
 Walk `references/review-checklist.md`. It is short and every item on it has been
@@ -89,10 +104,41 @@ wrong in a real document at least once.
 
 ## Step 7 — Deliver
 
-- **Google Doc** (usual route): create the doc, then paste the Markdown with
-  *Edit → Paste from Markdown* enabled so headings and tables convert. Diagrams
-  are pasted in manually at the `[INSERT DIAGRAM: …]` markers.
-- **.docx**: use the `docx` skill on the rendered Markdown.
+Render into the house design, which comes from the real issued template:
+
+```bash
+python3 scripts/render_docx.py build/<customer>-sow.md \
+        -o build/<Customer>-SOW.docx --prepared-for "<Customer>"
+```
+
+Then convert to a Google Doc, which is the usual deliverable:
+
+```bash
+gws drive files create --upload build/<Customer>-SOW.docx \
+  --upload-content-type "application/vnd.openxmlformats-officedocument.wordprocessingml.document" \
+  --json '{"name":"[DRAFT] <Customer> - SOW","mimeType":"application/vnd.google-apps.document"}' \
+  --params '{"supportsAllDrives":true,"fields":"id,webViewLink"}'
+```
+
+Design lives entirely in `assets/premier-cloud-sow-template.docx` — A4, Google
+Sans, `#6D9EEB` headings, `#4285F4` table headers, Premier Cloud letterhead on
+every page. **To change how SOWs look, change the template, not the script.**
+
+Diagrams are pasted in manually at the `[INSERT DIAGRAM: …]` markers, as are
+customer logos on the cover.
+
+## Step 8 — Look at it
+
+Do not ship a document you have not seen. Export it and read the pages:
+
+```bash
+gws drive files export --params '{"fileId":"<id>","mimeType":"application/pdf"}' -o build/qa/x.pdf
+python3 -c "import pymupdf; d=pymupdf.open('build/qa/x.pdf'); [d[i].get_pixmap(dpi=82).save(f'build/qa/p{i+1}.png') for i in range(min(4,d.page_count))]"
+```
+
+Structural checks pass on documents that look wrong. Version numbers, list
+numbering and cover layout have all broken silently in ways only a render
+showed.
 - Keep the intake file. Version 1.1 of a SOW is an edit to the intake plus a
   re-render, not a fresh draft.
 

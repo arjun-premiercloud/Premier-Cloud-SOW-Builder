@@ -37,7 +37,8 @@ CONTENTS = [
     ("scripts/render_sow.py", "scripts/render_sow.py"),
     ("scripts/validate_intake.py", "scripts/validate_intake.py"),
     ("scripts/test_render.py", "scripts/test_render.py"),
-    ("scripts/md2sow.js", "scripts/md2sow.js"),
+    ("scripts/render_docx.py", "scripts/render_docx.py"),
+    ("assets/premier-cloud-sow-template.docx", "assets/premier-cloud-sow-template.docx"),
     ("requirements.txt", "requirements.txt"),
     (".claude/skills/sow-builder/SKILL.md", "SKILL.md"),
     (".claude/skills/sow-builder/references", "references"),
@@ -63,10 +64,10 @@ Then install the two Python dependencies:
 pip install -r sow-builder/requirements.txt   # Jinja2, PyYAML
 ```
 
-Optional, only if you want `.docx` output rather than Markdown:
+Optional, for visual QA of the rendered document:
 
 ```bash
-npm install docx
+pip install pymupdf    # only to render a PDF back to images for visual QA
 ```
 
 ## Check it works
@@ -88,7 +89,7 @@ Or drive the scripts directly:
 ```bash
 python3 sow-builder/scripts/validate_intake.py my-deal.intake.json   # what's still missing
 python3 sow-builder/scripts/render_sow.py     my-deal.intake.json -o my-deal.md
-node      sow-builder/scripts/md2sow.js       my-deal.md my-deal.docx
+python3   sow-builder/scripts/render_docx.py  my-deal.md -o my-deal.docx
 ```
 
 ## Where to start reading
@@ -99,8 +100,16 @@ node      sow-builder/scripts/md2sow.js       my-deal.md my-deal.docx
 | `references/required-inputs.md` | Discovery-call checklist by project type |
 | `references/extraction-playbook.md` | Turning what people say into intake fields |
 | `references/review-checklist.md` | Run before any SOW leaves Premier Cloud |
+| `references/msa-clause.md` | The Master Services Agreement clause standard |
 | `library/clauses.yaml` | The house language. Edit here, never in the output |
 | `examples/` | Reference intakes reconstructed from issued SOWs |
+
+## The MSA reference
+
+Every SOW binds itself to the Master Services Agreement in its opening
+paragraph — there is no opt-out, and the test suite fails any SOW without it.
+Leave `agreement.msa_url` unset so the canonical URL is used. See
+`references/msa-clause.md`.
 
 ## Editing house language
 

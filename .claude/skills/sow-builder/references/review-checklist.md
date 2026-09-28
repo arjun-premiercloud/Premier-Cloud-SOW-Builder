@@ -3,6 +3,15 @@
 Run before any SOW leaves Premier Cloud. Every item here has been wrong in a real
 document at least once.
 
+## Master Services Agreement
+
+- [ ] The opening paragraph references the Agreement. No SOW ships without it.
+- [ ] The URL is `https://premiercloud.com/master-services-agreement.pdf` — the
+      short redirect, **not** a `wp-content/uploads/...` path.
+- [ ] `dated_mpsa` is used only where a negotiated MPSA exists, and the date is
+      correct.
+- [ ] The precedence sentence is intact: the Agreement controls on conflict.
+
 ## Parties and dates
 
 - [ ] Customer legal entity name is the one on the MSA, not the brand name.

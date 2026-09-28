@@ -60,8 +60,28 @@ partner:
     Services, Healthcare, Media & Entertainment, Retail, and Logistics.
 
 # --------------------------------------------------------------------------
+# Master Services Agreement reference.
+#
+# EVERY Premier Cloud SOW must bind itself to the MSA. The SOW is not a
+# standalone contract - it takes its liability, IP, confidentiality and
+# termination terms from the Agreement, so a SOW that does not reference it
+# leaves those terms unstated. There is no option to omit this block, and
+# scripts/test_render.py fails any SOW rendered without it.
+#
+# Use the SHORT url. It is a stable redirect. The wp-content target it
+# redirects to carries a dated upload path (/2024/06/) that changes whenever
+# the file is re-uploaded, which would silently break every SOW quoting it.
+# Two issued SOWs (CoachHub, City Winery) quote the wp-content form; they
+# should be corrected on next revision.
+# --------------------------------------------------------------------------
+agreement:
+  msa_url: https://premiercloud.com/master-services-agreement.pdf
+  msa_name: Master Services Agreement
+
+# --------------------------------------------------------------------------
 # Legal preamble. `public_link` is the default; `dated_mpsa` is used when a
-# negotiated Master Professional Services Agreement exists.
+# negotiated Master Professional Services Agreement exists, in which case
+# `agreement.msa_date` is required.
 # --------------------------------------------------------------------------
 preamble:
   public_link: >-

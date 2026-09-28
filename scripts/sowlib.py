@@ -383,7 +383,7 @@ def build_context(intake: dict, clauses: dict | None = None) -> dict:
         "partner_name": partner.get("legal_name", "Premier Cloud Inc."),
         "execution_date": get(intake, "agreement.execution_date", ""),
         "msa_url": get(intake, "agreement.msa_url",
-                       "https://premiercloud.com/wp-content/uploads/2024/06/MASTER-SERVICES-AGREEMENT-PREMIER-CLOUD-INC.pdf"),
+                       get(clauses, "agreement.msa_url", "")),
         "msa_date": get(intake, "agreement.msa_date", ""),
         "effective_date": get(intake, "term.effective_date", ""),
         "end_date": get(intake, "term.end_date", ""),

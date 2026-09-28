@@ -134,6 +134,30 @@ docs/required-inputs.md       the discovery-call checklist
 build/                        generated output (gitignored)
 ```
 
+## The Master Services Agreement reference
+
+Every SOW binds itself to the MSA in its opening paragraph. The SOW carries
+scope, timeline and fee; liability, IP, confidentiality and termination come
+from the Agreement. There is no opt-out, and `test_render.py` fails any SOW
+rendered without it.
+
+The canonical URL lives once, in `library/clauses.yaml` under `agreement:`:
+
+```
+https://premiercloud.com/master-services-agreement.pdf
+```
+
+That is a stable redirect. It resolves to a `wp-content/uploads/2024/06/...`
+path whose date segment moves on re-upload — quoting that form directly means
+every SOW citing it eventually points at a 404. The validator flags any
+override, and the test suite rejects a `wp-content` link outright.
+
+Drift in the issued set, for correction: CoachHub and City Winery quote the
+brittle URL; Miles Partnership and Habyt/Hmlet v1 carry no MSA reference at all,
+against $68,000 and $30,000 fees respectively.
+
+Full standard: `.claude/skills/sow-builder/references/msa-clause.md`.
+
 ## Checks that earn their keep
 
 `validate_intake.py` does more than presence checking:

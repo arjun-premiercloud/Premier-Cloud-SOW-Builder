@@ -94,6 +94,18 @@ def main() -> int:
             check("Funding credit will be reversed" in out,
                   f"{name}: net cost is {pricing['net']} with funding, but no clawback paragraph")
 
+        # Every SOW must bind itself to the Master Services Agreement. The SOW
+        # is not standalone - liability, IP, confidentiality and termination all
+        # come from the Agreement. Two issued SOWs shipped without this.
+        check("Statement of Work" in out and "Agreement" in out,
+              f"{name}: no Master Services Agreement reference in the rendered SOW")
+        canonical = sowlib.get(sowlib.load_clauses(), "agreement.msa_url", "")
+        if intake.get("agreement", {}).get("msa_style") != "dated_mpsa":
+            check(canonical in out,
+                  f"{name}: rendered SOW does not carry the canonical MSA link {canonical}")
+        check("wp-content/uploads" not in out,
+              f"{name}: uses the brittle dated wp-content MSA link instead of the redirect")
+
         # Section numbering must be contiguous and start at 1.
         numbers = [s["n"] for s in sowlib.section_plan(intake["sow_type"], intake)]
         check(numbers == list(range(1, len(numbers) + 1)),

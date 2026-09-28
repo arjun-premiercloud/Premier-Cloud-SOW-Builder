@@ -172,6 +172,25 @@ def consistency_checks(intake: dict) -> list:
     investment = abs(g(intake, "pricing.partner_investment") or 0)
     net = total - funding - investment
 
+    # --- Master Services Agreement reference ---------------------------------
+    clauses = sowlib.load_clauses()
+    canonical = sowlib.get(clauses, "agreement.msa_url", "")
+    style = g(intake, "agreement.msa_style", "public_link")
+    url = g(intake, "agreement.msa_url")
+    if url and canonical and url != canonical:
+        out.append(
+            f"agreement.msa_url overrides the canonical MSA link. Expected {canonical}; "
+            f"got {url}. The canonical URL is a stable redirect - a direct wp-content link "
+            "carries a dated upload path that breaks when the file is re-uploaded."
+        )
+    if style == "dated_mpsa" and not g(intake, "agreement.msa_date"):
+        out.append(
+            "agreement.msa_style is 'dated_mpsa' but agreement.msa_date is missing. The "
+            "preamble would cite a negotiated agreement with no date, which is unenforceable."
+        )
+    if style not in ("public_link", "dated_mpsa"):
+        out.append(f"agreement.msa_style {style!r} is not recognised; the MSA preamble may not render.")
+
     low, high = g(intake, "pricing.estimate_low"), g(intake, "pricing.estimate_high")
     if low is not None and high is not None:
         out.append(
