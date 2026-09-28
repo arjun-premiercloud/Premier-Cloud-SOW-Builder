@@ -71,8 +71,8 @@ partner:
 # Use the SHORT url. It is a stable redirect. The wp-content target it
 # redirects to carries a dated upload path (/2024/06/) that changes whenever
 # the file is re-uploaded, which would silently break every SOW quoting it.
-# Two issued SOWs (CoachHub, City Winery) quote the wp-content form; they
-# should be corrected on next revision.
+# Some older issued SOWs quote the wp-content form directly; correct them
+# at next revision.
 # --------------------------------------------------------------------------
 agreement:
   msa_url: https://premiercloud.com/master-services-agreement.pdf

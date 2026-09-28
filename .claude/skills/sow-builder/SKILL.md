@@ -21,10 +21,10 @@ meeting notes  ──►  intake .json  ──►  validate_intake.py  ──►
 
 | Type | Use when | Reference example |
 |---|---|---|
-| `gemini_enterprise_implementation` | Seat-based Gemini Enterprise rollout: connectors, enablement, adoption | `examples/coachhub.intake.json` |
-| `agent_pilot` | Fixed-term pilot proving one or more agents against named use cases | `examples/afni.intake.json` |
-| `workspace_migration` | M365 or Google-to-Google Workspace data and/or identity migration | `examples/miles-partnership.intake.json` |
-| `infrastructure_build` | Cloud platform build or replication (e.g. AWS → GCP), with current-state / target-state architecture sections | — |
+| `gemini_enterprise_implementation` | Seat-based Gemini Enterprise rollout: connectors, enablement, adoption | `examples/gemini-enterprise.example.intake.json` |
+| `agent_pilot` | Fixed-term pilot proving one or more agents against named use cases | `examples/agent-pilot.example.intake.json` |
+| `workspace_migration` | M365 or Google-to-Google Workspace data and/or identity migration | `examples/workspace-migration.example.intake.json` |
+| `infrastructure_build` | Cloud platform build or replication (e.g. AWS → GCP), with current-state / target-state architecture sections | `examples/infrastructure-build.example.intake.json` |
 
 If the notes describe something else, pick the nearest type and say so in your
 summary — do not invent a fourth template silently.

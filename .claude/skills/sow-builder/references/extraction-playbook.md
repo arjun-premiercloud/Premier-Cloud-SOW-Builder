@@ -29,8 +29,7 @@ verbatim in the UAT onboarding line.
 
 ### "We'd want it hooked up to Drive, Gmail, Salesforce and Jira"
 `platform.data_sources`, one object per source. Mark `federated: true` for
-anything the connector federates rather than indexes — Salesforce, GitHub, Jira
-Cloud and Confluence Cloud have all been federated in past SOWs. **Get the full
+anything the connector federates rather than indexes — CRM, source control and issue trackers are commonly federated rather than indexed. **Get the full
 list.** Connector count drives price, timeline and the success-criteria line, and
 "additional data connectors will impact the delivery schedule and cost" is a
 standing assumption that only protects us if the baseline list is accurate.
@@ -70,7 +69,7 @@ While they walk the flow, listen for:
 - **the systems touched** — every read and every write-back → `use_cases[].systems`
 - **the numbers** — handle time, volumes, resolution rates → `background.baseline_metrics`
 
-Always record the source of a baseline number ("ServiceNow, March–May 2026"). A
+Always record the source of a baseline number ("the ticketing platform, March–May 2026"). A
 baseline without a provenance line cannot be defended at closure.
 
 ### "We're at about 44 minutes average handle time"
@@ -79,13 +78,12 @@ criteria. Get the system and date range they came from.
 
 ### "8 terabytes of mail, maybe 15 in OneDrive"
 `migration.volumes`. Ask for the **mailbox size distribution**, not just the
-total — the wave plan is built from it (under 1 GB / 1–20 GB / 20–50 GB / over
-50 GB in past engagements). Total TB drives worker-pool sizing.
+total — the wave plan is built from it (for example under 1 GB / 1–20 GB / 20–50 GB / over 50 GB). Total TB drives worker-pool sizing.
 
-### "Around 225 Windows machines, all domain-joined, managed through Splashtop"
+### "Around 225 Windows machines, all domain-joined, managed through an MDM platform"
 `migration.endpoints`. Note which platforms are actually *in scope* separately
-from what exists — the Miles engagement had 275 Macs that were explicitly not in
-the endpoint track.
+from what exists — an engagement may have a large Mac fleet explicitly excluded from the
+endpoint track.
 
 ### "ADP, Zoom, LastPass, a few others"
 `migration.sso_apps`. Get the actual list. "A few others" becomes a per-app

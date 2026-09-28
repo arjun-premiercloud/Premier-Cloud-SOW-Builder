@@ -1,0 +1,23 @@
+# Names that must never appear in a published skill package.
+# This file stays in the repo and is NEVER packaged - it names real customers.
+# One term per line, case-insensitive. Lines starting with # are ignored.
+#
+# scripts/package_skill.py refuses to build a package containing any of these,
+# or any email address outside the allowed domains below.
+
+CoachHub
+City Winery
+Afni
+Miles Partnership
+Habyt
+Hmlet
+ZenAdmin
+Maronda
+Comfort Dental
+Artificial Agency
+Bagel Platform
+Subro Assist
+ClaimPro
+Spin AI
+Splashtop
+Pulseway

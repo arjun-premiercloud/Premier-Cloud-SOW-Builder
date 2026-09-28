@@ -3,9 +3,9 @@
 
     python3 scripts/test_render.py
 
-The three reconstruction fixtures (coachhub, afni, miles-partnership) were built
-from issued SOWs, so a regression here means the generator has drifted away from
-a document Premier Cloud actually sent to a customer.
+examples/ ships synthetic intakes, one per SOW type. fixtures/ holds internal
+reconstructions of issued SOWs when present - never packaged, but the stronger
+regression, since drift there means drifting from a document a customer signed.
 """
 
 from __future__ import annotations
@@ -45,6 +45,10 @@ INVARIANTS = {
         ["Executive Summary", "Investment Summary", "Resource Allocation"],
         [],
     ),
+    "infrastructure_build": (
+        ["Current State", "Target State", "Scope of Work", "Out of Scope"],
+        [],
+    ),
 }
 
 FAILURES = []
@@ -58,6 +62,14 @@ def check(condition, message):
 def main() -> int:
     paths = sorted(glob.glob(os.path.join(sowlib.ROOT, "examples", "*.intake.json")))
     check(len(paths) >= 4, f"expected at least 4 example intakes, found {len(paths)}")
+
+    covered = {sowlib.load_intake(p)["sow_type"] for p in paths}
+    missing = set(sowlib.SOW_TYPES) - covered
+    check(not missing, f"no shipped example covers: {', '.join(sorted(missing))}")
+
+    # fixtures/ holds reconstructions of issued SOWs. Internal only - never
+    # packaged - but they are the stronger regression when available.
+    paths += sorted(glob.glob(os.path.join(sowlib.ROOT, "fixtures", "*.intake.json")))
 
     for path in paths:
         name = os.path.basename(path)

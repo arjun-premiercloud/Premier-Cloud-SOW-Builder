@@ -10,7 +10,7 @@
     "sow_type": {
       "type": "string",
       "enum": ["gemini_enterprise_implementation", "agent_pilot", "workspace_migration"],
-      "description": "Selects the template. gemini_enterprise_implementation = seat-based GE rollout with connectors (CoachHub, City Winery). agent_pilot = fixed-term pilot proving one or more agents against named use cases (Afni GECX). workspace_migration = M365/other -> Google Workspace data + identity migration (Miles Partnership).",
+      "description": "Selects the template. gemini_enterprise_implementation = seat-based GE rollout with connectors (the customer, the customer). agent_pilot = fixed-term pilot proving one or more agents against named use cases (the customer GECX). workspace_migration = M365/other -> Google Workspace data + identity migration (the customer).",
       "x-question": "Is this a Gemini Enterprise rollout, an agent/CX pilot, or a Workspace migration?",
       "x-source": "Opportunity type in CRM; obvious from the meeting."
     },
@@ -20,7 +20,7 @@
       "required": ["title", "date", "version"],
       "properties": {
         "title":       { "type": "string",  "x-question": "What is the SOW titled?", "x-source": "Deal name. e.g. 'Gemini Enterprise Implementation SOW'." },
-        "subtitle":    { "type": "string",  "x-question": "Is there a scope subtitle?", "x-source": "e.g. 'Gemini Enterprise for CX Voice Agent Pilots - IT Service Desk, Progressive CCC & FNOL'." },
+        "subtitle":    { "type": "string",  "x-question": "Is there a scope subtitle?", "x-source": "e.g. 'Gemini Enterprise for CX Voice Agent Pilots - IT Service Desk, an outbound claim-filing agent & FNOL'." },
         "date":        { "type": "string",  "format": "date", "x-question": "What date goes on the cover?", "x-source": "Date the SOW is issued." },
         "version":     { "type": "string",  "default": "1.0", "x-question": "Version number?", "x-source": "1.0 unless revising." },
         "prepared_by": { "type": "string",  "default": "Premier Cloud Team" },
@@ -32,8 +32,8 @@
       "type": "object",
       "required": ["legal_name", "short_name", "contact"],
       "properties": {
-        "legal_name":     { "type": "string", "x-question": "What is the customer's exact legal entity name?", "x-source": "MSA / order form. NOT the brand name - 'Afni, Inc.' not 'Afni'." },
-        "short_name":     { "type": "string", "x-question": "What short name should the body text use?", "x-source": "e.g. 'CoachHub', 'Miles Partnership'." },
+        "legal_name":     { "type": "string", "x-question": "What is the customer's exact legal entity name?", "x-source": "MSA / order form. The registered entity, not the trading name." },
+        "short_name":     { "type": "string", "x-question": "What short name should the body text use?", "x-source": "The short form used throughout the body text." },
         "address":        { "type": "string", "x-question": "Customer's billing/registered address?", "x-source": "Order form or the POC's signature block." },
         "website":        { "type": "string" },
         "industry":       { "type": "string", "x-question": "What industry are they in?", "x-source": "Used in the Customer Profile paragraph." },
@@ -178,7 +178,7 @@
             "properties": {
               "metric": { "type": "string" },
               "value":  { "type": "string" },
-              "source": { "type": "string", "description": "e.g. 'ServiceNow, March-May 2026'." }
+              "source": { "type": "string", "description": "e.g. 'ticketing platform, Q1 2026' - always record the system and date range." }
             }
           },
           "x-question": "What is today's baseline we will measure against?",
@@ -233,7 +233,7 @@
             "type": "object",
             "required": ["name", "description"],
             "properties": {
-              "name":         { "type": "string", "description": "e.g. 'Chief of Staff'." },
+              "name":         { "type": "string", "description": "e.g. a named no-code agent." },
               "description":  { "type": "string" },
               "integrations": { "type": "array", "items": { "type": "string" } },
               "revision_cycles": { "type": "integer", "default": 1 }

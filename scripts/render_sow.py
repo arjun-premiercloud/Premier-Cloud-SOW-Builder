@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render a Premier Cloud SOW from a validated intake file.
 
-    python3 scripts/render_sow.py examples/coachhub.intake.json -o build/coachhub.md
+    python3 scripts/render_sow.py examples/gemini-enterprise.example.intake.json -o build/acme-sow.md
 
 Output is Markdown. To get the customer-facing document:
   - Google Docs: File > Import, or paste with "Paste from Markdown" enabled.

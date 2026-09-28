@@ -1,0 +1,178 @@
+{
+  "_comment": "SYNTHETIC EXAMPLE - no real customer. Reference intake for sow_type=workspace_migration. Shows parallel tracks with phases, an effort schedule in hours, resource allocation, and a Google-funded deal where the customer pays a net amount - which makes the funding-reversal (clawback) paragraph mandatory.",
+
+  "sow_type": "workspace_migration",
+  "document": {
+    "title": "Microsoft 365 to Google Workspace Migration",
+    "date": "2026-04-06",
+    "version": "1.0",
+    "prepared_by": "Premier Cloud Inc."
+  },
+
+  "customer": {
+    "legal_name": "Ardenmoor Group Ltd.",
+    "short_name": "Ardenmoor",
+    "address": "18 Kingsway House, Leeds LS1 2ES, United Kingdom",
+    "industry": "Professional services",
+    "employee_count": 310,
+    "profile": "Ardenmoor Group Ltd. is a professional services firm operating from four UK offices. It runs Microsoft 365 for mail and files, with an on-premises Active Directory providing endpoint authentication and single sign-on to a small set of line-of-business applications.",
+    "contact": { "name": "Helen Ashworth", "title": "IT Director", "email": "helen.ashworth@ardenmoor.example" },
+    "signatory": { "name": "Helen Ashworth", "title": "IT Director", "email": "helen.ashworth@ardenmoor.example" },
+    "stakeholders": [
+      { "role": "IT Director", "name": "Helen Ashworth", "title": "IT Director", "email": "helen.ashworth@ardenmoor.example", "description": "Executive sponsor and decision owner" },
+      { "role": "Systems Administrator", "name": "Tomas Reilly", "title": "Systems Administrator", "description": "User mapping, endpoint access and joint validation" }
+    ]
+  },
+
+  "partner": { "signatory": { "name": "Jason Murray-Rosel", "title": "Head of Client Success" } },
+  "agreement": { "execution_date": "2026-04-06" },
+  "term": { "effective_date": "2026-04-20", "end_date": "2026-06-26", "duration_weeks": 10 },
+
+  "background": {
+    "objective": "Ardenmoor Group Ltd. is partnering with Premier Cloud Inc., a Google Cloud Premier Partner, to migrate from Microsoft 365 to Google Workspace and decommission its on-premises Active Directory.\n\nThe objective is an end-to-end migration of mail, files and endpoint identity for approximately 310 users within a 10-week window. Active Directory will be decommissioned and the SSO-integrated applications re-pointed to Google as the Identity Provider.",
+    "key_focus_areas": [
+      { "label": "Mail & File Migration", "text": "Migration of mailboxes and OneDrive/SharePoint content in waves, with a delta sync at cutover" },
+      { "label": "Endpoint Identity Migration", "text": "Active Directory decommission via Google Credential Provider for Windows, with user data preserved on-device" },
+      { "label": "SSO Re-pointing", "text": "Re-configuration of the SSO-integrated applications to use Google as Identity Provider, validated per application" },
+      { "label": "Cutover & Decommission", "text": "DNS changes, Gmail and Calendar activation, Active Directory decommission and operational handover" }
+    ],
+    "engagement_type": "This is an execution engagement. Premier Cloud will perform the migration end-to-end, including discovery, configuration, pilot, wave migration, delta sync, cutover and post-migration validation."
+  },
+
+  "migration": {
+    "source_platform": "Microsoft 365 (Exchange Online, OneDrive, SharePoint Online)",
+    "tool": "CloudM Migrate",
+    "domain_count": 2,
+    "user_count": 310,
+    "mailbox_count": 340,
+    "worker_nodes": "8 worker nodes (4 mail + 4 file)",
+    "pilot_user_count": 20,
+    "volumes": [
+      { "label": "Mail", "size": "approximately 3.4 TB", "notes": "340 mailboxes" },
+      { "label": "OneDrive", "size": "approximately 5.1 TB", "notes": "" },
+      { "label": "SharePoint", "size": "approximately 0.8 TB", "notes": "" }
+    ],
+    "endpoints": { "windows_count": 290, "mdm": "Intune", "directory": "on-premises Active Directory", "in_scope": ["approximately 290 Windows devices"] },
+    "sso_apps": ["Sage", "DocuSign", "Zoom", "and two similar applications"],
+    "decisions_pending": [
+      "Ardenmoor IT completes the user mapping spreadsheet for all in-scope users and SharePoint sites by end of Week 1",
+      "Decisions on archive mailbox handling and external sharing strategy are finalised before the Week 2 pilot"
+    ],
+    "tracks": [
+      {
+        "name": "Track A - Data Migration (CloudM Migrate)",
+        "phases": [
+          { "name": "Phase 1: Preparation & Discovery (Week 1)", "activities": [
+            "Pre-migration scan of the source tenant covering mailbox count and size distribution, file volumes and externally-shared content",
+            "User mapping spreadsheet completed by Ardenmoor IT for all in-scope accounts and sites",
+            "Customer decisions documented for archive handling and external sharing strategy"
+          ]},
+          { "name": "Phase 2: Configuration & Readiness Scan (Week 1)", "activities": [
+            "CloudM Migrate instance provisioned with 8 worker nodes",
+            "Domain mappings and per-entity migration batches configured",
+            "Readiness scan executed to validate connectivity and surface configuration issues prior to pilot"
+          ]},
+          { "name": "Phase 3: Pilot Migration (Week 2)", "activities": [
+            "Pilot group of 20 users selected across departments and mailbox-size profiles",
+            "Pilot covers mail and OneDrive with full data fidelity validation",
+            "Pilot acceptance reviewed with Ardenmoor before proceeding to bulk waves"
+          ]},
+          { "name": "Phase 4: Bulk Migration in Waves (Weeks 3-8)", "intro": "Migration is sequenced by mailbox size, smallest first, to maximise early worker utilisation and contain risk:", "activities": [
+            "Wave 1 (Weeks 3-4): mailboxes under 1 GB",
+            "Wave 2 (Weeks 5-6): mailboxes 1-20 GB plus smaller SharePoint sites",
+            "Wave 3 (Weeks 7-8): mailboxes over 20 GB plus larger SharePoint sites"
+          ]},
+          { "name": "Phase 5: Delta Migration & Cutover (Week 9)", "activities": [
+            "Final delta pass to capture new and changed mail and files",
+            "DNS cutover: MX, Autodiscover, SPF and DKIM records",
+            "Gmail and Google Calendar activated for all in-scope users"
+          ]},
+          { "name": "Phase 6: Post-Migration Validation (Week 10)", "activities": [
+            "Reconciliation report reviewed for each migration batch",
+            "Spot-check audit of mailboxes and Drive folders against source counts",
+            "Outstanding remediation items tracked to closure"
+          ]}
+        ]
+      },
+      {
+        "name": "Track B - Endpoint Identity Migration (AD to Google Login)",
+        "description": "Track B runs in parallel with Track A, in waves aligned to the data-migration waves.",
+        "phases": [
+          { "name": "Phase 1: Endpoint Inventory & SSO Audit (Week 1)", "activities": [
+            "Inventory of all in-scope domain-joined Windows endpoints",
+            "Audit of the SSO-integrated applications currently authenticating via Active Directory",
+            "SSO re-pointing plan with per-application validation criteria"
+          ]},
+          { "name": "Phase 2: Endpoint Pilot (Week 2)", "activities": [
+            "10-device pilot validating profile migration, domain unjoin and GCPW installation",
+            "Active Directory kept live in parallel for two weeks post-pilot to enable rollback"
+          ]},
+          { "name": "Phase 3: Endpoint Waves (Weeks 3-8)", "activities": [
+            "Endpoints migrated in three waves aligned to the data-migration schedule",
+            "VIP and executive endpoints scheduled in the final wave"
+          ]},
+          { "name": "Phase 4: SSO Re-pointing & AD Decommission (Weeks 9-10)", "activities": [
+            "SSO applications re-pointed to Google as Identity Provider and validated against the Phase 1 test plan",
+            "Active Directory infrastructure decommissioned",
+            "Operational handover and decommission sign-off"
+          ]}
+        ]
+      }
+    ]
+  },
+
+  "scope": {
+    "statement": "This engagement is delivered in two parallel tracks over 10 weeks: Track A covers mail and file migration, Track B covers endpoint identity migration and Active Directory decommission.",
+    "out_of_scope_extra": [
+      "Migration of Microsoft Teams content. Teams is being retained by Ardenmoor and is not in scope.",
+      "Migration of macOS endpoints. Ardenmoor's Mac fleet is managed separately and is out of scope for this phase."
+    ]
+  },
+
+  "assumptions": [
+    "Intune remains operational throughout the migration window for pushing endpoint scripts and configuration profiles",
+    "Active Directory remains operational in parallel for the two weeks following the endpoint pilot to enable rollback"
+  ],
+
+  "timeline": {
+    "weeks": 10,
+    "schedule": [
+      { "track": "Track A: Data Migration", "activity": "Preparation & Discovery", "effort_hours": 36, "deliverable": "Kickoff deck; Discovery Report; decision register", "start_date": "2026-04-20", "end_date": "2026-04-24" },
+      { "track": "Track A: Data Migration", "activity": "Setup & Configuration", "effort_hours": 20, "deliverable": "Configured migration project; readiness scan report", "start_date": "2026-04-23", "end_date": "2026-04-28" },
+      { "track": "Track A: Data Migration", "activity": "Pilot Migration & Acceptance", "effort_hours": 32, "deliverable": "Pilot reports; signed pilot acceptance", "start_date": "2026-04-29", "end_date": "2026-05-05" },
+      { "track": "Track A: Data Migration", "activity": "Bulk Migration Waves", "effort_hours": 168, "deliverable": "Wave migration reports", "start_date": "2026-05-06", "end_date": "2026-06-12" },
+      { "track": "Track A: Data Migration", "activity": "Delta Migration & Cutover", "effort_hours": 24, "deliverable": "Final reconciliation; cutover runbook", "start_date": "2026-06-15", "end_date": "2026-06-19" },
+      { "track": "Track A: Data Migration", "activity": "Post-Migration Validation", "effort_hours": 18, "deliverable": "Final reconciliation report; signed acceptance", "start_date": "2026-06-22", "end_date": "2026-06-26" },
+      { "track": "Track B: Endpoint Identity Migration", "activity": "Endpoint Inventory & Planning", "effort_hours": 30, "deliverable": "Endpoint inventory; SSO audit; re-pointing plan", "start_date": "2026-04-21", "end_date": "2026-04-28" },
+      { "track": "Track B: Endpoint Identity Migration", "activity": "Endpoint Pilot & Sign-off", "effort_hours": 28, "deliverable": "Pilot reports; signed endpoint acceptance", "start_date": "2026-04-29", "end_date": "2026-05-05" },
+      { "track": "Track B: Endpoint Identity Migration", "activity": "Endpoint Waves", "effort_hours": 132, "deliverable": "Wave migration reports", "start_date": "2026-05-06", "end_date": "2026-06-12" },
+      { "track": "Track B: Endpoint Identity Migration", "activity": "SSO Re-pointing & AD Decommission", "effort_hours": 26, "deliverable": "SSO validation matrix; AD decommission checklist", "start_date": "2026-06-15", "end_date": "2026-06-26" }
+    ]
+  },
+
+  "resources": [
+    { "role": "Project Manager", "hours": 90, "responsibilities": "Project planning, weekly status, stakeholder coordination, sign-off" },
+    { "role": "Migration Engineers (x2)", "hours": 298, "responsibilities": "Migration tool configuration, batch execution, wave management and troubleshooting" },
+    { "role": "Endpoint Engineer", "hours": 96, "responsibilities": "Endpoint scripting, GCPW deployment, domain unjoin and SSO validation support" }
+  ],
+
+  "success_criteria": [
+    "100% of in-scope mailboxes migrated to Google Workspace with delta sync validated against the reconciliation report",
+    "100% of in-scope OneDrive and SharePoint content migrated to Google Drive and Shared Drives",
+    "100% of in-scope Windows endpoints transitioned to Google login with user data preserved",
+    "Active Directory decommissioned and all SSO-integrated applications re-pointed and validated",
+    "Mail flow cutover completed with no inbound mail loss",
+    "Final reports reviewed and validated by Ardenmoor stakeholders"
+  ],
+
+  "pricing": {
+    "currency": "USD",
+    "total_fixed_price": 82000,
+    "google_funding": 30000,
+    "funding_program": "PSF",
+    "funding_clawback": true,
+    "line_items": [{ "label": "Microsoft 365 to Google Workspace Migration, AD Decommission, SSO Re-pointing", "amount": 82000 }]
+  },
+
+  "provenance": { "sources": ["Synthetic example - not a real engagement"], "assumed": [], "unanswered": [] }
+}

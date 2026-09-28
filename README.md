@@ -89,10 +89,27 @@ the staged copy to prove it works standalone, then zips it. The recipient drops
 the folder into `.claude/skills/` and runs `pip install -r requirements.txt`;
 `INSTALL.md` in the package covers the rest.
 
-`intake/` and `build/` are never packaged. The reference examples are, and they
-carry real customer names, contacts and contract values — fine internally, worth
-a look before it leaves Premier Cloud. `--no-examples` drops them, at the cost of
-the test suite and the reference reconstructions.
+### Nothing real ships
+
+The package is for org-wide publication, so it carries no client data.
+
+| Directory | Contents | Packaged |
+|---|---|---|
+| `examples/` | Synthetic reference intakes, one per SOW type | yes |
+| `fixtures/` | Reconstructions of issued SOWs — real names, contacts, fees | **never** |
+| `intake/` | Live deal working files | **never** |
+| `build/` | Rendered documents | **never** |
+
+Every project has an intake, so a shipped example never needs to be a real one.
+The fixtures still run in `test_render.py` locally, where they remain the
+stronger regression — drift there means drifting from a document a customer
+signed.
+
+The backstop is automated: `package_skill.py` **refuses to build** a package
+containing a name from `.sanitisation-denylist.txt` (repo-only, never packaged)
+or any email address outside `premiercloud.com` and `.example`. It caught five
+leaks in script docstrings and comments on first run that manual review had
+missed.
 
 ## Google Workspace CLI
 
@@ -129,7 +146,8 @@ scripts/
   validate_intake.py          gap report + consistency checks
   render_sow.py               intake -> Markdown
   test_render.py              round-trip tests over the example intakes
-examples/                     three reconstructions + one worked notes->intake example
+examples/                     synthetic reference intakes, one per SOW type (packaged)
+fixtures/                     reconstructions of issued SOWs (never packaged)
 docs/required-inputs.md       the discovery-call checklist
 build/                        generated output (gitignored)
 ```

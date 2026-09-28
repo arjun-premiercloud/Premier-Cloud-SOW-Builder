@@ -1,0 +1,112 @@
+{
+  "_comment": "SYNTHETIC EXAMPLE - no real customer. Reference intake for sow_type=agent_pilot. Shows the per-use-case Current Solution / Proposed Solution treatment, baseline metrics with provenance, and per-agent price line items.",
+
+  "sow_type": "agent_pilot",
+  "document": {
+    "title": "Gemini Enterprise Pilot Statement of Work",
+    "subtitle": "Customer Service Voice Agent Pilot",
+    "date": "2026-03-02",
+    "version": "1.0",
+    "prepared_by": "Premier Cloud Inc.",
+    "product_short": "Gemini Enterprise for Customer Experience (GECX)"
+  },
+
+  "customer": {
+    "legal_name": "Lakeside Utilities Inc.",
+    "short_name": "Lakeside",
+    "industry": "Regional utilities",
+    "employee_count": 2400,
+    "profile": "Lakeside Utilities Inc. is a regional water and power utility serving approximately 400,000 households. Its customer service organisation handles billing, outage reporting and service transfers through a 60-seat contact centre, and is evaluating conversational AI to absorb routine contact volume without proportional headcount growth.",
+    "contact": { "name": "Dana Whitfield", "title": "Director, Customer Operations", "email": "dana.whitfield@lakeside-utilities.example" },
+    "signatory": { "name": "Marcus Oyelaran", "title": "Chief Information Officer", "email": "marcus.oyelaran@lakeside-utilities.example" },
+    "stakeholders": [
+      { "role": "Executive Sponsor", "name": "Marcus Oyelaran", "title": "CIO", "description": "Executive alignment and L2 escalation" },
+      { "role": "Technical Lead", "name": "Priya Anand", "title": "Manager, Automation", "description": "Decision-tree input and UAT participation" }
+    ]
+  },
+
+  "partner": { "signatory": { "name": "Jason Murray-Rosel", "title": "Head of Client Success" } },
+  "agreement": { "execution_date": "the date of last signature" },
+  "term": { "effective_date": "March 16, 2026", "end_date": "May 8, 2026", "duration_weeks": 8, "extendable_note": true },
+  "platform": { "environment": "non-production" },
+
+  "background": {
+    "objective": "The objective of this pilot is to prove the value of Gemini Enterprise for Customer Experience against a Lakeside-prioritised workflow. Premier Cloud and Lakeside will design and build a billing-enquiry voice agent, exercised against representative scenarios and measured on call containment, intent-resolution accuracy, average handle time against the current baseline, and tool-call accuracy.",
+    "business_challenges": [
+      "Billing enquiries are high-volume, repeatable and script-driven, and account for roughly half of inbound contacts.",
+      "Seasonal outage events produce contact spikes the current staffing model cannot absorb without long queue times."
+    ],
+    "baseline_metrics": [
+      { "metric": "Inbound contacts (90 days)", "value": "approximately 74,000", "source": "Contact centre platform, Q4 2025" },
+      { "metric": "Average handle time", "value": "6 minutes 40 seconds", "source": "Contact centre platform, Q4 2025" },
+      { "metric": "Billing enquiry share of volume", "value": "48%", "source": "Contact centre platform, Q4 2025" }
+    ]
+  },
+
+  "scope": {
+    "statement": "Lakeside's billing enquiry workflow is high-volume and script-driven, making it a strong candidate for an AI-augmented voice agent.",
+    "out_of_scope_extra": [
+      "Outage reporting and service transfer workflows. Raised in discovery and deferred to a later phase.",
+      "Integration with the field dispatch system. Not required for the billing use case.",
+      "Replacement of the existing contact centre platform."
+    ]
+  },
+
+  "use_cases": [
+    {
+      "name": "Billing Enquiry",
+      "summary": "handles balance enquiries, payment arrangements and bill explanation, with verified caller identity and a warm transfer to an agent for anything outside the agreed scenarios.",
+      "current_solution": "The current billing enquiry workflow proceeds as follows:",
+      "current_solution_steps": [
+        "**Initial Contact:** Calls arrive at the IVR, which performs basic menu triage.",
+        "**Routing:** The call is routed to an available customer service representative.",
+        "**Identity Verification:** The representative verifies the caller against account number and address.",
+        "**Resolution:** The representative looks up the balance, explains charges, and where requested sets up a payment arrangement.",
+        "**Escalation:** Disputed charges are escalated to the billing specialist queue."
+      ],
+      "proposed_solution": "Premier Cloud will design, build and demonstrate a billing enquiry voice agent on Gemini Enterprise for Customer Experience, in a controlled pilot environment within Lakeside's Google Cloud project. The agent verifies the caller, retrieves account balance and recent charges through an OpenAPI connector to a representative configuration of the billing system, explains the bill using approved language, and where in scope records a payment arrangement. Anything outside the agreed scenarios warm-transfers to a representative with the caller already verified and context attached.",
+      "trigger": "Inbound call via the Google Telephony Platform voice channel",
+      "systems": ["Billing system (sandbox)", "Customer master record"],
+      "success_metrics": ["Call containment rate", "Verification success rate", "Intent-resolution accuracy", "Average handle time versus the 6m40s baseline", "Tool-call accuracy"],
+      "figures": ["The voice agent at a glance: caller, agent, and connected services", "The billing enquiry target call flow"],
+      "price": 26000
+    }
+  ],
+
+  "timeline": {
+    "weeks": 8,
+    "note": "The pilot will run for eight (8) weeks, beginning March 16, 2026.",
+    "milestones": [
+      { "id": "M1", "task": "1. Kickoff & Discovery", "name": "Kickoff & Discovery Complete", "description": "Project kickoff completed, discovery findings documented, pilot scope and success criteria agreed.", "week": 2 },
+      { "id": "M2", "task": "2. Solution Design", "name": "Solution Design Approved", "description": "Solution Design Document delivered and written approval received.", "week": 3 },
+      { "id": "M3", "task": "3. Connectors", "name": "Connectors Operational", "description": "OpenAPI connectors built, smoke tests passed, baseline tool-call accuracy captured.", "week": 4 },
+      { "id": "M4", "task": "4. Development & Testing", "name": "Agent Demonstration Ready", "description": "Agent built, integrated and exercised through UAT; success-metric measurements captured.", "week": 7 },
+      { "id": "M5", "task": "5. Adoption & Enablement", "name": "Adoption Handover Complete", "description": "Training delivered, dashboard handed over.", "week": 8 },
+      { "id": "M6", "task": "6. Project Closure", "name": "Pilot Closed", "description": "Final pilot report, follow-up roadmap and review meeting completed.", "week": 8 }
+    ]
+  },
+
+  "deliverables": [
+    { "detail": "Project kickoff and governance setup, including discovery findings document", "timeline": "M1" },
+    { "detail": "Solution Design Document covering agent architecture and integration design", "timeline": "M2" },
+    { "detail": "OpenAPI connector configuration with smoke-test results and baseline measurement", "timeline": "M3" },
+    { "detail": "Working demonstration of the billing enquiry voice agent with a UAT measurement summary", "timeline": "M4" },
+    { "detail": "Training materials package and agent dashboard handover", "timeline": "M5" },
+    { "detail": "Final pilot report and follow-up roadmap reviewed at pilot closure", "timeline": "M6" }
+  ],
+
+  "risks": [
+    { "risk": "Pilot-environment access delays", "mitigation": "Phase 1 prerequisite confirmation with a named technical contact and an escalation path via the PM." },
+    { "risk": "Billing system API access or schema is not confirmed", "mitigation": "Phase 1 prerequisite for documented endpoints; sample-data fallback where needed; written change request if integration complexity exceeds estimates." }
+  ],
+
+  "success_criteria": [
+    "The agent demonstrates end-to-end handling across the pilot scenarios agreed in Phase 1, including caller verification and warm transfer.",
+    "Measurements against the agreed success metrics are captured and shared with Lakeside stakeholders.",
+    "Lakeside's automation team is trained on agent operation, monitoring and tuning, with documented materials delivered.",
+    "A final pilot report and follow-up roadmap are delivered and reviewed at pilot close."
+  ],
+
+  "pricing": { "currency": "USD", "total_fixed_price": 48000, "google_funding": 48000, "funding_program": "PSF", "funding_clawback": false },
+  "provenance": { "sources": ["Synthetic example - not a real engagement"], "assumed": [], "unanswered": [] }
+}

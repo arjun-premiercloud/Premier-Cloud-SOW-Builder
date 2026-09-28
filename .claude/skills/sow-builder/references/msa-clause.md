@@ -67,20 +67,17 @@ problem you discover at exactly the wrong moment.
 The canonical URL is set once, in `library/clauses.yaml` under `agreement:`.
 Leave `agreement.msa_url` unset in intake files; overriding it is flagged.
 
-## Known drift in issued SOWs
+## Known drift
 
-| SOW | MSA reference |
-|---|---|
-| CoachHub | present, **brittle wp-content URL** |
-| City Winery | present, **brittle wp-content URL** |
-| Afni | present, `dated_mpsa`, short URL |
-| Miles Partnership | **absent** |
-| Habyt → Hmlet v1 | **absent** |
+Not every issued SOW is consistent. Two patterns exist in the back catalogue:
 
-The two marked absent went out against a $68,000 and a $30,000 fee with no
-stated liability cap, IP terms or termination rights. Correct the two brittle
-URLs at next revision; raise the two missing references with whoever owns the
-commercial relationship.
+- SOWs quoting the **brittle wp-content URL** directly instead of the redirect.
+  Correct at next revision.
+- SOWs with **no MSA reference at all**, which means no stated liability cap, IP
+  terms or termination rights against a signed fee.
+
+Premier Cloud keeps the specific list internally; ask the SOW owner rather than
+assuming a given document is compliant.
 
 ## What the tooling enforces
 

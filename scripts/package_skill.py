@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -143,6 +144,44 @@ def stage(dest: str, include_examples: bool) -> None:
         fh.write(INSTALL)
 
 
+# Email domains a published package may legitimately contain.
+ALLOWED_EMAIL_DOMAINS = ("premiercloud.com", ".example")
+DENYLIST_FILE = os.path.join(ROOT, ".sanitisation-denylist.txt")
+
+
+def scan_for_client_data(pkg_root: str) -> list:
+    """Refuse to publish a package carrying real client data.
+
+    Every project has an intake, so the shipped examples never need to be real
+    ones. This is the backstop: a denylist of customer names plus a catch-all
+    for email addresses outside the allowed domains.
+    """
+    terms = []
+    if os.path.exists(DENYLIST_FILE):
+        with open(DENYLIST_FILE, encoding="utf-8") as fh:
+            terms = [l.strip() for l in fh if l.strip() and not l.startswith("#")]
+
+    email = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+    findings = []
+    for dirpath, dirnames, filenames in os.walk(pkg_root):
+        dirnames[:] = [d for d in dirnames if d != "__pycache__"]
+        for name in sorted(filenames):
+            full = os.path.join(dirpath, name)
+            rel = os.path.relpath(full, pkg_root)
+            try:
+                body = open(full, encoding="utf-8").read()
+            except (UnicodeDecodeError, OSError):
+                continue  # binary assets are checked separately below
+            low = body.lower()
+            for term in terms:
+                if term.lower() in low:
+                    findings.append(f"{rel}: contains denylisted name {term!r}")
+            for addr in set(email.findall(body)):
+                if not any(addr.lower().endswith(d) for d in ALLOWED_EMAIL_DOMAINS):
+                    findings.append(f"{rel}: contains external email address {addr}")
+    return sorted(set(findings))
+
+
 def verify(pkg_root: str, include_examples: bool) -> bool:
     """Run the bundled test suite against the staged copy, in isolation."""
     if not include_examples:
@@ -172,6 +211,18 @@ def main() -> int:
         print("Staging:")
         stage(pkg_root, include_examples)
 
+        print("\nScanning for client data:")
+        leaks = scan_for_client_data(pkg_root)
+        if leaks:
+            print(f"  REFUSING TO PUBLISH - {len(leaks)} finding(s):", file=sys.stderr)
+            for f in leaks:
+                print(f"    {f}", file=sys.stderr)
+            print("\nShipped examples must be synthetic. Move real reconstructions to "
+                  "fixtures/ (never packaged) and add a synthetic example instead.",
+                  file=sys.stderr)
+            return 1
+        print("  clean - no denylisted names, no external email addresses")
+
         print("\nVerifying the packaged copy runs standalone:")
         if not verify(pkg_root, include_examples):
             print("\nPackaging aborted - the staged copy does not pass its own tests.",
@@ -191,10 +242,9 @@ def main() -> int:
     size = os.path.getsize(args.out)
     print(f"\nWrote {args.out} ({size / 1024:.0f} KB)")
     if include_examples:
-        print("Includes examples/ - reconstructions of issued SOWs with real customer "
-              "names, contacts and contract values. Fine for a Premier Cloud colleague; "
-              "check before sending outside the company.")
-    print("Never included: intake/ (live deal data) and build/ (rendered documents).")
+        print("Includes examples/ - synthetic reference intakes, one per SOW type. "
+              "No real client data.")
+    print("Never included: intake/ and fixtures/ (real client data), build/ (rendered documents).")
     return 0
 
 

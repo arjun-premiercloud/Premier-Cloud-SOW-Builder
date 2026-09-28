@@ -1,0 +1,170 @@
+{
+  "_comment": "SYNTHETIC EXAMPLE - no real customer. Reference intake for sow_type=infrastructure_build. Shows current-state / target-state architecture sections with a service mapping table, a phase/deliverable timeline, and a pre-discovery estimate range rather than a fixed price.",
+
+  "sow_type": "infrastructure_build",
+  "document": {
+    "title": "AWS to Google Cloud Platform Replication",
+    "subtitle": "Marketplace Listing Readiness",
+    "date": "2026-05-11",
+    "version": "0.2 (Draft)",
+    "prepared_by": "Premier Cloud Inc."
+  },
+
+  "customer": {
+    "legal_name": "Ravensbourne Analytics Ltd.",
+    "short_name": "Ravensbourne",
+    "industry": "B2B SaaS analytics",
+    "contact": { "name": "Nadia Okonkwo", "title": "Head of Platform Engineering", "email": "nadia.okonkwo@ravensbourne.example" },
+    "signatory": { "name": "Peter Lindqvist", "title": "Chief Technology Officer", "email": "peter.lindqvist@ravensbourne.example" },
+    "stakeholders": [
+      { "role": "CTO", "name": "Peter Lindqvist", "title": "CTO", "description": "Executive sponsor and commercial approver" },
+      { "role": "Head of Platform Engineering", "name": "Nadia Okonkwo", "title": "Head of Platform Engineering", "description": "Technical point of contact; architecture decisions and approvals" }
+    ]
+  },
+
+  "partner": {
+    "contact": { "name": "Jason Murray-Rosel", "title": "Head of Client Success", "email": "jason@premiercloud.com" },
+    "team": [
+      { "role": "Account Manager", "description": "Commercial ownership, engagement governance and customer communication" },
+      { "role": "Cloud Architect", "description": "Solution architecture, platform design, Terraform adaptation and technical delivery" },
+      { "role": "CTO / Executive Sponsor", "description": "Executive oversight and escalation path" }
+    ]
+  },
+
+  "agreement": { "execution_date": "2026-05-25" },
+  "term": { "effective_date": "2026-06-01", "end_date": "2026-07-10", "duration_weeks": 6 },
+
+  "background": {
+    "objective": "Ravensbourne Analytics Ltd. operates a B2B analytics platform currently deployed on AWS. To list the platform on a cloud marketplace, Ravensbourne requires a functioning infrastructure presence on Google Cloud.\n\nThis engagement is **not** a migration off AWS. Ravensbourne will continue to operate and serve existing customers there. The objective is to **replicate** the AWS architecture on Google Cloud as a greenfield deployment, adapting the existing Terraform codebase to GCP-native services, so that an initial set of pilot customers can be onboarded on Google Cloud.\n\nPartner will act as a hands-on technical extension of Ravensbourne's engineering team, providing the infrastructure and platform engineering effort the in-house team does not currently have bandwidth for."
+  },
+
+  "architecture": {
+    "current_state": {
+      "intro": "The production environment runs on Amazon EKS with cluster autoscaling and progressive delivery. Traffic is routed through Route 53 and an Application Load Balancer to a set of containerised services. Infrastructure is defined in Terraform across the application repositories.",
+      "layers": [
+        { "layer": "Edge / Routing", "components": "Route 53, Application Load Balancer" },
+        { "layer": "Compute", "components": "EKS, cluster autoscaler, OpenTelemetry" },
+        { "layer": "Data", "components": "RDS PostgreSQL, S3 (artifacts and analytics exports)" },
+        { "layer": "Auth & Secrets", "components": "SSO via external IdP, AWS Secrets Manager" },
+        { "layer": "Observability", "components": "Prometheus, Grafana, Sentry" },
+        { "layer": "Identity", "components": "Pod identity via IRSA" }
+      ],
+      "notes": [
+        { "label": "Being retired independently of this project", "text": "The legacy batch scheduler. Not part of the Google Cloud parity scope." }
+      ]
+    },
+    "target_state": {
+      "intro": "The Google Cloud deployment mirrors the AWS topology component-for-component wherever a direct equivalent exists, minimising application-level changes and maximising reuse of the existing Terraform.",
+      "mapping": [
+        { "from": "Route 53 + ALB", "to": "Cloud DNS + HTTPS Load Balancer + Cloud Armor", "notes": "Cloud Armor adds WAF-equivalent protection at the edge" },
+        { "from": "EKS", "to": "GKE", "notes": "Node pools re-mapped from EKS node groups" },
+        { "from": "RDS PostgreSQL", "to": "Cloud SQL for PostgreSQL", "notes": "Schema replicated by Partner; pilot tenant data imported from customer-provided exports" },
+        { "from": "S3", "to": "Cloud Storage", "notes": "Phase 1 via the S3 interoperability API, avoiding an application refactor" },
+        { "from": "AWS Secrets Manager", "to": "Secret Manager", "notes": "Runtime secret injection, same pattern" },
+        { "from": "IRSA (pod identity)", "to": "Workload Identity Federation", "notes": "Replaces IRSA directly rather than stepping down to static keys" },
+        { "from": "Prometheus / Grafana / Sentry", "to": "Cloud Monitoring, Cloud Logging + Grafana / Sentry", "notes": "Parity dashboards rebuilt on GCP-native telemetry" }
+      ],
+      "sections": [
+        { "heading": "Environments & Projects", "bullets": [
+          { "label": "Production", "text": "dedicated Google Cloud project" },
+          { "label": "Development / Sandbox", "text": "dedicated Google Cloud project" }
+        ]},
+        { "heading": "Network Design", "body": "Private GKE clusters with Private Service Connect for Cloud SQL and Cloud Storage, preserving the existing trust-zone security model." }
+      ]
+    }
+  },
+
+  "scope": {
+    "service_sections": [
+      { "heading": "Landing Zone & Networking", "bullets": [
+        "Validate the existing Google Cloud organisation, billing and committed spend setup.",
+        "Provision dedicated Google Cloud projects for production and development.",
+        "Design and provision VPC, subnets and Private Service Connect for Cloud SQL and Cloud Storage.",
+        "Establish the IAM baseline and configure GKE Workload Identity Federation."
+      ]},
+      { "heading": "Compute Platform (GKE)", "bullets": [
+        "Provision private GKE cluster(s) mirroring the EKS topology.",
+        "Configure node pools for baseline services and batch workloads.",
+        "Port Kubernetes manifests and Helm charts from EKS to GKE, adjusting for GCP-specific ingress, storage classes and annotations."
+      ]},
+      { "heading": "Data Layer Replication", "bullets": [
+        "Provision Cloud SQL for PostgreSQL and migrate the existing schema.",
+        "Provision Cloud Storage buckets configured for the S3 interoperability API and Uniform Bucket-Level Access.",
+        "Import pilot tenant data from customer-provided exports."
+      ]},
+      { "heading": "Observability, Security & Secrets Management", "bullets": [
+        "Configure Secret Manager for database credentials and API keys.",
+        "Build Cloud Monitoring and Grafana dashboards for parity with the existing setup.",
+        "Configure Cloud Armor policies at the load balancer."
+      ]},
+      { "heading": "CI/CD & Infrastructure-as-Code Adaptation", "bullets": [
+        "Convert and extend Terraform modules from AWS to GCP providers.",
+        "Configure a versioned Cloud Storage bucket for Terraform remote state.",
+        "Configure Artifact Registry and adapt the CI pipeline for GCP-hosted builds."
+      ]},
+      { "heading": "Validation & Handover", "bullets": [
+        "End-to-end smoke testing of GKE services and the data layer.",
+        "Deliver runbook and architecture documentation for the Google Cloud environment.",
+        "Conduct knowledge transfer session(s) with the engineering team."
+      ]}
+    ],
+    "out_of_scope_extra": [
+      "Full migration or decommissioning of the AWS environment. AWS remains live for existing customers.",
+      "Marketplace listing documentation, submission and approval, which is handled directly by the marketplace operator.",
+      "Global load balancing and full multi-region routing. Single-region only in this phase.",
+      "Data migration beyond the initial pilot tenants."
+    ]
+  },
+
+  "timeline": {
+    "weeks": 6,
+    "note": "Estimated overall duration: four (4) to six (6) weeks from kickoff, contingent on timely access to the information described in the Dependencies section.",
+    "phases": [
+      { "phase": "1. Discovery & Landing Zone", "timeframe": "Week 1", "activities": "Validate projects and billing; confirm scale from AWS billing data; finalise network design; configure Workload Identity Federation", "deliverable": "Landing zone provisioned; confirmed scope document" },
+      { "phase": "2. Core Infrastructure Build", "timeframe": "Weeks 2-3", "activities": "Stand up GKE cluster and node pools; provision Cloud SQL and Cloud Storage; convert Terraform; wire CI/CD", "deliverable": "GKE environment running core services in development" },
+      { "phase": "3. Data Layer", "timeframe": "Weeks 3-4", "activities": "Migrate schema and import pilot tenant data; validate integrity", "deliverable": "Pilot tenant data replicated" },
+      { "phase": "4. Observability, Security & Validation", "timeframe": "Weeks 4-5", "activities": "Configure Secret Manager, Cloud Armor and monitoring parity; run end-to-end smoke tests", "deliverable": "Production-ready environment; test results report" },
+      { "phase": "5. Handover", "timeframe": "Weeks 5-6", "activities": "Document runbooks; conduct knowledge transfer", "deliverable": "Final architecture and runbook documentation; sign-off" }
+    ]
+  },
+
+  "prerequisites_before": [
+    "Provide Partner with access to the Google Cloud organisation, billing account and in-scope projects.",
+    "Provide AWS billing and usage exports sufficient to validate scale assumptions.",
+    "Provide architecture diagrams and the AWS configuration detail required for replication.",
+    "Identify the pilot customer tenants in scope for data import."
+  ],
+  "prerequisites_ongoing": [
+    "Ensure timely availability of the technical point of contact for architecture questions and reviews.",
+    "Provide review and written approval at each phase boundary.",
+    "Promptly communicate any organisational, technical or scope changes affecting delivery."
+  ],
+
+  "assumptions": [
+    "The existing Terraform codebase is well-structured and can be adapted to Google Cloud with minimal refactoring.",
+    "Scope is limited to the production and development environments.",
+    "Initial data migration covers only the pilot customer tenants, not the full customer base."
+  ],
+
+  "risks": [
+    { "risk": "An incomplete AWS resource inventory delays accurate scoping", "mitigation": "Confirm scale via AWS billing export and architecture diagram review during Phase 1." },
+    { "risk": "S3 to Cloud Storage interoperability gaps require application-level changes", "mitigation": "Validate interoperability early against a sandbox bucket before full replication." }
+  ],
+
+  "success_criteria": [
+    "**Functional Parity** - Core platform services run on GKE with functional parity to the AWS deployment.",
+    "**Data Layer Readiness** - Cloud SQL and Cloud Storage are provisioned, populated with pilot tenant data, and validated for integrity.",
+    "**Operational Readiness** - The engineering team can observe, deploy and troubleshoot the Google Cloud environment using documented runbooks."
+  ],
+
+  "change_management": "Any change to the scope, timeline or cost described in this SOW must be agreed in writing by both Parties before related work begins.",
+
+  "pricing": {
+    "currency": "USD",
+    "estimate_low": 35000,
+    "estimate_high": 55000,
+    "payment_terms": "This estimate excludes ongoing Google Cloud consumption and hosting costs, which are billed directly under the Customer's own Google Cloud account."
+  },
+
+  "provenance": { "sources": ["Synthetic example - not a real engagement"], "assumed": [], "unanswered": [] }
+}

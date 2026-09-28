@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate a SOW intake file and print a gap report.
 
-    python3 scripts/validate_intake.py examples/coachhub.intake.json
+    python3 scripts/validate_intake.py examples/gemini-enterprise.example.intake.json
 
 The point of this script is not schema pedantry - it is to turn "what do we
 still not know?" into a list of questions you can paste into an email or take

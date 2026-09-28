@@ -1,7 +1,6 @@
 # What you need to collect to build a SOW
 
-Derived from four issued Premier Cloud SOWs (CoachHub, City Winery, Afni, Miles
-Partnership). Use this as the discovery-call checklist; the schema in
+Derived from Premier Cloud's issued SOW set. Use this as the discovery-call checklist; the schema in
 `schemas/sow-intake.schema.json` is the machine-readable version of the same
 thing, and `scripts/validate_intake.py` will tell you which of these you are
 still missing for a specific deal.
@@ -16,7 +15,7 @@ optional otherwise.
 ### Parties
 | Input | | Notes |
 |---|---|---|
-| Customer legal entity name | R | As it appears on the MSA. "Afni, Inc." not "Afni". |
+| Customer legal entity name | R | As it appears on the MSA. the registered entity, not the trading name. |
 | Customer short name | R | Used throughout the body text. |
 | Customer address | N | Registered or billing address. |
 | SOW point of contact: name, email, phone | R | Section 1 table. |
@@ -59,7 +58,7 @@ optional otherwise.
 
 ## B. Gemini Enterprise Implementation
 
-*The CoachHub / City Winery shape: seat-based rollout, connectors, enablement.*
+*Seat-based rollout: connectors, testing, adoption and enablement.*
 
 | Input | | Notes |
 |---|---|---|
@@ -78,7 +77,7 @@ optional otherwise.
 
 ## C. Agent / CX Pilot
 
-*The Afni shape: fixed-term pilot proving named agents against named use cases.*
+*Fixed-term pilot proving named agents against named use cases.*
 
 Everything in A, plus:
 
@@ -93,7 +92,7 @@ Everything in A, plus:
 | **Per use case:** systems of record read from / written back to | N | |
 | **Per use case:** success metrics | N | |
 | **Per use case:** price | | Enables per-agent line items in the cost table. |
-| Baseline metrics + their source | N | e.g. "44-minute AHT, ServiceNow March–May 2026". A baseline without provenance cannot be defended at closure. |
+| Baseline metrics + their source | N | e.g. "44-minute average handle time, ticketing platform, Q1". A baseline without provenance cannot be defended at closure. |
 | Pilot environment | N | Production sandbox, dev, or sample-data layer. |
 | Telephony entry point | N | GTP for the pilot; production approach is usually a recommendation. |
 | Dated task schedule | N | Phase-by-phase with start and end dates. |
@@ -103,7 +102,7 @@ Everything in A, plus:
 
 ## D. Workspace Migration
 
-*The Miles Partnership shape: data + identity migration in parallel tracks.*
+*Data and identity migration in parallel tracks.*
 
 Everything in A, plus:
 
