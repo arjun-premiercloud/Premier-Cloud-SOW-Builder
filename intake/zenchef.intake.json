@@ -1,0 +1,168 @@
+{
+  "_comment": "CoverManager -> Zenchef Google Workspace tenant consolidation. PRELIMINARY: populated only with facts confirmed in writing as of 2026-10-29. Sources: (1) Oct 8 2026 'Zenchef // Premier Cloud // Domain Migration Sync' Gemini notes, doc 1jB0_uL5q75AUl7gsE9WgQC7FqqgA1Y43ZUp_zAc-Lo0; (2) shared tracker 'CoverManager -> Zenchef - Workspace migration tracker', sheet 17nodws89k17I4cJ6QzmpSO2_Etk2_rtmhce9qrjxk-Y, last export 28/10/2026; (3) Gmail thread 'Migration to Zenchef / CoverManager', Javier Gonzalez Salvador 28-29/10/2026; (4) Pre-Sales Engineering tracker row 'Zenchef - Renewal + Domain / GCP Migration' (PSE-312). Deliberately left absent: price, dates, legal entity, signatory - see intake/zenchef.context-and-inputs.md.",
+  "sow_type": "workspace_migration",
+
+  "document": {
+    "title": "Google Workspace Migration - CoverManager to Zenchef",
+    "subtitle": "Tenant Consolidation: Full Organization Migration",
+    "date": "2026-10-29",
+    "version": "0.1",
+    "prepared_by": "Premier Cloud Inc."
+  },
+
+  "customer": {
+    "short_name": "Zenchef",
+    "industry": "Restaurant booking and guest management software",
+    "profile": "Zenchef and CoverManager are consolidating into a single entity, with everything to sit under Zenchef. Zenchef operates the destination Google Workspace tenant (zenchef.com); CoverManager operates the source tenant (covermanager.com) and holds the users, data and GCP projects in scope. The engagement merges the CoverManager tenant into Zenchef's, with covermanager.com added to the Zenchef tenant so every user keeps their existing address.",
+    "contact": {
+      "name": "Javier Gonzalez Salvador",
+      "title": "Head of Engineering, Zenchef",
+      "email": "javiergonzalez@covermanager.com"
+    },
+    "stakeholders": [
+      {
+        "role": "Technical Lead / Primary Contact",
+        "name": "Javier Gonzalez Salvador",
+        "title": "Head of Engineering, Zenchef",
+        "email": "javiergonzalez@covermanager.com",
+        "description": "Owns the shared migration tracker and all source-tenant inventory, access and pre-cutover preparation on the customer side."
+      },
+      {
+        "role": "Procurement / Programme Contact",
+        "name": "Kunesan Thayalan",
+        "email": "kunesan.thayalan@welii.io",
+        "description": "Opened the engagement and coordinates the consolidation programme between the two entities."
+      },
+      {
+        "role": "Zenchef Tenant Contact",
+        "name": "Julien Balmont",
+        "email": "julien@zenchef.com",
+        "description": "Destination-tenant side. Owner of tenant-wide Zenchef settings and destination super admin provisioning (tracker Q7, Q8, T7)."
+      }
+    ]
+  },
+
+  "partner": {
+    "team": [
+      {
+        "role": "Client Success Manager",
+        "name": "Michael Penrose",
+        "description": "Commercial ownership, client communication and engagement governance"
+      },
+      {
+        "role": "Operations",
+        "name": "Ian Basham",
+        "description": "Delivery oversight and migration scheduling"
+      },
+      {
+        "role": "Migration Specialist",
+        "name": "Bruno Maia",
+        "description": "CloudM configuration, placeholder creation, background sync, cutover and delta execution"
+      },
+      {
+        "role": "Google Cloud Architect",
+        "name": "Yahya Derbeli",
+        "description": "GCP footprint review, project move, billing and cost monitoring"
+      }
+    ]
+  },
+
+  "agreement": {
+    "msa_style": "public_link",
+    "msa_url": "https://premiercloud.com/master-services-agreement.pdf"
+  },
+
+  "background": {
+    "objective": "Zenchef is engaging Premier Cloud Inc., a Google Cloud Premier Partner, to consolidate the CoverManager Google Workspace tenant into the Zenchef tenant as part of a corporate merger of the two entities. The entire CoverManager organization is in scope. covermanager.com is added to the Zenchef tenant as a secondary domain so that every user keeps their existing @covermanager.com address, and historical mail, Drive, shared drive, calendar and contact data is transferred with CloudM Migrate ahead of a single out-of-hours cutover.",
+    "key_focus_areas": [
+      {
+        "label": "Address Continuity",
+        "text": "covermanager.com moves to the Zenchef tenant as a secondary domain. Every user keeps the same address; no mailbox renaming and no alias-domain substitution."
+      },
+      {
+        "label": "Historical Data Migration",
+        "text": "CloudM Migrate transfers mail, My Drive, shared drives, calendar and contacts from the covermanager.com tenant into pre-created placeholder accounts in the zenchef.com tenant. Nothing is deleted from the source."
+      },
+      {
+        "label": "Minimal Cutover Downtime",
+        "text": "Background sync runs while users continue working normally; the domain move, rename and DKIM change happen out of hours, with a short mail interruption and a final delta pass afterwards."
+      },
+      {
+        "label": "GCP Continuity",
+        "text": "The CoverManager GCP organization, its projects, billing and service accounts are reviewed separately from the Workspace migration. The OAuth project is moved rather than recreated, and a minimum footprint is retained in the old tenant to keep the GCP organization alive."
+      }
+    ],
+    "engagement_type": "This is an execution engagement. Premier Cloud performs the migration end to end, including environment scan, placeholder creation, background sync, cutover and the final delta, with defined preparation and post-migration tasks owned by the Customer."
+  },
+
+  "migration": {
+    "source_platform": "Google Workspace (covermanager.com)",
+    "destination_platform": "Google Workspace (zenchef.com)",
+    "tool": "CloudM Migrate",
+    "user_count": 262,
+    "domain_count": 1,
+    "plan_link": "https://docs.google.com/spreadsheets/d/17nodws89k17I4cJ6QzmpSO2_Etk2_rtmhce9qrjxk-Y/edit",
+    "plan_note": "The phase list, task split, decisions taken and open questions are maintained jointly by Premier Cloud and the Customer in the shared migration tracker, which both parties treat as the single source of truth for delivery.",
+    "volumes": [
+      {
+        "label": "Source accounts",
+        "size": "289 total; 282 active",
+        "notes": "5 suspended and 2 archived. 20 active accounts flagged for review (no login in 90+ days or never). 262 accounts proposed to migrate after cleanup. Admin SDK export, 28/10/2026."
+      },
+      {
+        "label": "Shared / service mailboxes",
+        "size": "21",
+        "notes": "Administration, billing, support, legal, DPO, marketing, noreply and similar. Regular licensed users, not Google Groups. 7 accounts exceed 100 GB, mostly shared mailboxes; the largest single account is approximately 580 GB."
+      },
+      {
+        "label": "Groups and aliases",
+        "size": "51 groups, 428 memberships, 153 user aliases",
+        "notes": "4 groups have external members; 2 groups are empty."
+      },
+      {
+        "label": "Shared drives",
+        "size": "59 shared drives, approximately 1.0 TB",
+        "notes": "Confirmed by the Customer on 29/10/2026 from Admin Console reports dated 27/10/2026."
+      },
+      {
+        "label": "Total data volume",
+        "size": "Approximately 5.5 TB",
+        "notes": "Gmail approximately 1.9 TB; My Drive approximately 2.5 TB; shared drives approximately 1.0 TB; Google Photos approximately 80 GB."
+      }
+    ],
+    "decisions_pending": [
+      "Confirmation that covermanager.com will be added to the Zenchef tenant as a secondary domain and not as an alias domain (tracker Q3).",
+      "Dedicated super admin accounts for Premier Cloud on both the source and destination tenants, which the Customer has stated will be created once this SOW is signed (tracker T6, T7, Q11).",
+      "Owner for rebuilding SAML applications and domain-wide delegation on the destination tenant (tracker T12, Q5).",
+      "Owner for rebuilding routing, content compliance and email-to-case on the destination tenant, and whether these can be tested before cutover (tracker T11, Q6).",
+      "Owner and sequencing for moving the OAuth GCP project into the Zenchef organization, before or after cutover (tracker T14, Q9).",
+      "The minimum licences and super admin accounts to retain in the CoverManager tenant so the GCP organization stays alive, and who owns decommissioning the remainder (tracker T12 timeline row, Q10).",
+      "Zenchef tenant-wide settings that will apply to migrated users - outbound gateway or relay, spam handling, SSO and external forwarding - and whether CoverManager gets a dedicated OU with delegated admin rights (tracker Q7, Q8, for Zenchef)."
+    ]
+  },
+
+  "provenance": {
+    "sources": [
+      "Zenchef // Premier Cloud // Domain Migration Sync, 8 October 2026 - Gemini meeting notes",
+      "CoverManager -> Zenchef - Workspace migration tracker, shared by the Customer 28 October 2026 (Overview, Timeline, Tasks, Open questions, Decisions, Inventory summary tabs)",
+      "Email, Javier Gonzalez Salvador to Michael Penrose, 28 October 2026 - scope, naming scheme and super admin approach",
+      "Email, Javier Gonzalez Salvador to Michael Penrose, 29 October 2026 - data volumes and shared drive count",
+      "Pre-Sales Engineering tracker, row 'Zenchef - Renewal + Domain / GCP Migration' (PSE-312)"
+    ],
+    "assumed": [
+      "sow_type workspace_migration, by analogy with the Habyt to Hmlet Google-to-Google tenant merge.",
+      "CloudM Migrate as the migration tool, stated on the 8 October scoping call and reflected in the tracker phases.",
+      "262 as the in-scope user count, being the tracker's 'accounts proposed to migrate' after the Customer's cleanup of the 20 accounts flagged for review. Not yet confirmed as the contracted figure."
+    ],
+    "unanswered": [
+      "Contracting legal entity and its registered address - Zenchef, CoverManager or a merged entity.",
+      "Authorised signatory name and title.",
+      "Total fixed price and payment terms; the opportunity is logged as value TBD at Discovery stage.",
+      "Whether any Google funding applies, or whether this is customer-paid.",
+      "Term effective date, end date and duration; the Customer has asked for per-phase target dates in the tracker Timeline tab.",
+      "Per-phase effort estimates and the resource allocation behind them.",
+      "Whether the GCP review and project move are in scope of this SOW or handled separately, as the Customer has agreed GCP can be split out.",
+      "Whether the renewal element of the opportunity is part of this SOW or a separate paper."
+    ]
+  }
+}
