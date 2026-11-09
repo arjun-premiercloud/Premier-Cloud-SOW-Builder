@@ -37,6 +37,7 @@ CONTENTS = [
     ("scripts/sowlib.py", "scripts/sowlib.py"),
     ("scripts/render_sow.py", "scripts/render_sow.py"),
     ("scripts/validate_intake.py", "scripts/validate_intake.py"),
+    ("scripts/pm_review.py", "scripts/pm_review.py"),
     ("scripts/test_render.py", "scripts/test_render.py"),
     ("scripts/render_docx.py", "scripts/render_docx.py"),
     ("assets/premier-cloud-sow-template.docx", "assets/premier-cloud-sow-template.docx"),
@@ -89,9 +90,14 @@ Or drive the scripts directly:
 
 ```bash
 python3 sow-builder/scripts/validate_intake.py my-deal.intake.json   # what's still missing
+python3 sow-builder/scripts/pm_review.py      my-deal.intake.json   # can we deliver it?
 python3 sow-builder/scripts/render_sow.py     my-deal.intake.json -o my-deal.md
 python3   sow-builder/scripts/render_docx.py  my-deal.md -o my-deal.docx
 ```
+
+`validate_intake.py` asks whether the document can be rendered. `pm_review.py`
+asks whether the engagement can be delivered - they catch different things, and
+a SOW can pass the first and fail the second.
 
 ## Where to start reading
 
@@ -100,7 +106,8 @@ python3   sow-builder/scripts/render_docx.py  my-deal.md -o my-deal.docx
 | `SKILL.md` | The workflow, start to finish |
 | `references/required-inputs.md` | Discovery-call checklist by project type |
 | `references/extraction-playbook.md` | Turning what people say into intake fields |
-| `references/review-checklist.md` | Run before any SOW leaves Premier Cloud |
+| `references/review-checklist.md` | Is the document correct? Run before any SOW leaves |
+| `references/pm-review.md` | Can we deliver it? The senior PM review |
 | `references/msa-clause.md` | The Master Services Agreement clause standard |
 | `library/clauses.yaml` | The house language. Edit here, never in the output |
 | `examples/` | Reference intakes reconstructed from issued SOWs |

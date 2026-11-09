@@ -153,7 +153,7 @@
   "resources": [
     { "role": "Project Manager", "hours": 90, "responsibilities": "Project planning, weekly status, stakeholder coordination, sign-off" },
     { "role": "Migration Engineers (x2)", "hours": 298, "responsibilities": "Migration tool configuration, batch execution, wave management and troubleshooting" },
-    { "role": "Endpoint Engineer", "hours": 96, "responsibilities": "Endpoint scripting, GCPW deployment, domain unjoin and SSO validation support" }
+    { "role": "Endpoint Engineer", "hours": 216, "responsibilities": "Endpoint scripting, GCPW deployment, domain unjoin and SSO validation support" }
   ],
 
   "success_criteria": [

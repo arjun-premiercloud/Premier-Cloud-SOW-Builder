@@ -1,6 +1,6 @@
 ---
 name: sow-builder
-description: Build a Premier Cloud Statement of Work from meeting notes, a transcript, a discovery call summary, or a Google Doc, and render it in the house design as .docx or a Google Doc. Use whenever the user asks to draft, generate, build, reformat or update a SOW or Statement of Work, mentions turning notes or a discovery call into a SOW, asks to put a document into the Premier Cloud SOW format, or asks what inputs are needed to scope one. Handles Gemini Enterprise implementations, agent/CX pilots, Workspace migrations, and cloud infrastructure builds. Every SOW it produces binds to the Master Services Agreement.
+description: Build a Premier Cloud Statement of Work from meeting notes, a transcript, a discovery call summary, or a Google Doc, render it in the house design as .docx or a Google Doc, and review a SOW for delivery risk as a senior PM would. Use whenever the user asks to draft, generate, build, reformat or update a SOW or Statement of Work, mentions turning notes or a discovery call into a SOW, asks to put a document into the Premier Cloud SOW format, asks what inputs are needed to scope one, or asks to review, sanity-check or sign off a SOW before it goes to a customer — including whether it can be staffed, whether the timeline is realistic, or what the delivery risks are. Handles Gemini Enterprise implementations, agent/CX pilots, Workspace migrations, and cloud infrastructure builds. Every SOW it produces binds to the Master Services Agreement.
 ---
 
 # SOW Builder
@@ -99,8 +99,31 @@ Read `references/msa-clause.md` before changing anything in this area.
 
 ## Step 6 — Review before it goes anywhere
 
-Walk `references/review-checklist.md`. It is short and every item on it has been
-wrong in a real document at least once.
+Two reviews, asking different questions. Do both.
+
+**6a. Is the document correct?** Walk `references/review-checklist.md`. It is
+short and every item on it has been wrong in a real document at least once.
+
+**6b. If we sign this, can we deliver it?** Start with the mechanical pass:
+
+```bash
+python3 scripts/pm_review.py intake/<customer>.intake.json
+```
+
+It reports delivery risk by severity — term and schedule integrity, implied
+FTE, resource reconciliation, effective hourly rate, unowned dependencies,
+acceptance and change control. Exit 1 means at least one HIGH finding.
+
+Then do the senior PM review in `references/pm-review.md`, which is the part
+that matters. The script only knows what is in the file; the questions that
+decide whether an engagement lands — is this team actually free, has this kind
+of work slipped before, who else is standing on the critical path — need
+evidence from the capacity tracker, past delivery projects and the customer's
+own thread. **Run it with fresh eyes**: delegate it to a subagent where one is
+available, and give it the document and the sources, not your opinion of them.
+
+A SOW can pass every item in 6a and still be undeliverable. That is what 6b is
+for.
 
 ## Step 7 — Deliver
 

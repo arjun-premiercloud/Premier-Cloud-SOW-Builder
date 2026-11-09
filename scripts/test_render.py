@@ -15,6 +15,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import pm_review  # noqa: E402
 import sowlib  # noqa: E402
 from render_sow import render  # noqa: E402
 from validate_intake import validate  # noqa: E402
@@ -117,6 +118,27 @@ def main() -> int:
                   f"{name}: rendered SOW does not carry the canonical MSA link {canonical}")
         check("wp-content/uploads" not in out,
               f"{name}: uses the brittle dated wp-content MSA link instead of the redirect")
+
+        # The PM delivery review must run on every intake, and the shipped
+        # examples must be internally staffable. Commercial and closure gaps
+        # are expected in synthetic examples; arithmetic that does not hold
+        # between the schedule, the resource table and the term is not. A
+        # shipped example once quoted 216 hours of work against an engineer
+        # allocated 96.
+        try:
+            findings = pm_review.run(intake).findings
+        except Exception as exc:  # noqa: BLE001
+            FAILURES.append(f"{name}: pm_review raised {type(exc).__name__}: {exc}")
+            findings = []
+        for f in findings:
+            check(set(f) >= {"severity", "area", "finding", "so_what"},
+                  f"{name}: malformed pm_review finding {f!r}")
+        internal = [f for f in findings
+                    if f["severity"] == "HIGH"
+                    and f["area"] in ("Term", "Schedule", "Capacity")]
+        check(not internal,
+              f"{name}: pm_review HIGH on internal consistency: "
+              f"{[f['finding'] for f in internal]}")
 
         # Section numbering must be contiguous and start at 1.
         numbers = [s["n"] for s in sowlib.section_plan(intake["sow_type"], intake)]
