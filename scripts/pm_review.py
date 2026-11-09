@@ -57,6 +57,15 @@ UNOWNED = re.compile(
     re.I,
 )
 
+# A deliverable phrased like this authorises the work that follows it.
+GATING = re.compile(r"sign-?off|signed off|approv(ed|al)|accept(ed|ance)", re.I)
+
+# Dates inside prose, for payment terms: "November 28, 2026" or "2026-11-28".
+PROSE_DATE = re.compile(
+    r"\b(?:January|February|March|April|May|June|July|August|September|"
+    r"October|November|December)\s+\d{1,2},\s+\d{4}\b|\b\d{4}-\d{2}-\d{2}\b"
+)
+
 
 def parse_date(value):
     """Return a date, or None if the value is prose rather than a date."""
@@ -169,6 +178,39 @@ def check_schedule(intake, g, rep, start, end, weeks):
                     f"'{label}' ends before it starts ({rs} to {re_}).",
                     "Arithmetic error that will show in the client-facing table.")
 
+    # A deliverable that gates later work has to land before that work starts.
+    for row in schedule:
+        gate_end = parse_date(row.get("end_date"))
+        gate_start = parse_date(row.get("start_date")) or gate_end
+        if not gate_end or not GATING.search(str(row.get("deliverable") or "")):
+            continue
+        # Only work that begins *inside* the gate's own window is a conflict.
+        # Anything starting earlier is upstream of the gate, not authorised
+        # by it, and the gate's own trailing deliverables are not blocked.
+        # Parallel tracks each carry their own gates, so a Track B pilot
+        # running alongside a Track A sign-off is the plan working, not a
+        # conflict. Only compare within a track.
+        blocked = []
+        for r in schedule:
+            if r is row or r.get("track") != row.get("track"):
+                continue
+            rs = parse_date(r.get("start_date"))
+            if rs and gate_start <= rs < gate_end:
+                blocked.append(r)
+        if blocked:
+            names = ", ".join(
+                f"'{(r.get('phase') or r.get('activity') or '?')[:40]}'"
+                for r in blocked[:3])
+            rep.add(HIGH, "Schedule",
+                    f"'{(row.get('phase') or row.get('activity'))[:50]}' delivers "
+                    f"\"{str(row.get('deliverable'))[:72]}\" on {gate_end}, but "
+                    f"{names} start before that.",
+                    "Work that a sign-off is supposed to authorise is scheduled "
+                    "to begin before the sign-off exists. Either the gate is "
+                    "decorative, or the plan slips the moment the customer "
+                    "takes the review seriously.",
+                    "Move the gate earlier, or start the dependent work after it.")
+
     if hours and weeks:
         fte = hours / (weeks * BILLABLE_HOURS_PER_WEEK)
         if fte > 3.0:
@@ -188,6 +230,13 @@ def check_schedule(intake, g, rep, start, end, weeks):
     return hours
 
 
+def g_schedule(intake):
+    """The dated plan, however this sow_type expresses it."""
+    return (sowlib.get(intake, "timeline.schedule")
+            or sowlib.get(intake, "timeline.phases")
+            or [])
+
+
 def check_resources(intake, g, rep, schedule_hours):
     resources = g(intake, "resources") or []
     if not resources:
@@ -202,6 +251,18 @@ def check_resources(intake, g, rep, schedule_hours):
                for r in resources
                if isinstance(r.get("hours"), (int, float))]
     total = sum(h for _, h in numeric)
+
+    # Hours quoted as a single lump against a multi-phase plan cannot be
+    # checked by anyone - not us, not the customer, not this script.
+    if total and not schedule_hours and len(g_schedule(intake)) > 1:
+        rep.add(MEDIUM, "Capacity",
+                f"{total:.0f} hours are quoted as a lump against a "
+                f"{len(g_schedule(intake))}-phase plan, with no hours per "
+                "phase.",
+                "Nothing can be checked: not whether a phase is underfunded, "
+                "not whether we are behind at the halfway point, and not "
+                "which phase to cut if the estimate is wrong.",
+                "Break the hours down by phase, even approximately.")
 
     # Direction matters. Scheduled work with nobody allocated to it is a
     # delivery hole; allocated hours above the schedule is usually project
@@ -238,7 +299,7 @@ def check_resources(intake, g, rep, schedule_hours):
                         "Name a backup, or spread the work.")
 
 
-def check_commercials(intake, g, rep, hours):
+def check_commercials(intake, g, rep, hours, start=None):
     price = g(intake, "pricing.total_fixed_price")
     currency = g(intake, "pricing.currency") or "USD"
     funding = g(intake, "pricing.google_funding") or 0
@@ -282,12 +343,30 @@ def check_commercials(intake, g, rep, hours):
                 "with nothing in the SOW to fall back on.",
                 "Set pricing.funding_clawback: true.")
 
-    if price and not g(intake, "pricing.payment_terms"):
+    terms = g(intake, "pricing.payment_terms")
+    if price and not terms:
         rep.add(MEDIUM, "Commercials",
                 "No payment terms.",
                 "Invoicing trigger and schedule are undefined, which is how "
                 "final payments stall for months after delivery ends.",
                 "State the trigger and the terms, e.g. Net 30 on acceptance.")
+    elif terms and start:
+        # An invoice dated before the engagement starts is dated before the
+        # SOW is signed, on anything executed "as of the date of last
+        # signature".
+        for text in PROSE_DATE.findall(terms):
+            when = parse_date(text)
+            if when and when < start:
+                rep.add(HIGH, "Commercials",
+                        f"An invoice is dated {when}, before the term begins "
+                        f"({start}).",
+                        "The SOW executes on the date of last signature. An "
+                        "invoice date that has passed, or falls before "
+                        "signature, is unenforceable as written and has to be "
+                        "renegotiated at exactly the wrong moment.",
+                        "Tie the first invoice to signature or to the "
+                        "effective date, not to a fixed calendar date.")
+                break
 
 
 def check_dependencies(intake, g, rep):
@@ -394,7 +473,7 @@ def run(intake):
     start, end, weeks = check_term(intake, g, rep)
     hours = check_schedule(intake, g, rep, start, end, weeks)
     check_resources(intake, g, rep, hours)
-    check_commercials(intake, g, rep, hours)
+    check_commercials(intake, g, rep, hours, start)
     check_dependencies(intake, g, rep)
     check_closure(intake, g, rep)
     check_provenance(intake, g, rep)

@@ -1,0 +1,202 @@
+{
+  "_comment": "Reverse-engineered from the issued draft 'Google Cloud Landing Zone' SOW v2.0 (Draft), dated 2026-11-06, doc 19OWj16PjnL77OwBBJtHG9iui3MDiNjl-j4GY-QX94T8. Built to run the PM delivery review against the document as written. Values are read from the document, not invented - where the document is silent the field is left absent, which is itself part of the test.",
+  "sow_type": "infrastructure_build",
+
+  "document": {
+    "title": "Google Cloud Landing Zone",
+    "subtitle": "Organization & Resource Hierarchy | Entra ID Single Sign-On | Billing Consolidation",
+    "date": "2026-11-06",
+    "version": "2.0 (Draft)",
+    "prepared_by": "Premier Cloud Inc."
+  },
+
+  "customer": {
+    "legal_name": "Automobile et Touring Club du Québec (A.T.C.Q.)",
+    "short_name": "CAA-Québec",
+    "industry": "Automobile club and member services",
+    "profile": "CAA-Québec's Google Cloud usage began within its marketing function, with projects built alongside external partners. There is no Google Cloud organization, users sign in with individually created Google accounts not tied to Microsoft Entra ID, and spend is spread across three billing accounts.",
+    "address": "444 Rue Bouvier, Québec (Québec) G2J 1E3",
+    "contact": {
+      "name": "Guilherme Rattes",
+      "title": "Director of Solution Architects",
+      "email": "guilherme.rattes@caaquebec.com"
+    },
+    "stakeholders": [
+      {"role": "Primary Point of Contact", "name": "Guilherme Rattes", "title": "Director of Solution Architects"},
+      {"role": "Technical Lead / Architect", "name": "Nicolas Verret", "title": "Architect"},
+      {"role": "Applications", "name": "Jérôme Théraulaz", "title": "Principal Director, Applications"},
+      {"role": "Entra ID, DNS & Billing Administrators", "name": "To be confirmed at kickoff", "title": "To be confirmed at kickoff"}
+    ]
+  },
+
+  "partner": {
+    "team": [
+      {"role": "Account Manager", "name": "Museb Nabil", "description": "Commercial ownership, billing consolidation, change control and executive coordination"},
+      {"role": "Google Cloud Architect, Engagement Lead", "name": "Kevin Printz", "description": "Leads discovery and design, writes and applies the Terraform code and Azure DevOps pipelines, configures Cloud Identity, identity federation and PAM, prepares the run-cost estimate, and delivers the documentation and knowledge transfer"},
+      {"role": "Project Manager", "description": "Scheduling, weekly status reporting, change control and quality review (10% allocation)"}
+    ]
+  },
+
+  "agreement": {
+    "msa_style": "public_link",
+    "execution_date": "the date of last signature"
+  },
+
+  "term": {
+    "effective_date": "2026-12-01",
+    "end_date": "2027-02-05"
+  },
+
+  "background": {
+    "objective": "Establish the platform foundation CAA-Québec needs to take control of its Google Cloud environment: a Google Cloud organization and resource hierarchy, single sign-on with Entra ID as the identity source, just-in-time privileged access, baseline organization policies, centralized audit logging, and one consolidated bill, defined as code with Terraform and delivered in CAA-Québec's Azure DevOps."
+  },
+
+  "scope": {
+    "statement": "Partner will design the Google Cloud landing zone with Customer, write the Terraform code and Azure DevOps pipelines, and deploy the foundation in joint sessions with Customer's team.",
+    "service_sections": [
+      {"heading": "Kickoff & Discovery", "bullets": [
+        "Kickoff, access onboarding and a discovery workshop with Customer's team.",
+        "Inventory of existing projects, billing accounts, enabled services, service accounts and caaquebec.com Google accounts.",
+        "Review of Customer's Entra ID readiness, Azure DevOps setup and Terraform conventions."]},
+      {"heading": "Foundation Design", "bullets": [
+        "Foundation Design Document covering folder structure, group-based IAM, privileged access model, organization policy baseline, logging, security recommendations, Terraform repository and pipeline structure, and the migration plan.",
+        "Identity federation options presented with pros and cons; approach selected and documented.",
+        "Security Command Center Standard and Premium tiers compared with features, controls and estimated cost.",
+        "Estimated monthly run cost for each service the foundation enables.",
+        "Microsoft Sentinel integration guidance with estimated Google Cloud cost including network egress to Azure.",
+        "Design reviewed and signed off by Customer before the build starts."]},
+      {"heading": "Identity Foundation", "bullets": [
+        "Cloud Identity (Free edition) activated, domain verified, Google Cloud organization created with break-glass super administrator accounts.",
+        "Selected Entra ID federation approach implemented in joint sessions, keeping conditional access and MFA at sign-in.",
+        "Existing caaquebec.com Google accounts handled according to the approved plan.",
+        "Privileged Access Manager configured for just-in-time elevation.",
+        "Sign-in validated with a pilot group before rollout."]},
+      {"heading": "Foundation Build (Terraform & Azure DevOps)", "bullets": [
+        "Terraform bootstrap and Terraform code for folder hierarchy, IAM bindings, PAM entitlements, organization policies, logging, Security Command Center, billing export and budgets.",
+        "Terraform code committed to Customer's Azure DevOps repository with pipelines to plan and apply changes.",
+        "Deployment performed in shared sessions with Customer's team.",
+        "Organization policies deployed in dry-run mode first, then enforced once validated.",
+        "Organization-level aggregated log sink, Essential Contacts, and Security Command Center Standard enabled.",
+        "Existing projects moved into the organization and linked to the consolidated billing account; billing export and budgets configured.",
+        "Components not supported by the Google Terraform provider configured manually and documented."]},
+      {"heading": "Validation & Handover", "bullets": [
+        "Validation of sign-in, access and policy behavior.",
+        "Custom as-built documentation, README files, architecture diagrams and runbooks.",
+        "Knowledge transfer session(s).",
+        "Closeout review against the success criteria."]}
+    ],
+    "out_of_scope_extra": [
+      "Application-level refactoring beyond what is required for platform compatibility.",
+      "Ongoing support, maintenance, or operation of the delivered environment.",
+      "Security assessments, penetration testing, or third-party compliance audits.",
+      "Network landing zone: Shared VPC, hub-and-spoke networking, hybrid connectivity, Cloud DNS and firewall policy design.",
+      "Private connectivity between Google Cloud and Azure.",
+      "Implementation of Google Cloud log forwarding to Microsoft Sentinel, and any configuration in Sentinel.",
+      "Activation of Security Command Center Premium, and remediation of findings on existing workloads.",
+      "Entra ID configuration beyond the Google Cloud integration.",
+      "BigQuery query and table optimization.",
+      "Gemini Enterprise deployment, AI workflows and AI proof-of-concept work.",
+      "Re-architecture or migration of existing BigQuery datasets or Vertex AI Search applications.",
+      "Cancelling or changing subscriptions, refunds and credits.",
+      "Google Workspace deployment or configuration.",
+      "Managed services and ongoing operational support after closeout.",
+      "On-site delivery."
+    ]
+  },
+
+  "timeline": {
+    "note": "The engagement is delivered in two blocks around CAA-Québec's holiday period. No Customer sessions are scheduled between December 14, 2026 and January 8, 2027.",
+    "schedule": [
+      {"phase": "1. Kickoff & Discovery", "activity": "Kickoff and access onboarding; discovery workshop; inventory of projects, billing accounts, services and Google accounts; billing consolidation initiated", "deliverable": "Current-State Inventory; Run-Cost Estimate", "start_date": "2026-12-01", "end_date": "2026-12-11"},
+      {"phase": "2. Foundation Design (draft)", "activity": "Draft design and architecture diagrams; identity federation options; SCC tier comparison; Sentinel requirements", "deliverable": "Foundation Design Document (draft)", "start_date": "2026-12-01", "end_date": "2026-12-11"},
+      {"phase": "2. Foundation Design (review and sign-off)", "activity": "Design review with Customer and selection of the federation approach", "deliverable": "Foundation Design Document, signed off by Customer", "start_date": "2027-01-11", "end_date": "2027-01-15"},
+      {"phase": "3. Identity Foundation", "activity": "Cloud Identity and organization; Entra ID federation in joint sessions; handling of existing accounts; PAM; pilot and rollout", "deliverable": "Organization created; Entra ID sign-in live; PAM configured", "start_date": "2027-01-11", "end_date": "2027-01-29"},
+      {"phase": "4. Foundation Build", "activity": "Terraform bootstrap and Azure DevOps pipelines; hierarchy, IAM, PAM entitlements, policies in dry-run, logging, SCC, billing export, budgets; project migration and billing relink; shared deployment sessions", "deliverable": "Terraform code and pipelines in Customer's Azure DevOps; deployed landing zone; consolidated billing account", "start_date": "2027-01-11", "end_date": "2027-01-29"},
+      {"phase": "5. Validation & Handover", "activity": "Policy enforcement; validation; documentation; knowledge transfer; closeout", "deliverable": "As-built documentation, READMEs, diagrams and runbooks; knowledge transfer; sign-off", "start_date": "2027-02-01", "end_date": "2027-02-05"}
+    ]
+  },
+
+  "resources": [
+    {"role": "Google Cloud Architect, Engagement Lead", "hours": 70, "responsibilities": "Discovery, design, Terraform and Azure DevOps pipelines, Cloud Identity, identity federation, PAM, run-cost estimate, documentation and knowledge transfer"},
+    {"role": "Project Manager", "hours": 7, "responsibilities": "Scheduling, weekly status reporting, change control and quality review"}
+  ],
+
+  "governance": {
+    "meetings": [
+      {"sr": "01", "meeting": "Project Kickoff", "cadence": "Once (week of Dec 1, 2026)", "purpose": "Scope, contacts, access, change windows and schedule confirmed", "customer": "Required", "partner": "Required"},
+      {"sr": "02", "meeting": "Discovery Workshop", "cadence": "December 2026", "purpose": "Current environment, Entra ID, Azure DevOps and Terraform conventions", "customer": "Required", "partner": "Required"},
+      {"sr": "03", "meeting": "Design Review & Sign-off", "cadence": "Week of Jan 11, 2027", "purpose": "Foundation design, federation approach, SCC tier, run-cost estimate", "customer": "Required", "partner": "Required"},
+      {"sr": "04", "meeting": "Weekly Status Review", "cadence": "Weekly while active", "purpose": "Progress, risks, dependencies, upcoming change windows", "customer": "Required", "partner": "Required"},
+      {"sr": "05", "meeting": "Joint Configuration & Deployment Sessions", "cadence": "As scheduled", "purpose": "Entra ID configuration and Terraform deployment with Customer's team", "customer": "Required", "partner": "Required"},
+      {"sr": "06", "meeting": "Knowledge Transfer & Closure", "cadence": "Week of Feb 1, 2027", "purpose": "Walkthrough of design and code; review against success criteria", "customer": "Required", "partner": "Required"}
+    ]
+  },
+
+  "assumptions": [
+    "Customer will provide timely access to the technical points of contact required for architecture decisions and reviews.",
+    "All Services will be performed remotely by Partner.",
+    "The fixed price is based on the current environment as described by Customer (a small environment of marketing projects). A materially larger inventory found during discovery is handled through change control.",
+    "Partner applies the Terraform code to Customer's environment through Azure DevOps pipelines, in shared sessions with Customer's team.",
+    "Billing consolidation is provided at no additional fee and does not add to the fixed price.",
+    "The engagement, including meetings and documentation, is delivered in English or French, at Customer's choice."
+  ],
+
+  "prerequisites_before": [
+    "DNS administrator available to add the TXT record that verifies caaquebec.com in Cloud Identity.",
+    "At least two named individuals designated to hold the break-glass super administrator accounts.",
+    "An Entra ID administrator with rights to create and configure enterprise applications available for the identity design and joint configuration sessions.",
+    "Owners of the billing accounts and existing projects identified, with a Billing Account Administrator and a project Owner available for billing relinking and project migration.",
+    "An Azure DevOps project and repository for the Terraform code, with the permissions Partner needs to create pipelines and service connections."
+  ],
+
+  "risks": [
+    {"risk": "Delay due to product feature issues", "mitigation": "Partner will collaborate to resolve any product related issues and revisit timelines."},
+    {"risk": "Differing expectations between Partner and Customer", "mitigation": "Frequent stakeholder alignment meetings; clear SOW and Acceptance Criteria; RACI matrices."},
+    {"risk": "Compatibility issues between Customer's existing systems and Google Cloud architecture", "mitigation": "Thorough technical discovery to identify integration points and security requirements."},
+    {"risk": "Data privacy and compliance concerns when moving to the cloud", "mitigation": "Include a separately scoped security and compliance assessment as part of onboarding."},
+    {"risk": "Technical issues due to inadequate testing", "mitigation": "Comprehensive testing phases (unit, system, integration, UAT); automated testing tools."},
+    {"risk": "Loss of momentum or context over the December 14 to January 8 pause", "mitigation": "December outputs are documented; the January restart opens with the design review and sign-off session."},
+    {"risk": "External marketing partners and accounts depend on current access and are disrupted by the identity change", "mitigation": "Inventory all accounts in Phase 1; define handling in the approved migration plan; validate with a pilot group."},
+    {"risk": "Organization policies disrupt existing BigQuery or Vertex AI workloads", "mitigation": "Deploy in dry-run mode, review with Customer, enforce only within approved change windows."},
+    {"risk": "Azure DevOps pipelines or agents are not yet activated in Customer's environment", "mitigation": "Customer confirms the Azure DevOps CI/CD setup before January 11, 2027."},
+    {"risk": "Google Cloud run costs increase once foundation services are enabled", "mitigation": "Run-cost estimate per service delivered in Phase 1; budgets and alerts configured during the build."}
+  ],
+
+  "success_criteria": [
+    "Organization - A Google Cloud organization exists for caaquebec.com, and all in-scope projects sit in the approved folder hierarchy.",
+    "Identity - Users sign in to Google Cloud with their Entra ID credentials, and access is granted through groups rather than to individual accounts.",
+    "Privileged access - Administrative permissions are elevated just in time through Privileged Access Manager, with no standing privileged access beyond the break-glass accounts.",
+    "Guardrails - The baseline organization policies are enforced, after dry-run validation, without disrupting existing workloads.",
+    "Billing - All in-scope projects are linked to a single consolidated billing account, with billing export to BigQuery and budgets and alerts in place.",
+    "Foundation as code - The foundation is defined in Terraform in Customer's Azure DevOps with working deployment pipelines, and manual steps are documented.",
+    "Cost visibility - The run-cost estimate, SCC tier comparison and Sentinel forwarding requirements are delivered to Customer.",
+    "Operational readiness - Customer's team has completed the knowledge transfer and can manage the foundation using the delivered documentation."
+  ],
+
+  "pricing": {
+    "currency": "CAD",
+    "total_fixed_price": 21560,
+    "line_items": [
+      {"label": "Landing Zone Implementation (70 hours at $280 CAD/hour)", "amount": 19600},
+      {"label": "Project Management (10%, 7 hours at $280 CAD/hour)", "amount": 1960},
+      {"label": "Billing Consolidation (included at no additional fee)", "amount": 0}
+    ],
+    "payment_terms": "Fifty percent (50%) of the fixed price, $10,780 CAD, will be invoiced on or before November 28, 2026, payable net thirty (30) days. The remaining fifty percent (50%) will be invoiced at the start of the January 2027 delivery block (January 11, 2027), payable net thirty (30) days."
+  },
+
+  "provenance": {
+    "sources": [
+      "Statement of Work - Google Cloud Landing Zone, v2.0 (Draft), 2026-11-06, Google Doc 19OWj16PjnL77OwBBJtHG9iui3MDiNjl-j4GY-QX94T8",
+      "Discovery calls of September 18 and October 29, 2026, as referenced in the document"
+    ],
+    "assumed": [
+      "sow_type infrastructure_build, as the nearest archetype for a platform foundation build."
+    ],
+    "unanswered": [
+      "Partner and Customer signatory names and titles are TBD in the signature block.",
+      "Customer phone number is 'To be confirmed'.",
+      "Entra ID, DNS and Billing Administrators are 'To be confirmed at kickoff'.",
+      "The 70 implementation hours are not broken down by phase, so no phase can be checked against its hours."
+    ]
+  }
+}

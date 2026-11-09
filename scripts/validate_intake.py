@@ -104,7 +104,11 @@ def schema_meta(schema: dict, dotted: str) -> dict:
         elif node.get("type") == "array" and node.get("items"):
             node = node["items"].get("properties", {}).get(part, {})
         else:
-            return {}
+            # Path not in the schema. Still return the default shape - a gap
+            # report that crashes is worse than one with a generic question,
+            # and schema drift should not take the validator down with it.
+            node = {}
+            break
     return {
         "question": node.get("x-question") or f"Provide `{dotted}`.",
         "source": node.get("x-source", ""),
