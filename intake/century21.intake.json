@@ -1,0 +1,154 @@
+{
+  "_comment": "Reverse-engineered from '[Century 21] DAF Gemini Enterprise Pilot SOW - 2026-11-05', v1.0, Google Doc 1nWsUifBhlvCUa1KwEuLA-zkiQs2L6Y7BLfTtXtTEJ-U, last modified 2026-11-12 by Ahmad Siddiqi. Built to run the PM delivery review against the document as written. Template placeholders left unfilled in the document ('Start date', 'End date', 'Customer POC ...', '[number]') are carried through verbatim rather than corrected.",
+  "sow_type": "gemini_enterprise_implementation",
+
+  "document": {
+    "title": "Gemini Enterprise Pilot SOW",
+    "date": "2026-11-05",
+    "version": "1.0",
+    "prepared_by": "Premier Cloud Team"
+  },
+
+  "customer": {
+    "legal_name": "Century 21 Canada Limited Partnership",
+    "short_name": "Century 21 Canada",
+    "industry": "Real estate brokerage franchising",
+    "address": "Customer POC Address",
+    "contact": {
+      "name": "Alistair Henry",
+      "title": "Customer POC Title",
+      "email": "alistair.henry@century21.ca"
+    },
+    "signatory": {
+      "name": "Alistair Henry",
+      "title": "Customer POC Title"
+    }
+  },
+
+  "partner": {
+    "signatory": {"name": "Lee Henwood", "title": "Sr. Sales Manager"},
+    "team": [
+      {"role": "PM", "description": "Program lead, driving activities and deliverables in the SOW."},
+      {"role": "Architect", "description": "Design the implementation; manage the project technically; bug reporting and fixes."},
+      {"role": "AI Engineer (2)", "description": "Guide the technical implementation; resolve configuration issues; bug reporting and fixes."},
+      {"role": "Identity Architect", "description": "Design the identity implementation using Google Identity."},
+      {"role": "Business Consultant", "description": "Guide use case identification and 1P/3P systems integration."}
+    ]
+  },
+
+  "agreement": {
+    "msa_style": "public_link",
+    "execution_date": "Start date"
+  },
+
+  "term": {
+    "effective_date": "Start date",
+    "end_date": "End date"
+  },
+
+  "platform": {
+    "seats": 50,
+    "identity_provider": "Google Identity",
+    "user_community": "Leadership, administrative, accounting and bookkeeping staff at the Century 21 Masters and Heritage Group brokerages, and real estate agents at the participating brokerages who use the onboarding support agent. Up to 50 active test users.",
+    "data_sources": ["Gmail", "Google Drive", "Google Calendar", "People Search", "Lone Wolf (through a custom MCP connector built by Partner)"]
+  },
+
+  "background": {
+    "business_challenges": [
+      "Deal entry to Lone Wolf: each deal is keyed into Lone Wolf by hand from the deal documents the agent submits.",
+      "Missing receipts: the bookkeeper matches each monthly credit card statement against receipts in the accounts payable inbox, and chases missing receipts and GL codes, by hand.",
+      "Onboarding support: agents set up each tool themselves and admin staff answer the same questions at each brokerage."
+    ]
+  },
+
+  "timeline": {
+    "weeks": 5,
+    "milestones": [
+      {"id": "M1", "name": "Use Case Finalization", "week": 1},
+      {"id": "M2", "name": "Solution Design Sign-off", "week": 2},
+      {"id": "M3", "name": "Solution Deployment", "week": 3},
+      {"id": "M4", "name": "Testing and Validation", "description": "Develop test cases, conduct system and integration testing, and secure Customer sign-off.", "week": 4},
+      {"id": "M5", "name": "User Adoption and Organizational Enablement", "week": 5},
+      {"id": "M6", "name": "Documentation and Transition", "week": 5}
+    ]
+  },
+
+  "deliverables": [
+    {"name": "Deliverable 1", "detail": "Use Cases Document", "timeline": "End of Milestone 1"},
+    {"name": "Deliverable 2", "detail": "Project Kickoff Deck, Delivery Guide, and Discovery Findings Document", "timeline": "End of Milestone 1"},
+    {"name": "Deliverable 3", "detail": "Solution Architecture Design", "timeline": "End of Milestone 2"},
+    {"name": "Deliverable 4", "detail": "End-to-end solution design and deployment", "timeline": "End of Milestone 3"},
+    {"name": "Deliverable 5", "detail": "User Testing Findings Document", "timeline": "End of Milestone 4"},
+    {"name": "Deliverable 6", "detail": "User Adoption and Organizational Enablement workshop(s) complete and related assets shared", "timeline": "End of Milestone 5"},
+    {"name": "Deliverable 7", "detail": "Final TDD & Project Closeout documentation", "timeline": "End of Milestone 6"}
+  ],
+
+  "governance": {
+    "meetings": [
+      {"sr": "01", "meeting": "Project Kickoff", "cadence": "Once"},
+      {"sr": "02", "meeting": "Discovery Sessions", "cadence": "Week 1"},
+      {"sr": "03", "meeting": "Weekly Project Management Review", "cadence": "Weekly"},
+      {"sr": "04", "meeting": "Project Evaluation Review", "cadence": "Weekly"},
+      {"sr": "05", "meeting": "Ad-Hoc Calls", "cadence": "On demand"},
+      {"sr": "06", "meeting": "Project Closure & Next Steps", "cadence": "Final week"}
+    ]
+  },
+
+  "assumptions": [
+    "Additional data connectors will impact the delivery schedule and cost.",
+    "Customer is using compatible versions of the identified connectors and source systems.",
+    "A single identity provider (Google Identity) will be supported for this engagement.",
+    "Customer will grant Partner's team the necessary administrative rights and permissions within their environment to configure the required services for the Gemini Enterprise pilot.",
+    "Customer shall assign qualified subject matter experts and technical points of contact to support Partner during this engagement.",
+    "All Services will be performed remotely by Partner from North America.",
+    "The pilot runs as a single Gemini Enterprise deployment under one Customer billing account.",
+    "Lone Wolf actions are tested in Lone Wolf's test environment if Lone Wolf provides one. Otherwise, with Customer's approval, testing uses clearly marked test deals in Customer's Lone Wolf account, which Customer removes after testing.",
+    "If Customer has not obtained Lone Wolf API access by the end of Milestone 2 (Solution Design Sign-off), Partner and Customer will agree in writing to either adjust the timeline or replace deal entry with another no-code use case of similar effort.",
+    "Deal entry covers one (1) pilot brokerage and the deal fields agreed during solution design.",
+    "The Lone Wolf connector is built on Lone Wolf's API as documented when this SOW is signed. Changes Lone Wolf makes to the API during the engagement are handled through a change request.",
+    "The missing receipt workflow covers the company credit card statements of the participating brokerages, in one (1) statement format per brokerage, for up to [number] cardholders.",
+    "The onboarding support agent answers only from the guides that Customer supplies. Partner configures the agent but does not write or maintain the guides.",
+    "The monthly missing receipt runs are started on request by a pilot user. Gemini Enterprise scheduled runs use the author's credentials, which expire every 14 days, so the pilot does not rely on them."
+  ],
+
+  "risks": [
+    {"risk": "Delay due to product feature issues", "mitigation": "Partner will collaborate to resolve any product-related issues and revisit timelines."},
+    {"risk": "Differing expectations between Partner and Customer", "mitigation": "Frequent stakeholder alignment meetings; clear SOW and Acceptance Criteria; RACI matrices."},
+    {"risk": "Compatibility issues between Customer's existing systems and Google Cloud architecture", "mitigation": "Thorough technical discovery."},
+    {"risk": "Data privacy and compliance concerns when moving to the cloud", "mitigation": "Include a separately scoped security and compliance assessment as part of onboarding."},
+    {"risk": "Technical issues due to inadequate testing", "mitigation": "Comprehensive testing phases (unit, system, integration, UAT); automated testing tools."}
+  ],
+
+  "success_criteria": [
+    "Complete end-to-end set up and system integration on Customer's Google Cloud environment with 5 connectors.",
+    "Each of the three use cases in Section 3 runs end to end with the pilot cohort on Customer's data.",
+    "Users can effectively search and retrieve information across integrated systems.",
+    "Timely onboarding of users with 50 users onboarded using a scalable framework with minimal technical issues and adoption across the user base.",
+    "High tool activation and sustained usage rates across the pilot user cohorts, demonstrating positive user adoption and value.",
+    "Positive customer feedback and successful pilot handover, ensuring readiness for future scalability and collaboration."
+  ],
+
+  "pricing": {
+    "currency": "USD",
+    "total_fixed_price": 50000,
+    "google_funding": 50000,
+    "funding_program": "Google Deal Acceleration Funds (DAF)",
+    "payment_terms": "100% Google-funded; the Google funding line equals the total fixed-price professional-services fee, payable subject to formal approval by Google Cloud and Customer acceptance of the deliverables."
+  },
+
+  "provenance": {
+    "sources": [
+      "[Century 21] DAF Gemini Enterprise Pilot SOW - 2026-11-05, v1.0, Google Doc 1nWsUifBhlvCUa1KwEuLA-zkiQs2L6Y7BLfTtXtTEJ-U"
+    ],
+    "assumed": [
+      "sow_type gemini_enterprise_implementation, from the document's section structure."
+    ],
+    "unanswered": [
+      "Execution date, Effective Date and Term end date are unfilled template placeholders ('Start date', 'End date').",
+      "Customer address, signatory title and phone are unfilled template placeholders ('Customer POC Address', 'Customer POC Title', 'Customer POC Phone').",
+      "The missing receipt cardholder cap is an unfilled placeholder ('up to [number] cardholders').",
+      "No hours, names or allocation for the six Partner roles.",
+      "Google DAF funding approval status is not stated."
+    ]
+  }
+}

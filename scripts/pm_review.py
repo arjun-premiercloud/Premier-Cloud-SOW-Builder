@@ -57,6 +57,23 @@ UNOWNED = re.compile(
     re.I,
 )
 
+# Success criteria that rest on sentiment, or on usage the term is too short
+# to observe.
+UNPROVABLE = re.compile(
+    r"positive (customer |user )?(feedback|sentiment)|satisf(ied|action)|"
+    r"\bsustained\b|\bhigh (tool )?(activation|adoption|usage|engagement)|"
+    r"\bminimal (technical )?issues\b",
+    re.I,
+)
+
+# Template text left in a field that should hold a real value: Google Docs
+# date-chip placeholders, "Customer POC ...", bracketed fill-ins, bare TBD.
+PLACEHOLDER = re.compile(
+    r"^\s*(start|end|effective|execution) date\s*$|customer poc\b|"
+    r"\[(?:number|name|date|tbd|insert)[^\]]*\]|^\s*tbd\s*$|^\s*to be confirmed\s*$",
+    re.I,
+)
+
 # A deliverable phrased like this authorises the work that follows it.
 GATING = re.compile(r"sign-?off|signed off|approv(ed|al)|accept(ed|ance)", re.I)
 
@@ -101,6 +118,43 @@ class Report:
 # --------------------------------------------------------------------------
 # Checks
 # --------------------------------------------------------------------------
+
+CONTRACT_FIELDS = [
+    ("agreement.execution_date", "execution date"),
+    ("term.effective_date", "effective date"),
+    ("term.end_date", "term end date"),
+    ("customer.legal_name", "customer legal name"),
+    ("customer.address", "customer address"),
+    ("customer.signatory.name", "customer signatory"),
+    ("customer.signatory.title", "customer signatory title"),
+    ("partner.signatory.name", "partner signatory"),
+    ("partner.signatory.title", "partner signatory title"),
+]
+
+
+def check_contract(intake, g, rep):
+    """Template text still sitting where the contract needs a real value."""
+    unfilled = [f"{label} ('{g(intake, path)}')"
+                for path, label in CONTRACT_FIELDS
+                if isinstance(g(intake, path), str) and PLACEHOLDER.search(g(intake, path))]
+    if unfilled:
+        rep.add(HIGH, "Contract",
+                f"{len(unfilled)} contract field(s) still hold template text: "
+                + "; ".join(unfilled[:4]) + ("; ..." if len(unfilled) > 4 else ""),
+                "The document cannot be signed as written, and an unfilled "
+                "term means nothing else in the plan can be held to a date.",
+                "Fill them, or state the term as N weeks from an agreed "
+                "kickoff if the dates genuinely float.")
+
+    prose = [a for a in (g(intake, "assumptions") or []) if isinstance(a, str)
+             and re.search(r"\[(?:number|name|date|tbd|insert)[^\]]*\]", a, re.I)]
+    if prose:
+        rep.add(HIGH, "Contract",
+                f"{len(prose)} assumption(s) contain an unfilled fill-in. "
+                f"First: \"{prose[0][:110]}\"",
+                "An assumption that caps scope is only a cap once the number "
+                "is in it. Until then it is unbounded.")
+
 
 def check_term(intake, g, rep):
     start = parse_date(g(intake, "term.effective_date"))
@@ -240,11 +294,24 @@ def g_schedule(intake):
 def check_resources(intake, g, rep, schedule_hours):
     resources = g(intake, "resources") or []
     if not resources:
+        team = g(intake, "partner.team") or []
         if schedule_hours:
             rep.add(MEDIUM, "Capacity",
                     f"{schedule_hours:.0f} hours are quoted in the schedule "
                     "but there is no resource allocation table.",
                     "Nobody has been asked to confirm they can do the work.")
+        elif team:
+            unnamed = len([t for t in team
+                           if not (isinstance(t, dict) and t.get("name"))])
+            rep.add(MEDIUM, "Capacity",
+                    f"{len(team)} Partner role(s) are listed with no hours "
+                    "against any of them"
+                    + (f", and {unnamed} have no name." if unnamed else "."),
+                    "The fixed price rests on an effort estimate the document "
+                    "does not show. Nobody can check whether the team is "
+                    "free, and nobody can tell mid-engagement whether it is "
+                    "over.",
+                    "Add hours per role, and name at least the lead.")
         return
 
     numeric = [(r.get("role") or "unnamed role", float(r["hours"]))
@@ -423,6 +490,26 @@ def check_closure(intake, g, rep):
                     "Cannot be demonstrated at closure, so it becomes an "
                     "argument instead of a sign-off.")
 
+        # Criteria that turn on the customer's opinion, or on behaviour the
+        # term is too short to observe. On a funded deal the fee is released
+        # against these, so they decide whether we are paid.
+        unprovable = [c for c in criteria if isinstance(c, str)
+                      and UNPROVABLE.search(c) and not re.search(r"\d+\s*%", c)]
+        if unprovable:
+            funded = bool(g(intake, "pricing.google_funding"))
+            rep.add(HIGH if funded else MEDIUM, "Closure",
+                    f"{len(unprovable)} success criteria depend on opinion or "
+                    "on behaviour the term cannot observe. First: "
+                    f"\"{unprovable[0][:100]}\"",
+                    ("The fee is released on acceptance, and acceptance is "
+                     "judged against these. A criterion nobody can "
+                     "demonstrate puts the whole funded amount on the "
+                     "customer's mood." if funded else
+                     "Cannot be demonstrated at closure, so sign-off becomes "
+                     "a negotiation."),
+                    "Replace with something observable inside the term - a "
+                    "count, a demonstration, a delivered artefact.")
+
     blob = repr(intake).lower()
     if not re.search(r"accept(ance|ed|s)\b|sign-?off", blob):
         rep.add(HIGH, "Closure",
@@ -470,6 +557,7 @@ def check_provenance(intake, g, rep):
 def run(intake):
     g = sowlib.get
     rep = Report()
+    check_contract(intake, g, rep)
     start, end, weeks = check_term(intake, g, rep)
     hours = check_schedule(intake, g, rep, start, end, weeks)
     check_resources(intake, g, rep, hours)
