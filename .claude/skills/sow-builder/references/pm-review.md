@@ -150,6 +150,23 @@ findings, worst first. Four lines each:
 Then say plainly what you could not check, and why. A review that does not
 name its blind spots reads as more complete than it is.
 
+Rules for every finding, in the written review and in any chat summary of it:
+
+- **Quote the sentence it rests on, with its section number.** The reader
+  has the document open; give them the words to search for. A finding they
+  cannot locate is a finding they cannot act on.
+- **Never give a count without naming the items.** "Eight requirements have
+  no deliverable" is useless without the eight IDs and what each one says.
+- **Say what the document states, then what you infer, and label the
+  inference.** "Included at no cost to Customer" means the customer does not
+  pay; it does not mean we do. Keep that gap visible.
+- **Bring in outside evidence only when the finding needs it.** A person is
+  relevant because the document names them or the finding turns on them, not
+  because they appear on a tracker. A tour of someone's other commitments is
+  noise.
+- **When a list mixes cases, split it.** Work that has no deliverable and an
+  ID that is merely uncited are different problems with different fixes.
+
 ## What this review is not
 
 - **Not a re-run of the document checklist.** If you find yourself checking the
