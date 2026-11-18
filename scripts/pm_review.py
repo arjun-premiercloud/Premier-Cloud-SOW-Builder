@@ -60,7 +60,8 @@ UNOWNED = re.compile(
 # Success criteria that rest on sentiment, or on usage the term is too short
 # to observe.
 UNPROVABLE = re.compile(
-    r"positive (customer |user )?(feedback|sentiment)|satisf(ied|action)|"
+    r"positive (customer |user )?(feedback|sentiment)|\bsatisfaction\b|"
+    r"\b(customer|user|stakeholder)s? (is |are )?satisfied\b|"
     r"\bsustained\b|\bhigh (tool )?(activation|adoption|usage|engagement)|"
     r"\bminimal (technical )?issues\b",
     re.I,
@@ -354,7 +355,8 @@ def check_resources(intake, g, rep, schedule_hours):
                 "a reader who adds up both tables will ask, so make sure the "
                 "answer is one we want to give.")
 
-    if total:
+    # One row is a lump, not a concentration - the lump check reports it.
+    if total and len(numeric) > 1:
         for role, h in numeric:
             if h / total > KEY_PERSON_SHARE:
                 rep.add(MEDIUM, "Capacity",
@@ -462,7 +464,9 @@ def check_dependencies(intake, g, rep):
                 "A dependency without a date cannot be chased, and cannot "
                 "support a delay claim later.")
 
-    access = [a for a in assumptions if isinstance(a, str)
+    # Access is as often written as a prerequisite as an assumption.
+    access = [a for a in assumptions + (g(intake, "prerequisites_before") or [])
+              if isinstance(a, str)
               and re.search(r"admin|access|credential|licen[cs]e", a, re.I)]
     if not access:
         rep.add(MEDIUM, "Dependencies",
@@ -511,7 +515,8 @@ def check_closure(intake, g, rep):
                     "count, a demonstration, a delivered artefact.")
 
     blob = repr(intake).lower()
-    if not re.search(r"accept(ance|ed|s)\b|sign-?off", blob):
+    if not re.search(r"accept(ance|ed|s)\b|sign-?off|"
+                     r"confirms? in writing|written (confirmation|approval)", blob):
         rep.add(HIGH, "Closure",
                 "No acceptance mechanism anywhere in the intake.",
                 "Without a named artefact and a named approver, there is "

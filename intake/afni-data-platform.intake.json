@@ -1,0 +1,136 @@
+{
+  "_comment": "Reverse-engineered from 'SOW - Afni Enterprise Data & Analytics Platform Evaluation (v0.2 DRAFT)', Google Doc 1nAVSmPms9OZx37ulELN-Xbtm-cIvAyQkCg-_Ja-lt5s, created 2026-11-17, last modified 2026-11-18 by Yahya Derbeli. Not built from the house template; mapped onto the intake schema to run the PM delivery review. Values are read from the document; absences are the document's.",
+  "sow_type": "infrastructure_build",
+
+  "document": {
+    "title": "Afni Enterprise Data & Analytics Platform",
+    "subtitle": "Google Cloud Proof of Concept, Comparative TCO & Target Architecture",
+    "date": "2026-11-17",
+    "version": "0.2"
+  },
+
+  "customer": {
+    "legal_name": "Afni, Inc.",
+    "short_name": "Afni",
+    "industry": "Business process outsourcing",
+    "profile": "Afni is a global BPO provider whose analytics estate supports internal operations and a portfolio of enterprise clients, each with distinct data isolation, contractual and reporting obligations. Afni is selecting a strategic data and analytics platform to replace Azure Synapse and in-scope Informatica, through an RFI with a common POC and TCO evidence standard.",
+    "contact": {"name": "Michelle Aspbury", "title": "Director, Data Architecture & Engineering, ITS"},
+    "stakeholders": [
+      {"role": "Delivery lead", "name": "Michelle Aspbury"},
+      {"role": "Business owner", "name": "Seth Anglin"},
+      {"role": "Technology lead", "name": "Dak Drake"},
+      {"role": "BI lead", "name": "Clinton Bruns"}
+    ]
+  },
+
+  "partner": {
+    "team": [
+      {"role": "Engagement Manager", "name": "Kendall Turner"},
+      {"role": "Chief Technology Officer", "name": "Adel Ben Rzouga"},
+      {"role": "Data & AI Solutions Engineer (technical lead)", "name": "Yahya Derbeli"},
+      {"role": "AI Engineer (POC 2 lead)", "name": "Mohamed Ali Meddeb"}
+    ]
+  },
+
+  "agreement": {
+    "msa_style": "dated_mpsa",
+    "execution_date": "December 1, 2026"
+  },
+
+  "term": {
+    "effective_date": "2026-12-01",
+    "end_date": "2027-01-23",
+    "duration_weeks": 8
+  },
+
+  "background": {
+    "objective": "Build both Sales Chat proof-of-concept scenarios on Google Cloud using Afni source data, produce a target architecture for the in-scope Synapse estate, and deliver a bottom-up 1-, 3- and 5-year TCO model, as Google Cloud's evidence in Afni's platform RFI."
+  },
+
+  "timeline": {
+    "schedule": [
+      {"phase": "Week 1", "activity": "Kickoff, lineage walkthroughs, rubric review, data-handling approval", "start_date": "2026-12-01", "end_date": "2026-12-05"},
+      {"phase": "Week 2", "activity": "Prerequisite gate; environment build begins", "deliverable": "Current-state lineage & source inventory", "start_date": "2026-12-08", "end_date": "2026-12-12"},
+      {"phase": "Week 3", "activity": "Target architecture & TDD; governance baseline; POC 1 ingestion", "deliverable": "Target Architecture & Technical Design Document", "start_date": "2026-12-15", "end_date": "2026-12-19"},
+      {"phase": "Week 4", "activity": "Reduced capacity over holiday period. POC 1 transformation & assertions; POC 2 ingestion", "start_date": "2026-12-22", "end_date": "2027-01-02"},
+      {"phase": "Week 5", "activity": "POC 1 semantic layer, Tableau coexistence, lineage; POC 2 evaluation pipeline", "deliverable": "POC 1 scorecard data product; Tableau validation artifact", "start_date": "2027-01-05", "end_date": "2027-01-09"},
+      {"phase": "Week 6", "activity": "POC 1 reconciliation; POC 2 human review & agreement report; governance and observability packs", "deliverable": "Reconciliation report; POC 2 pipeline; versioned configuration record; governance pack; observability evidence", "start_date": "2027-01-12", "end_date": "2027-01-16"},
+      {"phase": "Week 7", "activity": "TCO model; migration roadmap; evidence pack; executive showcase", "deliverable": "TCO model; migration roadmap; evaluation evidence pack; executive showcase", "start_date": "2027-01-19", "end_date": "2027-01-21"},
+      {"phase": "Week 8", "activity": "Knowledge transfer, closure, production recommendations", "deliverable": "Knowledge transfer & closure pack", "start_date": "2027-01-22", "end_date": "2027-01-23"}
+    ]
+  },
+
+  "resources": [
+    {"role": "Data & AI Solutions Engineer (lead), AI Engineer, Solution Architect / CTO (part-time), Engagement Manager", "hours": 300}
+  ],
+
+  "governance": {
+    "meetings": [
+      {"meeting": "Kickoff", "cadence": "Once"},
+      {"meeting": "Weekly status", "cadence": "Weekly, 30 minutes"},
+      {"meeting": "Executive showcase", "cadence": "Once"}
+    ]
+  },
+
+  "prerequisites_before": [
+    "Final source inventory and lineage documentation from the BI and Data Engineering teams.",
+    "Representative raw files and data samples, including at least one cleansing or structural-change case.",
+    "The current Tableau scorecard workbook and data source, and the Afni-approved KPI and calculation definitions.",
+    "A validation sample with expected outputs for reconciliation.",
+    "Security roles, test accounts, and vendor connectivity requirements.",
+    "Sufficient history to validate trend, period-over-period, and ranking behaviour.",
+    "Current transcript lineage and process documentation from Jefren/ABS.",
+    "A representative transcript sample with associated metadata and approved access controls.",
+    "The exact Sales Chat quality rubric, definitions, weighting and scoring rules, and expected output schema.",
+    "A human-reviewed benchmark set for objective comparison.",
+    "Required organizational and hierarchy reference data.",
+    "Security and privacy handling requirements, and the approved vendor test-access method.",
+    "Usage facts for the TCO model, including in-scope Informatica job counts with complexity tiers.",
+    "Executed NDA and documented client-data restrictions governing vendor access to Afni and Afni client data.",
+    "A single Afni point of contact.",
+    "A named Afni project sponsor.",
+    "Access to Afni subject-matter experts.",
+    "Stakeholders aligned to attend kickoff, the executive showcase, and a weekly 30-minute status call."
+  ],
+
+  "assumptions": [
+    "Afni provides timely review and feedback, within three business days of each deliverable submission.",
+    "Services are delivered remotely unless on-site attendance is mutually agreed.",
+    "Reduced delivery capacity is assumed for the period December 22 - January 2.",
+    "Afni's evaluation timeline (Day 30 / Day 60 / Day 90) remains as described in the RFI. Material change to that timeline is handled by Change Request.",
+    "Google Cloud product behaviour, pricing, and regional availability are as published at the effective date.",
+    "The prerequisite gate is met by December 10, 2026. Delay to the gate shifts dependent deliverable dates by an equivalent period."
+  ],
+
+  "success_criteria": [
+    "Both Sales Chat proof-of-concept scenarios are built and demonstrated on Afni data, and every Must-priority requirement in Afni's POC 1 and POC 2 requirement documents is either satisfied with evidence or explicitly reported as not satisfied with the reason stated.",
+    "POC 1 output reconciles to the Afni-approved validation sample, or every difference is reconciled and explained (SC-A1).",
+    "An Afni evaluator can trace a displayed metric from Tableau through semantic definition and transformation to source data (SC-A2), and trace an evaluation result to its source conversation evidence and the configuration that produced it (TR-A3).",
+    "The criterion-level agreement report against Afni's human-reviewed benchmark is delivered, including disagreements and failure cases (TR-A2).",
+    "The 1-, 3-, and 5-year TCO model is delivered with all assumptions, units, rates, and sensitivity drivers exposed and auditable by Afni's Finance reviewers.",
+    "Afni confirms in writing that the deliverables and activities outlined in Section 3 have been completed as agreed."
+  ],
+
+  "pricing": {
+    "currency": "USD",
+    "total_fixed_price": 60000,
+    "google_funding": 60000,
+    "funding_program": "Google Deal Acceleration Funds (DAF)"
+  },
+
+  "provenance": {
+    "sources": [
+      "SOW - Afni Enterprise Data & Analytics Platform Evaluation (v0.2 DRAFT), Google Doc 1nAVSmPms9OZx37ulELN-Xbtm-cIvAyQkCg-_Ja-lt5s"
+    ],
+    "assumed": [
+      "sow_type infrastructure_build, as the nearest archetype for a platform evaluation with two POCs, a target architecture and a TCO model.",
+      "msa_style dated_mpsa, because the Change Request form asks for the 'Date of Master Services Agreement'."
+    ],
+    "unanswered": [
+      "The governing agreement is named 'Premier Cloud Services Agreement' in the preamble and 'Master Services Agreement' in the Change Request form, with no date and no link; the Afni MSA has been in Afni legal review since September.",
+      "No payment trigger or 'subject to Google approval' language for the DAF line.",
+      "The 300 hours are not split by role or phase.",
+      "Signatory names and titles are blank on both sides."
+    ]
+  }
+}
