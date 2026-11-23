@@ -41,6 +41,7 @@ CONTENTS = [
     ("scripts/test_render.py", "scripts/test_render.py"),
     ("scripts/render_docx.py", "scripts/render_docx.py"),
     ("assets/premier-cloud-sow-template.docx", "assets/premier-cloud-sow-template.docx"),
+    ("starters", "starters"),
     ("requirements.txt", "requirements.txt"),
     (".claude/skills/sow-builder/SKILL.md", "SKILL.md"),
     (".claude/skills/sow-builder/references", "references"),

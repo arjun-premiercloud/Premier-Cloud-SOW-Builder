@@ -71,6 +71,8 @@ def main() -> int:
     # fixtures/ holds reconstructions of issued SOWs. Internal only - never
     # packaged - but they are the stronger regression when available.
     paths += sorted(glob.glob(os.path.join(sowlib.ROOT, "fixtures", "*.intake.json")))
+    # Starter templates render on their own, markers and all, and ship with the skill.
+    paths += sorted(glob.glob(os.path.join(sowlib.ROOT, "starters", "*.intake.json")))
 
     for path in paths:
         name = os.path.basename(path)

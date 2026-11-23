@@ -62,6 +62,13 @@
         "include_toc": {
           "type": "boolean",
           "default": true
+        },
+        "template_note": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Starter templates only: instruction lines rendered in a box after the cover, for the engineer to delete before sending."
         }
       }
     },

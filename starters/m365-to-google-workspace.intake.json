@@ -1,0 +1,389 @@
+{
+  "_comment": "STARTER TEMPLATE - no real customer. A Microsoft 365 to Google Workspace migration SOW with the standard content written out and a [TBD: ...] marker for every value that comes from the scoping call. Copy it to intake/<customer>.intake.json, replace every marker, delete what does not apply, then validate, review and render as usual. Rendered on its own it produces the template SOW, with markers highlighted.",
+  "sow_type": "workspace_migration",
+  "document": {
+    "title": "Microsoft 365 to Google Workspace Migration",
+    "date": "[TBD: SOW date]",
+    "version": "0.1",
+    "prepared_by": "Premier Cloud Inc.",
+    "template_note": [
+      "**TEMPLATE. Delete this box before the SOW is sent.**",
+      "Replace every highlighted [TBD: ...] marker. Find and replace [TBD: Customer] first, since it appears throughout.",
+      "Delete phases, deliverables and appendix items that do not apply. If identity and devices are not moving, delete Track B and its schedule rows and add them to Out of Scope.",
+      "Hours, dates, volumes and price come from the scoping call. Never leave an estimate in that nobody has confirmed.",
+      "Run the SOW reviewer before the document goes to the customer."
+    ]
+  },
+  "customer": {
+    "legal_name": "[TBD: customer legal entity, as on the MSA]",
+    "short_name": "[TBD: Customer]",
+    "address": "[TBD: registered address]",
+    "industry": "[TBD: industry]",
+    "profile": "[TBD: Customer] [TBD: two or three sentences: who the customer is, how many people and offices, what they run on Microsoft 365 today, and why they are moving to Google Workspace].",
+    "contact": {
+      "name": "[TBD: primary contact name]",
+      "title": "[TBD: primary contact title]",
+      "email": "[TBD: primary contact email]"
+    },
+    "signatory": {
+      "name": "[TBD: signatory name]",
+      "title": "[TBD: signatory title]"
+    },
+    "stakeholders": [
+      {
+        "role": "Executive Sponsor",
+        "name": "[TBD: name]",
+        "title": "[TBD: title]",
+        "description": "Decision owner and escalation point"
+      },
+      {
+        "role": "IT Lead",
+        "name": "[TBD: name]",
+        "title": "[TBD: title]",
+        "description": "User and site mapping, admin access, DNS changes and joint validation"
+      }
+    ]
+  },
+  "agreement": {
+    "execution_date": "as of the date of last signature"
+  },
+  "term": {
+    "effective_date": "[TBD: start date]",
+    "end_date": "[TBD: estimated end date]",
+    "duration_weeks": "[TBD: number of]"
+  },
+  "background": {
+    "objective": "[TBD: Customer] is engaging Premier Cloud Inc., a Google Cloud Premier Partner, to migrate from Microsoft 365 to Google Workspace.\n\nThe engagement moves mail, calendars, contacts, OneDrive content and the agreed SharePoint sites for approximately [TBD: number] users across [TBD: number] domains, using [TBD: migration tool]. Users move [TBD: in a single cutover / in waves], and Microsoft 365 remains available until the final delta pass is complete.",
+    "key_focus_areas": [
+      {
+        "label": "Mail, Calendar and Contacts",
+        "text": "Migration of mailboxes, calendars and contacts, including shared and resource mailboxes, with a final delta pass at cutover"
+      },
+      {
+        "label": "Files",
+        "text": "Migration of OneDrive to My Drive and of the agreed SharePoint sites to shared drives, following the site mapping agreed in discovery"
+      },
+      {
+        "label": "Identity and Sign-in",
+        "text": "Users sign in to Google Workspace through [TBD: Google / Entra ID federated to Google / other identity provider], with the agreed applications re-pointed"
+      },
+      {
+        "label": "Cutover",
+        "text": "DNS changes, Gmail and Calendar activation, and validation against the source tenant"
+      }
+    ],
+    "engagement_type": "This is an execution engagement. Premier Cloud performs the migration end to end, including discovery, configuration, pilot, migration, delta sync, cutover and post-migration validation, with defined preparation tasks owned by [TBD: Customer]."
+  },
+  "migration": {
+    "source_platform": "Microsoft 365 (Exchange Online, OneDrive, SharePoint Online)",
+    "destination_platform": "Google Workspace [TBD: edition] (Gmail, Calendar, Drive, shared drives)",
+    "tool": "[TBD: migration tool]",
+    "domain_count": "[TBD: number of]",
+    "user_count": "[TBD: number of users in scope]",
+    "mailbox_count": "[TBD: number of mailboxes, including shared and resource mailboxes]",
+    "pilot_user_count": "[TBD: number of pilot users]",
+    "volumes": [
+      {
+        "label": "Mailboxes",
+        "size": "[TBD: GB]",
+        "notes": "[TBD: number of mailboxes; largest mailbox size]"
+      },
+      {
+        "label": "Online archives",
+        "size": "[TBD: GB, or not in scope]",
+        "notes": ""
+      },
+      {
+        "label": "OneDrive",
+        "size": "[TBD: GB]",
+        "notes": "[TBD: number of accounts; largest account size]"
+      },
+      {
+        "label": "SharePoint",
+        "size": "[TBD: GB]",
+        "notes": "[TBD: number of sites in scope]"
+      }
+    ],
+    "endpoints": {
+      "in_scope": [
+        "[TBD: number and platform of devices that change sign-in, or delete this line]"
+      ],
+      "mdm": "[TBD: device management today]",
+      "directory": "[TBD: Entra ID / on-premises Active Directory]"
+    },
+    "sso_apps": [
+      "[TBD: each application that signs in through Microsoft today and is re-pointed under this SOW]"
+    ],
+    "decisions_pending": [
+      "Naming scheme confirmed: users keep their current addresses, or move to a new domain, by [TBD: date]",
+      "User and SharePoint site mapping completed by [TBD: Customer] by [TBD: date]",
+      "Handling of online archives, PST files and leaver accounts decided before the pilot, by [TBD: date]",
+      "Cutover date and change window agreed, and the person who changes DNS named, by [TBD: date]",
+      "Microsoft 365 licence end date confirmed to fall after the final delta pass, by [TBD: date]"
+    ],
+    "tracks": [
+      {
+        "name": "Track A - Mail and File Migration ([TBD: migration tool])",
+        "phases": [
+          {
+            "name": "Phase 1: Preparation & Discovery (Week [TBD])",
+            "activities": [
+              "Scan of the source tenant covering mailbox count and size distribution, OneDrive and SharePoint volumes, and externally shared content",
+              "User and site mapping completed by [TBD: Customer] for every in-scope account and SharePoint site",
+              "Customer decisions recorded for archives, PST files, leaver accounts and external sharing"
+            ]
+          },
+          {
+            "name": "Phase 2: Configuration & Readiness (Week [TBD])",
+            "activities": [
+              "Migration tool configured with domain mappings and migration batches",
+              "Google Workspace prepared: users, groups, calendar resources and shared drives created from the mapping",
+              "Readiness scan run to confirm connectivity and surface issues before the pilot"
+            ]
+          },
+          {
+            "name": "Phase 3: Pilot Migration (Week [TBD])",
+            "activities": [
+              "Pilot group of [TBD: number] users selected across departments and mailbox sizes",
+              "Pilot covers mail, calendar, contacts and OneDrive, validated item by item",
+              "Pilot results reviewed with [TBD: Customer], whose written acceptance is needed before the main migration starts"
+            ]
+          },
+          {
+            "name": "Phase 4: Migration in Waves (Weeks [TBD])",
+            "intro": "Data moves in the background while users keep working in Microsoft 365. Waves are sequenced by size:",
+            "activities": [
+              "Wave 1 (Weeks [TBD]): [TBD: which mailboxes, OneDrive accounts or sites]",
+              "Wave 2 (Weeks [TBD]): [TBD: which mailboxes, OneDrive accounts or sites]",
+              "Wave 3 (Weeks [TBD]): [TBD: largest mailboxes and sites, scheduled for their own sync window]"
+            ]
+          },
+          {
+            "name": "Phase 5: Delta Migration & Cutover (Week [TBD])",
+            "activities": [
+              "Cutover carried out in the agreed change window, following the cutover runbook",
+              "DNS cutover: MX, SPF, DKIM, DMARC and domain verification records",
+              "Final delta pass to capture mail and files changed since the last wave",
+              "Gmail and Google Calendar activated for all in-scope users"
+            ]
+          },
+          {
+            "name": "Phase 6: Post-Migration Validation (Week [TBD])",
+            "activities": [
+              "Reconciliation report reviewed for each migration batch",
+              "Spot checks of mailboxes and Drive folders against source counts",
+              "Remediation items tracked to closure, and the post-migration validation report delivered"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Track B - Identity and Devices",
+        "description": "Track B runs alongside Track A. Delete it if sign-in and devices are not changing under this SOW.",
+        "phases": [
+          {
+            "name": "Phase 1: Identity Design & Application Inventory (Week [TBD])",
+            "activities": [
+              "Sign-in design agreed: identity provider, user provisioning, passwords at cutover and 2-step verification",
+              "Inventory of applications that sign in through Microsoft today, each with a test plan",
+              "Device inventory, covering which devices change sign-in and how they are managed"
+            ]
+          },
+          {
+            "name": "Phase 2: Pilot (Week [TBD])",
+            "activities": [
+              "Sign-in and device changes piloted with the Track A pilot group",
+              "Rollback path kept available until the pilot is accepted"
+            ]
+          },
+          {
+            "name": "Phase 3: Rollout (Weeks [TBD])",
+            "activities": [
+              "Device sign-in changes rolled out in waves aligned to Track A",
+              "Applications re-pointed to the agreed identity provider and validated against their test plans"
+            ]
+          },
+          {
+            "name": "Phase 4: Handover (Week [TBD])",
+            "activities": [
+              "Sign-in and device configuration documented and handed over",
+              "Retirement plan for the old directory delivered to [TBD: Customer]"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scope": {
+    "statement": "This engagement is delivered over [TBD: number] weeks in [TBD: one track / two parallel tracks]: Track A migrates mail and files, and Track B moves sign-in and devices to Google Workspace.",
+    "out_of_scope_extra": [
+      "Migration of Microsoft Teams chat history and channel conversations. Files stored in Teams channels are migrated with their SharePoint sites where listed in the site mapping.",
+      "Migration of Planner, Power Automate, Power Apps and Forms content.",
+      "Conversion of OneNote notebooks. Notebook files are moved as files and are not converted.",
+      "Migration of public folders and of PST files stored on PCs or file shares, unless listed in the user mapping.",
+      "Migration of on-premises file shares.",
+      "Clean-up of SharePoint permissions or content before migration.",
+      "Retirement of the Microsoft 365 tenant, Exchange servers or the old directory. A retirement plan is delivered; the work is performed by [TBD: Customer].",
+      "End-user training beyond [TBD: number] sessions, and support beyond [TBD: number] weeks after cutover."
+    ],
+    "out_of_scope_suppress": [
+      "End-user training programs beyond standard"
+    ]
+  },
+  "assumptions": [
+    "[TBD: Customer] provides a dedicated administrator account on Microsoft 365 and a dedicated super administrator account on Google Workspace before work starts. Both are removed at closeout.",
+    "[TBD: Customer] makes DNS changes within the agreed change window, or grants Premier Cloud access to do so.",
+    "Microsoft 365 licences remain active until the final delta pass is complete and validated."
+  ],
+  "success_criteria": [
+    "Every in-scope mailbox, OneDrive account and mapped SharePoint site is migrated, shown by the migration tool's reconciliation report for each batch.",
+    "Mail flows to and from Google Workspace for every in-scope domain after cutover, verified by test messages in both directions.",
+    "Every in-scope user can sign in to Google Workspace using the agreed sign-in method.",
+    "Calendar resources and Google Groups exist for every in-scope room and equipment mailbox and distribution list.",
+    "Each application listed under Identity signs in through the agreed identity provider, verified against its test plan.",
+    "The cutover runbook and the post-migration validation report are delivered."
+  ],
+  "timeline": {
+    "schedule": [
+      {
+        "track": "Track A: Mail and File Migration",
+        "activity": "Preparation & Discovery",
+        "effort_hours": "[TBD]",
+        "deliverable": "Discovery findings and user and site mapping",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      },
+      {
+        "track": "Track A: Mail and File Migration",
+        "activity": "Configuration & Readiness",
+        "effort_hours": "[TBD]",
+        "deliverable": "Readiness scan results",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      },
+      {
+        "track": "Track A: Mail and File Migration",
+        "activity": "Pilot Migration",
+        "effort_hours": "[TBD]",
+        "deliverable": "Pilot report and written acceptance",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      },
+      {
+        "track": "Track A: Mail and File Migration",
+        "activity": "Migration in Waves",
+        "effort_hours": "[TBD]",
+        "deliverable": "Per-wave reconciliation reports",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      },
+      {
+        "track": "Track A: Mail and File Migration",
+        "activity": "Delta Migration & Cutover",
+        "effort_hours": "[TBD]",
+        "deliverable": "Cutover runbook, completed",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      },
+      {
+        "track": "Track A: Mail and File Migration",
+        "activity": "Post-Migration Validation",
+        "effort_hours": "[TBD]",
+        "deliverable": "Post-migration validation report",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      },
+      {
+        "track": "Track B: Identity and Devices",
+        "activity": "Identity Design & Application Inventory",
+        "effort_hours": "[TBD]",
+        "deliverable": "Sign-in design and application test plans",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      },
+      {
+        "track": "Track B: Identity and Devices",
+        "activity": "Pilot",
+        "effort_hours": "[TBD]",
+        "deliverable": "Pilot acceptance",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      },
+      {
+        "track": "Track B: Identity and Devices",
+        "activity": "Rollout",
+        "effort_hours": "[TBD]",
+        "deliverable": "Application validation results",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      },
+      {
+        "track": "Track B: Identity and Devices",
+        "activity": "Handover",
+        "effort_hours": "[TBD]",
+        "deliverable": "Configuration handover and directory retirement plan",
+        "start_date": "[TBD]",
+        "end_date": "[TBD]"
+      }
+    ]
+  },
+  "resources": [
+    {
+      "role": "Project Manager",
+      "hours": "[TBD]",
+      "responsibilities": "Plan, schedule, status reporting, change control and customer communication"
+    },
+    {
+      "role": "Migration Engineer",
+      "hours": "[TBD]",
+      "responsibilities": "Migration tool configuration, waves, delta pass, cutover and reconciliation"
+    },
+    {
+      "role": "Identity and Device Engineer",
+      "hours": "[TBD]",
+      "responsibilities": "Sign-in design, application re-pointing and device changes (Track B)"
+    },
+    {
+      "role": "Solution Architect",
+      "hours": "[TBD]",
+      "responsibilities": "Design review, cutover runbook sign-off and escalation"
+    }
+  ],
+  "deliverables": [
+    {
+      "detail": "Discovery Findings and Mapping: confirmed inventory of users, mailboxes, sites and data volumes, with the agreed user and site mapping"
+    },
+    {
+      "detail": "Migration Plan: wave composition, dates and the cutover window"
+    },
+    {
+      "detail": "Pilot Report: pilot results, issues found, and written acceptance to proceed"
+    },
+    {
+      "detail": "Cutover Runbook: the cutover sequence, the point after which rollback is no longer possible, and what can be rolled back before it"
+    },
+    {
+      "detail": "Reconciliation Reports: per-batch item and size reconciliation from the migration tool"
+    },
+    {
+      "detail": "Post-Migration Validation Report: validation results, with remediation items tracked to closure"
+    },
+    {
+      "detail": "Identity and Device Handover: sign-in configuration, application re-pointing results and device rollout status (Track B)"
+    }
+  ],
+  "pricing": {
+    "currency": "USD",
+    "total_fixed_price": "[TBD: total fixed price]",
+    "payment_terms": "[TBD: invoicing schedule and trigger, for example invoiced on acceptance of the post-migration validation report, Net 30]"
+  },
+  "appendices": [
+    {
+      "title": "Migration Watchpoints",
+      "body": "The following are known limits of moving from Microsoft 365 to Google Workspace. Keep the ones that apply to this migration and say what each means for [TBD: Customer].\n\n- **Large accounts.** Google limits how much data one user can receive per day. Mailboxes and OneDrive accounts above that limit take more than one day to move and are scheduled in their own sync window.\n- **Large SharePoint libraries.** A shared drive holds a limited number of items. Libraries above that limit are split across more than one shared drive in the site mapping.\n- **Permissions.** SharePoint permissions that break inheritance at folder or file level do not map one to one onto shared drive roles. Affected content is listed in discovery and its access agreed before migration.\n- **Content that does not convert.** Teams chats, OneNote notebooks, Planner plans and some mailbox settings are not converted. Each is either out of scope or listed in the cutover runbook with what users should expect.\n- **Systems that send mail.** Scanners, printers and applications that send mail through Microsoft 365 stop working at MX cutover unless they are reconfigured. Each is listed in discovery with an owner.\n- **Sign-in changes.** Applications that sign in through Microsoft need re-pointing before the old directory is retired. Users may need to sign in again to third-party tools after cutover.\n- **Licences.** Microsoft 365 licences must stay active until the final delta pass is validated."
+    }
+  ],
+  "assumptions_suppress": [
+    "Administrative credentials in both tenants"
+  ]
+}

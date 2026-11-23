@@ -73,7 +73,21 @@ def runs(text: str, *, bold=False, size=None, color=None, align_rtl=True) -> str
     return "".join(out) or _run("", bold=bold, size=size, color=color)
 
 
+MARKER = re.compile(r"(\[TBD[^\]]*\])")
+
+
 def _run(text, *, bold=False, italic=False, size=None, color=None, underline=False) -> str:
+    """One run, split so that every [TBD: ...] marker is highlighted on its own."""
+    parts = [p for p in MARKER.split(text) if p] if "[TBD" in text else [text]
+    return "".join(_one_run(p, bold=bold, italic=italic, size=size, color=color,
+                            underline=underline, highlight=bool(MARKER.fullmatch(p)))
+                   for p in parts) or _one_run("", bold=bold)
+
+
+def _one_run(text, *, bold=False, italic=False, size=None, color=None, underline=False,
+             highlight=False) -> str:
+    if highlight:
+        color = "000000"   # a marker stays readable on a coloured table header
     rpr = ""
     if bold:
         rpr += '<w:b w:val="1"/><w:bCs w:val="1"/>'
@@ -85,6 +99,8 @@ def _run(text, *, bold=False, italic=False, size=None, color=None, underline=Fal
         rpr += f'<w:sz w:val="{size}"/><w:szCs w:val="{size}"/>'
     if underline:
         rpr += '<w:u w:val="single"/>'
+    if highlight:
+        rpr += '<w:highlight w:val="yellow"/>'
     rpr += '<w:rtl w:val="0"/>'
     return f"<w:r><w:rPr>{rpr}</w:rPr><w:t xml:space=\"preserve\">{escape(text)}</w:t></w:r>"
 
@@ -170,9 +186,17 @@ def build_body(md: str, cover: dict) -> str:
     # The markdown carries its own cover and table of contents; this renderer
     # builds the cover from the template instead, so drop everything before the
     # first real section. The DRAFT banner is kept and moved above the cover.
+    # The markdown's cover ends at its "Prepared by" block. Start the body at
+    # the first heading after it, rather than at the first Heading1: in
+    # templates that number sections with "#", the title line is a Heading1 too,
+    # and the markdown cover was being repeated on page 2.
+    cover_end = next((idx for idx, l in enumerate(lines)
+                      if l.strip().startswith("**Prepared by:**")), -1)
     first_section = next(
         (idx for idx, l in enumerate(lines)
-         if (m := re.match(r"^(#{1,6})\s+\S", l.strip())) and hmap.get(len(m.group(1))) == "Heading1"),
+         if idx > cover_end
+         and (m := re.match(r"^(#{1,6})\s+\S", l.strip()))
+         and (cover_end >= 0 or hmap.get(len(m.group(1))) == "Heading1")),
         0,
     )
     banner = [l.strip().lstrip(">").strip() for l in lines[:first_section]
@@ -302,6 +326,15 @@ def render(md_path: str, out_path: str, cover: dict, template: str = TEMPLATE) -
             zo.writestr(name, doc if name == "word/document.xml" else zin.read(name))
 
 
+def cover_subtitle(md: str) -> str:
+    """The bold line between the title and "Prepared by", if there is one."""
+    m = re.search(r"^#\s+.*?$(.*?)^\*\*Prepared by:\*\*", md, re.M | re.S)
+    if not m:
+        return ""
+    sub = re.search(r"^\*\*(.+?)\*\*\s*$", m.group(1), re.M)
+    return clean(sub.group(1)) if sub else ""
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Render SOW markdown into the house .docx design.")
     ap.add_argument("markdown")
@@ -324,7 +357,9 @@ def main() -> int:
 
     cover = {
         "title": a.title or sniff(r"^#\s+(.*)$", "Statement of Work"),
-        "subtitle": a.subtitle or sniff(r"^\*\*(.+?)\*\*\s*$"),
+        # Only a bold line inside the cover block is a subtitle. Searching the
+        # whole document picked up the first bold label, e.g. "Platform Details:".
+        "subtitle": a.subtitle or cover_subtitle(md),
         "date": a.date or sniff(r"^\*\*Date:\*\*\s*(.*)$"),
         "version": a.version or sniff(r"^\*\*Version:\*\*\s*(.*)$", "1.0"),
         "prepared_for": a.prepared_for or sniff(r"^\*\*Prepared for:\*\*\s*(.*)$"),

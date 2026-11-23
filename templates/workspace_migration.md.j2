@@ -125,7 +125,7 @@ The complete and live project plan, including all tasks, effort estimates, and t
 
 {{ table(['**Activity**', '**Estimated Effort (hrs)**', '**Deliverable**', '**Estimated Start Date**', '**Estimated End Date**'],
          rows(items, ['activity', 'effort_hours', 'deliverable', 'start_date', 'end_date'])
-         + [['**TOTAL**', '**' ~ (items | sum(attribute='effort_hours')) ~ '**', '', '', '']]) }}
+         + [['**TOTAL**', '**' ~ total_hours(items) ~ '**', '', '', '']]) }}
 {% endfor %}
 {% else %}
 
@@ -163,7 +163,9 @@ The complete and live project plan, including all tasks, effort estimates, and t
 
 # **{{ sections.investment.n }}. {{ sections.investment.title }}**
 
-{% if pricing.price_tbd %}
+{% if pricing.price_tbd and pricing.placeholder_rows %}
+{{ table(['Category', 'Cost (' ~ pricing.currency ~ ')'], pricing.placeholder_rows) }}
+{% elif pricing.price_tbd %}
 **[TBD: total fixed price not yet agreed — investment table omitted]**
 {% else %}
 {{ table(['Category', 'Cost (' ~ pricing.currency ~ ')'], pricing.rows) }}

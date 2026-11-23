@@ -1,3 +1,9 @@
+{% if doc.template_note %}
+{% for line in doc.template_note %}
+> {{ line }}
+{% endfor %}
+
+{% endif %}
 {% if unresolved %}
 > **DRAFT — NOT FOR ISSUE.** {{ unresolved | length }} required input(s) are unresolved.
 > This document cannot be sent to the customer until each is answered:

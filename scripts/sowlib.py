@@ -251,6 +251,15 @@ def build_pricing(intake: dict, clauses: dict) -> dict:  # noqa: ARG001
     # A draft with no agreed price still has to render; the cost table says so
     # rather than quietly showing $0.
     price_tbd = _num(p.get("total_fixed_price"), None) is None and not is_range
+    # A starter template carries a [TBD: ...] marker as the price. Show the cost
+    # table's shape with the markers in it rather than a computed $0.
+    marker = p.get("total_fixed_price") if isinstance(p.get("total_fixed_price"), str) else None
+    placeholder_rows = []
+    if marker:
+        placeholder_rows.append(["Total fixed price for Professional Services", marker])
+        if isinstance(p.get("google_funding"), str):
+            placeholder_rows.append(["Google funding (at project completion)", p["google_funding"]])
+        placeholder_rows.append(["**Net cost to customer**", "**[TBD: net cost to customer]**"])
 
     lines = []
     if is_range:
@@ -309,6 +318,7 @@ def build_pricing(intake: dict, clauses: dict) -> dict:  # noqa: ARG001
     return {
         "currency": cur,
         "price_tbd": price_tbd,
+        "placeholder_rows": placeholder_rows,
         "is_range": is_range,
         "range_str": (f"{money(low, cur).replace(' ' + cur, '')} \u2013 {money(high, cur)}"
                       if is_range else ""),
@@ -432,7 +442,7 @@ def build_context(intake: dict, clauses: dict | None = None) -> dict:
                                            after="Gemini Enterprise Deployment and Datasource Connectors Set Up")
 
     milestones = get(intake, "timeline.milestones") or cl.get("milestones", {}).get(sow_type, [])
-    weeks = get(intake, "timeline.weeks") or get(intake, "term.duration_weeks") or (
+    weeks = _num(get(intake, "timeline.weeks")) or _num(get(intake, "term.duration_weeks")) or (
         max((m.get("week", 1) for m in milestones), default=5)
     )
 
@@ -494,6 +504,12 @@ def build_context(intake: dict, clauses: dict | None = None) -> dict:
         "money": lambda a: money(a, pricing["currency"]),
         "spell": spell,
         "alpha": lambda i: chr(65 + i),
+        # Sum of effort hours, or a [TBD] marker while any row still lacks a number.
+        "total_hours": lambda items: (
+            sum(i["effort_hours"] for i in items)
+            if items and all(isinstance(i.get("effort_hours"), (int, float))
+                             and not isinstance(i.get("effort_hours"), bool) for i in items)
+            else "[TBD]"),
         "role_rows": role_rows,
         "stakeholder_rows": stakeholder_rows,
     }

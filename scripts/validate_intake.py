@@ -171,9 +171,11 @@ def consistency_checks(intake: dict) -> list:
     out = []
     g = sowlib.get
 
-    total = g(intake, "pricing.total_fixed_price") or 0
-    funding = abs(g(intake, "pricing.google_funding") or 0)
-    investment = abs(g(intake, "pricing.partner_investment") or 0)
+    # A [TBD: ...] marker in a number field counts as absent here, as it does
+    # in the renderer.
+    total = sowlib._num(g(intake, "pricing.total_fixed_price"))
+    funding = abs(sowlib._num(g(intake, "pricing.google_funding")))
+    investment = abs(sowlib._num(g(intake, "pricing.partner_investment")))
     net = total - funding - investment
 
     # --- Master Services Agreement reference ---------------------------------
@@ -224,7 +226,7 @@ def consistency_checks(intake: dict) -> list:
             "every milestone should land at least one deliverable."
         )
 
-    weeks = g(intake, "timeline.weeks") or g(intake, "term.duration_weeks")
+    weeks = sowlib._num(g(intake, "timeline.weeks")) or sowlib._num(g(intake, "term.duration_weeks"))
     if weeks and milestones:
         late = [m.get("id") for m in milestones if (m.get("week") or 0) > weeks]
         if late:

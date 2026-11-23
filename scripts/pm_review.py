@@ -202,7 +202,8 @@ def check_schedule(intake, g, rep, start, end, weeks):
                 "Populate timeline.schedule, even coarsely.")
         return 0.0
 
-    hours = sum(r.get("effort_hours") or 0 for r in schedule)
+    # [TBD] markers in a starter or half-filled intake count as not set.
+    hours = sum(sowlib._num(r.get("effort_hours")) for r in schedule)
     no_deliverable = [r for r in schedule if not r.get("deliverable")]
     if no_deliverable and len(no_deliverable) == len(schedule):
         rep.add(LOW, "Schedule",
@@ -369,14 +370,16 @@ def check_resources(intake, g, rep, schedule_hours):
 
 
 def check_commercials(intake, g, rep, hours, start=None):
-    price = g(intake, "pricing.total_fixed_price")
+    raw_price = g(intake, "pricing.total_fixed_price")
+    price = sowlib._num(raw_price, None)
     currency = g(intake, "pricing.currency") or "USD"
-    funding = g(intake, "pricing.google_funding") or 0
+    funding = sowlib._num(g(intake, "pricing.google_funding"))
     items = g(intake, "pricing.line_items") or []
 
     if price is None:
         rep.add(HIGH, "Commercials",
-                "No total fixed price.",
+                (f"The total fixed price is still a placeholder: {raw_price}"
+                 if isinstance(raw_price, str) else "No total fixed price."),
                 "Not a signable document.")
     elif hours:
         rate = price / hours
@@ -395,7 +398,7 @@ def check_commercials(intake, g, rep, hours, start=None):
                     "but it invites a procurement challenge on the hours.")
 
     if items and price:
-        line_total = sum(i.get("amount") or 0 for i in items if isinstance(i, dict))
+        line_total = sum(sowlib._num(i.get("amount")) for i in items if isinstance(i, dict))
         if line_total and abs(line_total - price) > 1:
             rep.add(HIGH, "Commercials",
                     f"Line items total {currency} {line_total:,.0f} against a "

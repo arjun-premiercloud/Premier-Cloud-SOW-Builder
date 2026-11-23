@@ -29,6 +29,12 @@ meeting notes  ──►  intake .json  ──►  validate_intake.py  ──►
 If the notes describe something else, pick the nearest type and say so in your
 summary — do not invent a fourth template silently.
 
+**Starter templates.** For a Microsoft 365 to Google Workspace migration, start
+from `starters/m365-to-google-workspace.intake.json` instead of a blank intake:
+copy it to `intake/<customer>.intake.json` and replace every `[TBD: ...]`
+marker. Rendered on its own, it produces the template SOW, with every marker
+highlighted in yellow in the Word and Google Doc output.
+
 ## Step 2 — Read the source material
 
 Meeting notes arrive as a Google Doc link, a pasted transcript, a Gemini/Fireflies
